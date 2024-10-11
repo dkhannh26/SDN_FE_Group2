@@ -8,7 +8,6 @@ const DiscountModel = () => {
             <Row>
                 <Title level={3}>New Discount</Title>
             </Row>
-
         </>
     );
 };
