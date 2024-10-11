@@ -1,4 +1,4 @@
-import { Button, Col, DatePicker, Form, Input, InputNumber, message, Row, Select, Space } from 'antd';
+import { Button, Col, DatePicker, Form, InputNumber, Row, Space } from 'antd';
 import Title from 'antd/es/typography/Title';
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
@@ -62,14 +62,10 @@ const DiscountModel = ({ type }) => {
         setDate(dateString)
     };
 
-    const [discount, setDiscount] = useState()
 
     useEffect(() => {
         axios.get(API_PATH.discount + `/${id}`)
             .then((res) => {
-                setDiscount(res.data)
-                console.log(res.data)
-
                 const date = dayjs(res.data.expired_at);
                 form.setFieldsValue({
                     percent: res.data.percent,
@@ -105,7 +101,7 @@ const DiscountModel = ({ type }) => {
                                     required: true,
                                     type: 'number',
                                     min: 0,
-                                    max: 99,
+                                    max: 100,
                                 },
                             ]}
 

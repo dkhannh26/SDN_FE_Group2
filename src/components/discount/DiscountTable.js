@@ -39,6 +39,7 @@ const DiscountTable = () => {
             },
         });
     };
+
     const columns = [
         {
             title: 'No.',
