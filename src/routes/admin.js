@@ -10,8 +10,8 @@ export const AdminRoutes = (
         <Route path='admin' element={<Dashboard />}>
             <Route path='discount' element={<Discount />}>
                 <Route index element={<DiscountTable />} />
-                <Route path='create' element={<DiscountModel />} />
-                <Route path='edit' element={<DiscountModel />} />
+                <Route path='create' element={<DiscountModel type='create' />} />
+                <Route path='edit/:id' element={<DiscountModel type='edit' />} />
             </Route>
         </Route>
     </>
