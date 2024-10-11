@@ -36,6 +36,7 @@ const Dashboard = () => {
             <Layout
                 style={{
                     marginInlineStart: 200,
+
                 }}
             >
                 <Header
@@ -48,6 +49,7 @@ const Dashboard = () => {
                     style={{
                         margin: '24px 16px 0',
                         overflow: 'initial',
+
                     }}
                 >
                     <div
@@ -56,6 +58,7 @@ const Dashboard = () => {
                             textAlign: 'center',
                             background: colorBgContainer,
                             borderRadius: borderRadiusLG,
+                            backgroundColor: '#e6e6e6'
                         }}
                     >
                         <Outlet></Outlet>
