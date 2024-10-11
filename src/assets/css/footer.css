@@ -1,0 +1,22 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.container {
+    margin: auto;
+    width: 1200px;
+}
+
+.flex-center {
+    display: flex;
+    align-items: center;
+}
+
+.footer {
+    margin-top: 100px;
+    position: relative;
+    width: 100%;
+    background-color: #f8f8f8;
+}
