@@ -48,6 +48,10 @@ input:focus {
     padding: 8px;
 }
 
+.top-bar p {
+    text-align: center;
+}
+
 .header-middle {
     justify-content: space-between;
 
