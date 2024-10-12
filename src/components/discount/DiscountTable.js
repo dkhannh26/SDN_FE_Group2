@@ -1,16 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { Button, Col, Flex, message, Row, Space, Table, Modal } from 'antd';
-import axios from 'axios'
+import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { Button, Col, Flex, message, Space, Table } from 'antd';
 import Title from 'antd/es/typography/Title';
-import moment from 'moment';
-import { DeleteOutlined, EditOutlined, ExclamationCircleFilled } from '@ant-design/icons';
-import { API_PATH } from '../../config/api.config';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { DISCOUNT_URL } from '../../config/url.config';
-
-const formatDate = (dateString) => {
-    return moment(dateString).format('DD/MM/YYYY');
-};
+import { getListDiscount } from '../../services/discount.service';
+import { formatDate, showDeleteConfirm, success } from '../../utils/helper';
+import { MESSAGE } from '../../config/message.config';
 
 const DiscountTable = () => {
     const [discounts, setDiscounts] = useState([])
@@ -18,27 +14,6 @@ const DiscountTable = () => {
     const [messageApi, contextHolder] = message.useMessage()
     const location = useLocation();
     const { state } = location;
-    const { confirm } = Modal;
-
-    const showDeleteConfirm = (id) => {
-        confirm({
-            title: 'Are you sure delete this discount?',
-            icon: <ExclamationCircleFilled />,
-            okText: 'Yes',
-            okType: 'danger',
-            cancelText: 'No',
-            onOk() {
-                axios.delete(API_PATH.discount + `/${id}`)
-                    .then(() => {
-
-                        success('Delete Succesfully')
-                    })
-            },
-            onCancel() {
-                console.log('Cancel');
-            },
-        });
-    };
 
     const columns = [
         {
@@ -49,7 +24,7 @@ const DiscountTable = () => {
         {
             title: 'Percent',
             dataIndex: 'percent',
-            sorter: (a, b) => a.age - b.age,
+            sorter: (a, b) => a.percent - b.percent,
             width: '15%',
         },
         {
@@ -67,7 +42,7 @@ const DiscountTable = () => {
                 return (
                     <Space>
                         <Button shape="round" icon={<EditOutlined />} onClick={() => navigate(`edit/${_id}`)} ></Button>
-                        <Button danger shape="round" icon={<DeleteOutlined />} onClick={() => showDeleteConfirm(_id)} ></Button>
+                        <Button danger shape="round" icon={<DeleteOutlined />} onClick={() => showDeleteConfirm(_id, messageApi, getListDiscount, setDiscounts)} ></Button>
                     </Space>
                 )
             },
@@ -75,31 +50,19 @@ const DiscountTable = () => {
         },
     ];
 
-    const success = (message) => {
-        messageApi.open({
-            type: 'success',
-            content: message,
-        });
-    };
-
     useEffect(() => {
-        if (state?.message === 'Create successfully!') {
+        if (state?.message === MESSAGE.CREATE_SUCCESS) {
             console.log('message', state?.message)
-            success(state.message);
+            success(state.message, messageApi);
             navigate(location.pathname, { replace: true }); //xóa state sau khi sử dụng
-        } else if (state?.message === 'Update successfully!') {
+        } else if (state?.message === MESSAGE.UPDATE_SUCCESS) {
             console.log('message', state?.message)
-            success(state.message);
+            success(state.message, messageApi);
             navigate(location.pathname, { replace: true });
         }
 
-        axios.get(API_PATH.discount)
-            .then((res) => {
-                setDiscounts(res.data)
-                console.log(res.data)
-            })
-    }, [state, navigate, success, location.pathname])
-
+        getListDiscount(setDiscounts)
+    }, [state, navigate, messageApi, location.pathname])
 
     return (
         <>

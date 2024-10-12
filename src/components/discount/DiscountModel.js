@@ -1,24 +1,10 @@
 import { Button, Col, DatePicker, Form, InputNumber, Row, Space } from 'antd';
 import Title from 'antd/es/typography/Title';
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import { API_PATH } from '../../config/api.config';
-import { useNavigate, useParams } from 'react-router-dom';
 import dayjs from 'dayjs';
-const layout = {
-    labelCol: {
-        span: 8,
-    },
-    wrapperCol: {
-        span: 16,
-    },
-};
-const tailLayout = {
-    wrapperCol: {
-        offset: 8,
-        span: 16,
-    },
-};
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { layout, tailLayout } from '../../config/style.config';
+import { createDiscount, editDiscount, getDiscount } from '../../services/discount.service';
 
 const DiscountModel = ({ type }) => {
     const [date, setDate] = useState()
@@ -32,48 +18,16 @@ const DiscountModel = ({ type }) => {
             expired_at: date
         }
 
-        console.log(type)
         if (type === 'create') {
-            axios.post(API_PATH.discount, discount)
-                .then(
-                    navigate('/admin/discount', {
-                        state: { message: 'Create successfully!' }
-                    })
-                )
-                .catch(error => {
-                    console.log(error)
-                })
+            createDiscount(discount, navigate)
         } else {
-            axios.put(API_PATH.discount + `/${id}`, discount)
-                .then(
-                    navigate('/admin/discount', {
-                        state: { message: 'Update successfully!' }
-                    })
-                )
-                .catch(error => {
-                    console.log(error)
-                })
+            editDiscount(id, discount, navigate)
         }
-
-
     };
-
-    const onDateChange = (dateString) => {
-        setDate(dateString)
-    };
-
 
     useEffect(() => {
-        axios.get(API_PATH.discount + `/${id}`)
-            .then((res) => {
-                const date = dayjs(res.data.expired_at);
-                form.setFieldsValue({
-                    percent: res.data.percent,
-                    date: date,
-                });
-            })
-    }, [id])
-
+        getDiscount(id, dayjs, form)
+    }, [id, form])
 
     return (
         <>
@@ -117,7 +71,7 @@ const DiscountModel = ({ type }) => {
                                 },
                             ]}
                         >
-                            <DatePicker onChange={onDateChange} style={{ width: '100%' }} />
+                            <DatePicker onChange={(dateString) => setDate(dateString)} style={{ width: '100%' }} />
                         </Form.Item>
                         <Form.Item {...tailLayout}>
                             <Space>

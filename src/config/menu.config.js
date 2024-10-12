@@ -1,22 +1,77 @@
 import {
-    AppstoreOutlined,
-    UserOutlined
+    AreaChartOutlined,
+    CodepenOutlined,
+    DollarOutlined,
+    FileDoneOutlined,
+    ProductOutlined,
+    TagOutlined,
+    UsergroupDeleteOutlined,
+    UserOutlined,
 } from '@ant-design/icons';
 import React from 'react';
 
 export const menu = [
     {
         icon: UserOutlined,
-        title: 'User',
-        key: '/user'
+        title: 'My Profile',
+        key: '/profile'
     },
     {
-        icon: AppstoreOutlined,
+        icon: UsergroupDeleteOutlined,
+        title: 'Account',
+        key: '/account'
+    },
+    {
+        icon: TagOutlined,
         title: 'Discount',
         key: '/discount'
     },
+    {
+        icon: DollarOutlined,
+        title: 'Voucher',
+        key: '/voucher'
+    },
+    {
+        icon: AreaChartOutlined,
+        title: 'Statistic',
+        key: '/statistic'
+    },
+    {
+        icon: CodepenOutlined,
+        title: 'Import',
+        key: '/import'
+    },
+    {
+        icon: ProductOutlined,
+        title: 'Product',
+        children: [
+            {
+                key: '/tshirt',
+                label: 'T-shirt',
+            },
+            {
+                key: '/pant',
+                label: 'Pant',
+            },
+            {
+                key: '/shoes',
+                label: 'Shoes',
+            },
+            {
+                key: '/accessory',
+                label: 'Accessory',
+            },
+        ],
+    },
+    {
+        icon: FileDoneOutlined,
+        title: 'Order',
+        key: '/order'
+    },
+
 ].map((item, index) => ({
     key: '/admin' + item.key,
     icon: React.createElement(item.icon),
     label: item.title,
+    children: item.children
 }));
