@@ -9,6 +9,10 @@
     /* --text-color: #677279; */
 }
 
+.hide {
+    display: none;
+}
+
 .text {
     color: #677279;
 }
@@ -74,7 +78,7 @@ input:focus {
     color: #ffffff;
     padding: 12px;
     border-radius: 0 4px 4px 0;
-    width: 12%;
+    width: 10%;
     cursor: pointer;
 }
 

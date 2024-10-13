@@ -50,12 +50,9 @@
     display: flex;
 }
 
-.icon {
-    margin-right: 10px;
-}
-
 .store-system li a {
     pointer-events: none;
+    margin-left: 10px;
 }
 
 .fb-icon {
