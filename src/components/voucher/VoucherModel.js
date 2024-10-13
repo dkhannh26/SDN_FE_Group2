@@ -1,6 +1,6 @@
-import { Button, Col, DatePicker, Form, InputNumber, Row, Space } from 'antd';
+import { Button, Col, Form, InputNumber, Row, Space } from 'antd';
 import Title from 'antd/es/typography/Title';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { layout, tailLayout } from '../../config/style.config';
 import { createVoucher, editVoucher, getVoucher } from '../../services/voucher.service';
@@ -27,7 +27,7 @@ const VoucherModel = ({ type }) => {
         if (type === 'edit') {
             getVoucher(id, form)
         }
-    }, [id, form])
+    }, [id, type, form])
     return (
         <>
             <Row>
