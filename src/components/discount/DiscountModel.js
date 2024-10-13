@@ -26,8 +26,8 @@ const DiscountModel = ({ type }) => {
     };
 
     useEffect(() => {
-        getDiscount(id, dayjs, form)
-    }, [id, form])
+        if (type === 'edit') getDiscount(id, dayjs, form)
+    }, [id, type, form])
 
     return (
         <>
