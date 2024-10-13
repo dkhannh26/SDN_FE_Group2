@@ -17,7 +17,7 @@ const Footer = () => {
                 </Col>
             </Row>
             <Row className='container'>
-                <Col span={6} className='footer-content'>
+                {/* <Col span={6} className='footer-content'>
                     <div className='footer-item--title'>
                         ABOUT US
                     </div>
@@ -26,8 +26,8 @@ const Footer = () => {
                         Sau 6 năm phát triển, SWE - Street Wear Eazy với slogan Young kids with a mission™ đã chiếm được tình cảm của
                         hầu hết các bạn trẻ yêu mến thời trang đường phố trên khắp cả nước.
                     </p>
-                </Col>
-                <Col span={6} className='footer-content'>
+                </Col> */}
+                <Col span={8} className='footer-content'>
                     <div className='footer-item--title'>
                         CHÍNH SÁCH
                     </div>
@@ -49,7 +49,7 @@ const Footer = () => {
                         </li>
                     </ul>
                 </Col>
-                <Col span={6} className='footer-content'>
+                <Col span={8} className='footer-content'>
                     <div className='footer-item--title'>
                         HỆ THỐNG CỬA HÀNG DOTAI
                     </div>
@@ -92,7 +92,7 @@ const Footer = () => {
                         </li>
                     </ul>
                 </Col>
-                <Col span={6} className='footer-content'>
+                <Col span={8} className='footer-content'>
                     <div className='footer-item--title'>
                         FANPAGE
                     </div>
