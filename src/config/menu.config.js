@@ -1,6 +1,7 @@
 import {
     AreaChartOutlined,
     CodepenOutlined,
+    CompressOutlined,
     DollarOutlined,
     FileDoneOutlined,
     ProductOutlined,
@@ -62,6 +63,11 @@ export const menu = [
                 label: 'Accessory',
             },
         ],
+    },
+    {
+        icon: CompressOutlined,
+        title: 'Size',
+        key: '/size'
     },
     {
         icon: FileDoneOutlined,
