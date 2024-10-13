@@ -28,6 +28,30 @@ export const showDeleteConfirm = (id, messageApi, getListDiscount, setDiscounts)
     });
 };
 
+export const showDeleteVoucherConfirm = (id, messageApi, getListVoucher, setVouchers) => {
+    confirm({
+        title: 'Are you sure delete this voucher?',
+        icon: <ExclamationCircleFilled />,
+        okText: 'Yes',
+        okType: 'danger',
+        cancelText: 'No',
+        onOk() {
+            axios.delete(API_PATH.voucher + `/${id}`)
+                .then(() => {
+                    success('Deleted Succesfully', messageApi)
+                })
+                .then(() => {
+                    getListVoucher(setVouchers)
+                })
+                .catch(error => console.error(error))
+        },
+        onCancel() {
+            console.log('Cancel');
+        },
+    });
+};
+
+
 
 export const success = (message, messageApi) => {
     messageApi.open({
