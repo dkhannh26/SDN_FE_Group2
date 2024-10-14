@@ -8,3 +8,8 @@ export const VOUCHER_URL = {
     CREATE: '/admin/voucher/create',
     EDIT: '/admin/voucher/create'
 }
+export const SIZE_URL = {
+    INDEX: '/admin/size',
+    CREATE: '/admin/size/create',
+    EDIT: '/admin/size/create'
+}
