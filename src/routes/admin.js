@@ -3,10 +3,13 @@ import { Route } from 'react-router-dom';
 import Dashboard from '../pages/Dashboard';
 import Discount from '../pages/Discount';
 import Voucher from '../pages/Discount';
+import Account from '../pages/Discount';
 import DiscountTable from '../components/discount/DiscountTable';
 import DiscountModel from '../components/discount/DiscountModel';
 import VoucherTable from '../components/voucher/VoucherTable';
 import VoucherModel from '../components/voucher/VoucherModel';
+import AccountTable from '../components/account/AccountTable';
+import AccountModel from '../components/account/AccountModel';
 
 export const AdminRoutes = (
     <>
@@ -20,6 +23,11 @@ export const AdminRoutes = (
                 <Route index element={<VoucherTable />} />
                 <Route path='create' element={<VoucherModel type='create' />} />
                 <Route path='edit/:id' element={<VoucherModel type='edit' />} />
+            </Route>
+            <Route path='account' element={<Account />}>
+                <Route index element={<AccountTable />} />
+                <Route path='create' element={<AccountModel type='create' />} />
+                <Route path='edit/:id' element={<AccountModel type='edit' />} />
             </Route>
         </Route>
     </>

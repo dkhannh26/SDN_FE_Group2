@@ -5,12 +5,13 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { API_PATH } from '../../config/api.config';
 import { MESSAGE } from '../../config/message.config';
-import { DISCOUNT_URL } from '../../config/url.config';
+import { ACCOUNT_URL, DISCOUNT_URL } from '../../config/url.config';
 import { getListDiscount } from '../../services/discount.service';
-import { formatDate, showDeleteConfirm, success } from '../../utils/helper';
+import { showDeleteConfirm, success } from '../../utils/helper';
+import { getListAccount } from '../../services/account.service';
 
-const DiscountTable = () => {
-    const [discounts, setDiscounts] = useState([])
+const AccountTable = () => {
+    const [accounts, setAccounts] = useState([])
     const navigate = useNavigate();
     const [messageApi, contextHolder] = message.useMessage()
     const location = useLocation();
@@ -23,18 +24,29 @@ const DiscountTable = () => {
             width: '10%',
         },
         {
-            title: 'Percent',
-            dataIndex: 'percent',
-            sorter: (a, b) => a.percent - b.percent,
+            title: 'Username',
+            dataIndex: 'username',
+            width: '5%',
+        },
+        {
+            title: 'Email',
+            dataIndex: 'email',
+            width: '5%',
+        },
+        {
+            title: 'Address',
+            dataIndex: 'address',
             width: '15%',
         },
         {
-            title: 'Expiry',
-            dataIndex: 'expired_at',
-            render: (date) => {
-                return formatDate(date)
-            },
-            width: '20%',
+            title: 'Phone Number',
+            dataIndex: 'phone',
+            width: '15%',
+        },
+        {
+            title: 'Role',
+            dataIndex: 'role',
+            width: '15%',
         },
         {
             title: 'Action',
@@ -43,7 +55,7 @@ const DiscountTable = () => {
                 return (
                     <Space>
                         <Button shape="round" icon={<EditOutlined />} onClick={() => navigate(`edit/${_id}`)} ></Button>
-                        <Button danger shape="round" icon={<DeleteOutlined />} onClick={() => showDeleteConfirm(_id, messageApi, getListDiscount, setDiscounts, API_PATH.discount)} ></Button>
+                        <Button danger shape="round" icon={<DeleteOutlined />} onClick={() => showDeleteConfirm(_id, messageApi, getListDiscount, setAccounts, API_PATH.discount)} ></Button>
                     </Space>
                 )
             },
@@ -62,7 +74,7 @@ const DiscountTable = () => {
             navigate(location.pathname, { replace: true });
         }
 
-        getListDiscount(setDiscounts)
+        getListAccount(setAccounts)
     }, [state, navigate, messageApi, location.pathname])
 
     return (
@@ -70,15 +82,15 @@ const DiscountTable = () => {
             <Flex gap="middle" align="center" justify='space-between'>
                 {contextHolder}
                 <Col>
-                    <Title level={2}>Discount Management</Title>
+                    <Title level={2}>Account Management</Title>
                 </Col>
                 <Col className="gutter-row" style={{ display: 'flex', justifyContent: 'flex-end  !important', alignItems: 'center !important', height: '100%' }}>
-                    <Button onClick={() => navigate(DISCOUNT_URL.CREATE)}>Insert</Button>
+                    <Button onClick={() => navigate(ACCOUNT_URL.CREATE)}>Insert Staff</Button>
                 </Col>
             </Flex>
-            <Table columns={columns} dataSource={discounts} />
+            <Table columns={columns} dataSource={accounts} />
         </>
     )
 }
 
-export default DiscountTable;
+export default AccountTable;
