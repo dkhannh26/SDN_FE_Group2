@@ -21,6 +21,7 @@ export const AdminRoutes = (
                 <Route path='create' element={<VoucherModel type='create' />} />
                 <Route path='edit/:id' element={<VoucherModel type='edit' />} />
             </Route>
+
         </Route>
     </>
 );
