@@ -2,7 +2,7 @@ import axios from "axios";
 import React, { useState, useRef } from "react";
 import { PATH } from "../config/api.config";
 
-import { Button, Carousel, Form, Input, notification } from "antd";
+import { Button, Carousel, Form, Input, List, notification } from "antd";
 import { useNavigate } from "react-router-dom";
 const LoginPopover = () => {
   const navigate = useNavigate();
@@ -74,7 +74,7 @@ const LoginPopover = () => {
   //   console.log(currentSlide);
   // };
 
-  const carouselRef = useRef(null);
+  // const carouselRef = useRef(null);
 
   // const gotoSlide = (slideIndex) => {
   //   if (carouselRef.current) {
@@ -83,117 +83,133 @@ const LoginPopover = () => {
   // };
 
   return (
-    <Carousel ref={carouselRef} dots={false} style={{ width: 350, }}>
-      <form className="login-pop" onSubmit={onSubmit} >
-        <div className="login-pop-title">
-          <p className="login-pop-title__1">Đăng nhập tài khoản</p>
-          <p className="login-pop-title__2 text">
-            Nhập email và mật khẩu của bạn:
-          </p>
-        </div>
-        <div className="login-pop-input">
-          <input
-            name="email"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-          <label className="text">Username</label>
-        </div>
-        <div className="login-pop-input">
-          <input
-            name="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-            type="password"
-          />
-          <label className="text">Password</label>
-        </div>
-        <div className="login-pop-recaptcha">
-          This site is protected by reCAPTCHA and the Google
-          <a
-            href="https://policies.google.com/privacy"
-            target="_blank"
-            rel="noreferrer"
-          >
-            {" "}
-            Privacy Policy{" "}
-          </a>
-          and{" "}
-          <a
-            href="https://policies.google.com/terms"
-            target="_blank"
-            rel="noreferrer"
-          >
-            {" "}
-            Terms of Service{" "}
-          </a>
-          apply.
-        </div>
-        <button type="submit" className="login-pop-btn">
-          ĐĂNG NHẬP
-        </button>
-        <div className="login-pop-navigate text">
-          <p>
-            Khách hàng mới?
-            <a href="/"> Tạo tài khoản</a>
-          </p>
-          <p>
-            Quên mật khẩu?
-            <a href="#" onClick={(e) => { e.preventDefault(); carouselRef.current.next(); }} > Khôi phục mật khẩu</a>
-          </p>
-        </div>
-      </form>
+    // <Carousel ref={carouselRef} dots={false} style={{ width: 350, }}>
+    //   <form className="login-pop" onSubmit={onSubmit} >
+    //     <div className="login-pop-title">
+    //       <p className="login-pop-title__1">Đăng nhập tài khoản</p>
+    //       <p className="login-pop-title__2 text">
+    //         Nhập email và mật khẩu của bạn:
+    //       </p>
+    //     </div>
+    //     <div className="login-pop-input">
+    //       <input
+    //         name="email"
+    //         value={username}
+    //         onChange={(e) => setUsername(e.target.value)}
+    //         required
+    //       />
+    //       <label className="text">Username</label>
+    //     </div>
+    //     <div className="login-pop-input">
+    //       <input
+    //         name="password"
+    //         value={password}
+    //         onChange={(e) => setPassword(e.target.value)}
+    //         required
+    //         type="password"
+    //       />
+    //       <label className="text">Password</label>
+    //     </div>
+    //     <div className="login-pop-recaptcha">
+    //       This site is protected by reCAPTCHA and the Google
+    //       <a
+    //         href="https://policies.google.com/privacy"
+    //         target="_blank"
+    //         rel="noreferrer"
+    //       >
+    //         {" "}
+    //         Privacy Policy{" "}
+    //       </a>
+    //       and{" "}
+    //       <a
+    //         href="https://policies.google.com/terms"
+    //         target="_blank"
+    //         rel="noreferrer"
+    //       >
+    //         {" "}
+    //         Terms of Service{" "}
+    //       </a>
+    //       apply.
+    //     </div>
+    //     <button type="submit" className="login-pop-btn">
+    //       ĐĂNG NHẬP
+    //     </button>
+    //     <div className="login-pop-navigate text">
+    //       <p>
+    //         Khách hàng mới?
+    //         <a href="/"> Tạo tài khoản</a>
+    //       </p>
+    //       <p>
+    //         Quên mật khẩu?
+    //         <a href="#" onClick={(e) => { e.preventDefault(); carouselRef.current.next(); }} > Khôi phục mật khẩu</a>
+    //       </p>
+    //     </div>
+    //   </form>
 
-      <form>
-        <div className="login-pop-title">
-          <p className="login-pop-title__1">KHÔI PHỤC MẬT KHẨU</p>
-          <p className="login-pop-title__2 text">
-            Nhập email của bạn:
-          </p>
-        </div>
-        <div className="login-pop-input">
-          <input
-            name="email"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-          <label className="text">Username</label>
-        </div>
-        <div className="login-pop-recaptcha">
-          This site is protected by reCAPTCHA and the Google
-          <a
-            href="https://policies.google.com/privacy"
-            target="_blank"
-            rel="noreferrer"
-          >
-            {" "}
-            Privacy Policy{" "}
-          </a>
-          and{" "}
-          <a
-            href="https://policies.google.com/terms"
-            target="_blank"
-            rel="noreferrer"
-          >
-            {" "}
-            Terms of Service{" "}
-          </a>
-          apply.
-        </div>
-        <button type="submit" className="re-pass-btn">
-          KHÔI PHỤC
-        </button>
-        <div className="login-pop-navigate text">
-          <p>
-            Bạn đã nhớ mật khẩu?
-            <a href="#" onClick={(e) => { e.preventDefault(); carouselRef.current.prev(); }} > Trở về đăng nhập</a>
-          </p>
-        </div>
-      </form>
-    </Carousel>
+    //   <form>
+    //     <div className="login-pop-title">
+    //       <p className="login-pop-title__1">KHÔI PHỤC MẬT KHẨU</p>
+    //       <p className="login-pop-title__2 text">
+    //         Nhập email của bạn:
+    //       </p>
+    //     </div>
+    //     <div className="login-pop-input">
+    //       <input
+    //         name="email"
+    //         value={username}
+    //         onChange={(e) => setUsername(e.target.value)}
+    //         required
+    //       />
+    //       <label className="text">Username</label>
+    //     </div>
+    //     <div className="login-pop-recaptcha">
+    //       This site is protected by reCAPTCHA and the Google
+    //       <a
+    //         href="https://policies.google.com/privacy"
+    //         target="_blank"
+    //         rel="noreferrer"
+    //       >
+    //         {" "}
+    //         Privacy Policy{" "}
+    //       </a>
+    //       and{" "}
+    //       <a
+    //         href="https://policies.google.com/terms"
+    //         target="_blank"
+    //         rel="noreferrer"
+    //       >
+    //         {" "}
+    //         Terms of Service{" "}
+    //       </a>
+    //       apply.
+    //     </div>
+    //     <button type="submit" className="re-pass-btn">
+    //       KHÔI PHỤC
+    //     </button>
+    //     <div className="login-pop-navigate text">
+    //       <p>
+    //         Bạn đã nhớ mật khẩu?
+    //         <a href="#" onClick={(e) => { e.preventDefault(); carouselRef.current.prev(); }} > Trở về đăng nhập</a>
+    //       </p>
+    //     </div>
+    //   </form>
+    // </Carousel>
+
+    
+      <List 
+        dataSource={[
+          'My Profile',
+          'Change Password',
+          'Logout'
+        ]}
+        renderItem={(item) => (
+          <List.Item className="pop-list-item">
+            {item}
+          </List.Item>
+        )}
+        style={{width: 110}}
+      />
+    
   );
 };
 

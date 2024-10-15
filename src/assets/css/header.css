@@ -227,3 +227,11 @@ input:focus {
 .header-menu {
     display: block;
 }
+
+.pop-list-item {
+    transition: .3s;
+}
+.pop-list-item:hover {
+    transform: scale(1.1);
+    cursor: pointer;
+}

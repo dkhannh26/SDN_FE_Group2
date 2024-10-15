@@ -94,7 +94,7 @@ const Header = () => {
           </div>
         </Col>
         <Col span={8} className="login-cart flex-center">
-          <Popover
+          {/* <Popover
             content={LoginPopover}
             trigger="click"
             className="login-box flex-center "
@@ -108,10 +108,10 @@ const Header = () => {
                 Tài khoản của tôi <DownOutlined />
               </p>
             </div>
-          </Popover>
+          </Popover> */}
 
-          {/* <Popover
-            // content={LoginPopover}
+          <Popover
+            content={LoginPopover}
             trigger="click"
             className="login-box flex-center "
           >
@@ -124,7 +124,7 @@ const Header = () => {
                 Thịnh Lâm <DownOutlined />
               </p>
             </div>
-          </Popover> */}
+          </Popover>
 
           <Popover
             placement="bottomRight"
