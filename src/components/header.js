@@ -2,6 +2,7 @@ import React  from 'react';
 import { Col, Row, Badge, Popover, Empty, Menu } from "antd";
 import '../assets/css/header.css'
 import Logo from '../assets/images/logo.webp'
+import Logo2 from '../assets/images/logo2.jpeg'
 import { DownOutlined, UserOutlined, ShoppingOutlined, SearchOutlined } from '@ant-design/icons';
 
 const Header = () => {
@@ -101,7 +102,7 @@ const Header = () => {
             </Row>
             <Row className='container header-middle flex-center'>
                 <Col span={4}>
-                    <img src={Logo} alt='logo' className='logo' />
+                    <img src={Logo2} alt='logo' className='logo' />
                 </Col>
                 <Col span={9} className='flex-center'>
                     <input name="search" placeholder='Tìm kiếm sản phẩm...' className='search-input' />
