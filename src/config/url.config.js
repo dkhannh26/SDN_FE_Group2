@@ -9,7 +9,10 @@ export const VOUCHER_URL = {
     EDIT: '/admin/voucher/create'
 }
 export const SIZE_URL = {
-    INDEX: '/admin/size',
-    CREATE: '/admin/size/create',
-    EDIT: '/admin/size/create'
+    PANTSHIRT_INDEX: '/admin/pantTshirtSize',
+    PANTSHIRT_CREATE: '/admin/pantTshirtSize/create',
+    PANTSHIRT_EDIT: '/admin/pantTshirtSize/create',
+    SHOES_INDEX: '/admin/shoesSize',
+    SHOES_CREATE: '/admin/shoesSize/create',
+    SHOES_EDIT: '/admin/shoesSize/create'
 }

@@ -69,20 +69,16 @@ export const menu = [
         icon: CompressOutlined,
         title: 'Size',
         key: '/size',
-        // children: [
-        //     {
-        //         key: '/tshirtSize',
-        //         label: 'T-shirt Size',
-        //     },
-        //     {
-        //         key: '/pantSize',
-        //         label: 'Pant Size',
-        //     },
-        //     {
-        //         key: '/shoesSize',
-        //         label: 'Shoes Size',
-        //     },
-        // ],
+        children: [
+            {
+                key: '/admin/pantTshirtSize',
+                label: 'Pant T-shirt Size',
+            },
+            {
+                key: '/admin/shoesSize',
+                label: 'Shoes Size',
+            },
+        ],
     },
     {
         icon: FileDoneOutlined,

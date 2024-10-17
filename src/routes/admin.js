@@ -8,8 +8,10 @@ import DiscountTable from '../components/discount/DiscountTable';
 import DiscountModel from '../components/discount/DiscountModel';
 import VoucherTable from '../components/voucher/VoucherTable';
 import VoucherModel from '../components/voucher/VoucherModel';
-import SizeTable from '../components/size/SizeTable';
-import SizeModel from '../components/size/SizeModel';
+import PantShirtSizeTable from '../components/size/PantShirtSizeTable';
+import PantShirtSizeModel from '../components/size/PantShirtSizeModel';
+import ShoesSizeTable from '../components/size/ShoesSizeTable';
+import ShoesSizeModel from '../components/size/ShoesSizeModel';
 
 export const AdminRoutes = (
     <>
@@ -24,10 +26,15 @@ export const AdminRoutes = (
                 <Route path='create' element={<VoucherModel type='create' />} />
                 <Route path='edit/:id' element={<VoucherModel type='edit' />} />
             </Route>
-            <Route path='size' element={<Size />}>
-                <Route index element={<SizeTable />} />
-                <Route path='create' element={<SizeModel type='create' />} />
-                <Route path='edit/:id' element={<SizeModel type='edit' />} />
+            <Route path='pantTshirtSize' element={<Size />}>
+                <Route index element={<PantShirtSizeTable />} />
+                <Route path='create' element={<PantShirtSizeModel type='create' />} />
+                <Route path='edit/:id' element={<PantShirtSizeModel type='edit' />} />
+            </Route>
+            <Route path='shoesSize' element={<Size />}>
+                <Route index element={<ShoesSizeTable />} />
+                <Route path='create' element={<ShoesSizeModel type='create' />} />
+                <Route path='edit/:id' element={<ShoesSizeModel type='edit' />} />
             </Route>
         </Route>
     </>
