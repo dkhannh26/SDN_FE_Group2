@@ -1,92 +1,61 @@
-import React from 'react';
-import { List, Image, Button, Row, Col, Typography, InputNumber, Card, Form, Input } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { List, Image, Button, Row, Col, Typography, InputNumber, Card, Form, Input, message, Space } from 'antd';
 import Title from 'antd/es/typography/Title';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faReply } from '@fortawesome/free-solid-svg-icons';
 import {
     CloseOutlined
 } from '@ant-design/icons';
+import { editCart, getListCart } from '../../services/cart.service';
+import { API_PATH } from "../../config/api.config";
+import { showDeleteConfirm } from '../../utils/helper';
+import { useNavigate } from 'react-router-dom';
+import { getListVoucher, getVoucher } from '../../services/voucher.service';
+
 
 const { Text } = Typography;
 
 const CartList = () => {
-    const data = [
-        {
-            id: 1,
-            title: 'LOUD TEE - BLACK',
-            price: 380000,
-            size: 'S',
-            imageUrl: 'https://product.hstatic.net/1000344185/product/swe_0012_c129a74253e847e384cd78fbf59b5fcc_medium.jpg'
-        },
-        {
-            id: 2,
-            title: '24 TEE - RED',
-            price: 300000,
-            size: 'S',
-            imageUrl: 'https://product.hstatic.net/1000344185/product/swe_0012_c129a74253e847e384cd78fbf59b5fcc_medium.jpg'
-        }, {
-            id: 1,
-            title: 'LOUD TEE - BLACK',
-            price: 380000,
-            size: 'S',
-            imageUrl: 'https://product.hstatic.net/1000344185/product/swe_0012_c129a74253e847e384cd78fbf59b5fcc_medium.jpg'
-        },
-        {
-            id: 2,
-            title: '24 TEE - RED',
-            price: 300000,
-            size: 'S',
-            imageUrl: 'https://product.hstatic.net/1000344185/product/swe_0012_c129a74253e847e384cd78fbf59b5fcc_medium.jpg'
-        }, {
-            id: 1,
-            title: 'LOUD TEE - BLACK',
-            price: 380000,
-            size: 'S',
-            imageUrl: 'https://product.hstatic.net/1000344185/product/swe_0012_c129a74253e847e384cd78fbf59b5fcc_medium.jpg'
-        },
-        {
-            id: 2,
-            title: '24 TEE - RED',
-            price: 300000,
-            size: 'S',
-            imageUrl: 'https://product.hstatic.net/1000344185/product/swe_0012_c129a74253e847e384cd78fbf59b5fcc_medium.jpg'
-        }, {
-            id: 1,
-            title: 'LOUD TEE - BLACK',
-            price: 380000,
-            size: 'S',
-            imageUrl: 'https://product.hstatic.net/1000344185/product/swe_0012_c129a74253e847e384cd78fbf59b5fcc_medium.jpg'
-        },
-        {
-            id: 2,
-            title: '24 TEE - RED',
-            price: 300000,
-            size: 'S',
-            imageUrl: 'https://product.hstatic.net/1000344185/product/swe_0012_c129a74253e847e384cd78fbf59b5fcc_medium.jpg'
-        }, {
-            id: 1,
-            title: 'LOUD TEE - BLACK',
-            price: 380000,
-            size: 'S',
-            imageUrl: 'https://product.hstatic.net/1000344185/product/swe_0012_c129a74253e847e384cd78fbf59b5fcc_medium.jpg'
-        },
-        {
-            id: 2,
-            title: '24 TEE - RED',
-            price: 300000,
-            size: 'S',
-            imageUrl: 'https://product.hstatic.net/1000344185/product/swe_0012_c129a74253e847e384cd78fbf59b5fcc_medium.jpg'
-        },
-    ];
+    const [isCheck, setIsCheck] = useState();
+    const [carts, setCarts] = useState([])
+    const [voucher, setVoucher] = useState([])
+    const [messageApi, contextHolder] = message.useMessage(null)
+    const navigate = useNavigate()
+    const [totalAmount, setTotalAmount] = useState(Number);
+    const [total, setTotal] = useState(Number);
+    const [initialTotal, setInitialTotal] = useState(0);
 
-    const onChange = (value) => {
-        console.log('changed', value);
+    // let total
+    const onChange = (value, id) => {
+        const updatedCart = { quantity: value };
+        editCart(id, updatedCart, setTotalAmount)
     };
     const handleContinueShopping = () => {
         console.log('Tiếp tục mua hàng');
     };
+    const handleVoucherClick = (voucherId, percent) => {
+        setIsCheck(voucherId);
+        setTotal(initialTotal - percent);
+    };
 
-    const totalAmount = data.reduce((acc, item) => acc + item.price, 0);
+
+    useEffect(() => {
+        getListVoucher(setVoucher);
+        getListCart(setCarts, (total) => {
+            setTotal(total);
+            setInitialTotal(total);
+        });
+        setIsCheck(null);
+    }, [totalAmount]);
+
+    console.log(total);
+    // let amount = carts?.map(cart => cart.tshirt.price * cart.quantity);
+    // console.log('amount', amount)
+    // const total = amount.reduce((a, b) => a + b, 0);
+    // setTotalAmount(total);
+
+    // console.log(carts);
+    // console.log(voucher);
 
     return (
         <div style={{ padding: '20px' }}>
@@ -94,35 +63,36 @@ const CartList = () => {
             <Row gutter={16} style={{ marginTop: '20px' }}>
                 <Col xs={24} md={16}>
                     <Text strong style={{ fontSize: '16px', backgroundColor: '#f5f5f5', padding: '10px', display: 'block', textAlign: 'left', color: '#888' }}>
-                        Có <Text style={{ color: 'blue', fontSize: '16px' }}>{data.length} sản phẩm</Text>  trong giỏ hàng
+                        Có <Text style={{ color: 'blue', fontSize: '16px' }}>{carts.length} sản phẩm</Text>  trong giỏ hàng
                     </Text>
                     <List
                         itemLayout="horizontal"
-                        dataSource={data}
+                        dataSource={carts}
                         renderItem={(item) => (
+
                             <List.Item>
                                 <List.Item.Meta
-                                    avatar={<Image width={100} src={item.imageUrl} />}
+                                    avatar={<Image width={100} src={`http://localhost:3000/uploads/${item.image._id}${item.image.file_extension}`} />}
                                     title={
-                                        <Text style={{ display: 'block', textAlign: 'left', fontSize: '15px', fontWeight: 'bold' }}>{item.title}</Text>
+                                        <Text style={{ display: 'block', textAlign: 'left', fontSize: '15px', fontWeight: 'bold' }}>{item.tshirt.name}</Text>
                                     }
                                     description={(
                                         <div style={{ marginTop: '5px', display: 'block', textAlign: 'left' }}>
-                                            <Text style={{ color: '#888' }}>{item.price.toLocaleString()}<Text style={{ fontSize: '10px', color: '#888', textDecorationLine: 'underline' }}>đ</Text></Text>
+                                            <Text style={{ color: '#888' }}>{(item.tshirt.price * item.quantity).toLocaleString()}<Text style={{ fontSize: '10px', color: '#888', textDecorationLine: 'underline' }}>đ</Text></Text>
                                             <br />
-                                            <Text style={{ color: '#888' }}>Kích thước: {item.size}</Text>
+                                            <Text style={{ color: '#888' }}>Kích thước: {item.size.size_name}</Text>
                                             <br />
-                                            <InputNumber min={1} max={10} defaultValue={1} onChange={onChange} />
+                                            <InputNumber min={1} max={item.tshirt.quantity} defaultValue={item.quantity} onChange={(value) => onChange(value, item._id)} />
                                         </div>
                                     )}
                                     style={{ marginLeft: '10px' }}
                                 />
                                 <div style={{ textAlign: 'right' }}>
-                                    <Button type="link"><CloseOutlined style={{ color: 'black' }} /></Button>
+                                    <Button type="link" onClick={() => showDeleteConfirm(item._id, messageApi, getListCart, setCarts, API_PATH.cart)}><CloseOutlined style={{ color: 'black' }} /></Button>
                                     <br />
                                     <br />
                                     <br />
-                                    <Text style={{ fontSize: '15px', color: 'black', fontWeight: 'bold' }}>{item.price.toLocaleString()}<Text style={{ fontSize: '10px', color: 'black', textDecorationLine: 'underline' }}>đ</Text></Text>
+                                    <Text style={{ fontSize: '15px', color: 'black', fontWeight: 'bold' }}>{(item.tshirt.price * item.quantity).toLocaleString()}<Text style={{ fontSize: '10px', color: 'black', textDecorationLine: 'underline' }}>đ</Text></Text>
                                 </div>
                             </List.Item>
                         )}
@@ -142,10 +112,20 @@ const CartList = () => {
                             bordered={false}
                             style={{ boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)' }}
                         >
+                            <Space wrap style={{ marginBottom: '20px' }}>
+                                {voucher.map((item) => {
+                                    return (
+                                        <Button color={isCheck === item._id ? 'primary' : 'default'} variant='outlined' onClick={() => handleVoucherClick(item._id, item.percent)} disabled={total < item.condition} >Giảm {item.percent}k cho đơn từ {item.condition}đ</Button>
+                                    )
+                                })}
+                            </Space>
+
+
+
                             <Row justify="space-between" align="middle">
                                 <Text style={{ fontWeight: 'bold', color: '#888' }}>Tổng tiền:</Text>
                                 <Text style={{ fontSize: '20px', color: 'red', fontWeight: 'bold' }}>
-                                    {totalAmount.toLocaleString()}<Text style={{ fontSize: '15px', color: 'red', textDecorationLine: 'underline' }}>đ</Text>
+                                    {total.toLocaleString()}<Text style={{ fontSize: '15px', color: 'red', textDecorationLine: 'underline' }}>đ</Text>
                                 </Text>
                             </Row>
                             <Button type="primary" block style={{ marginTop: '20px', backgroundColor: 'red', borderColor: 'red' }}>
