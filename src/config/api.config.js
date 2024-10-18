@@ -5,4 +5,6 @@ export const PATH = {
   discount: baseURL + "discount",
 
   login: baseURL + "account/login",
+
+  checkAuth: baseURL + "account/check-auth",
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Row, Badge, Popover, Empty, Menu } from "antd";
 import "../assets/css/header.css";
 import Logo from "../assets/images/logo.webp";
@@ -9,6 +9,10 @@ import {
   SearchOutlined,
 } from "@ant-design/icons";
 import LoginPopover from "./login";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { PATH } from "../config/api.config";
+import { useAuth } from "./context/AuthContext";
 
 const Header = () => {
   <LoginPopover />;
@@ -71,6 +75,10 @@ const Header = () => {
       key: "SALE",
     },
   ];
+
+  const { isAuthenticated, username, setIsAuthenticated, setUsername } =
+    useAuth();
+
   return (
     <div className="header">
       <Row className="top-bar">
@@ -94,37 +102,39 @@ const Header = () => {
           </div>
         </Col>
         <Col span={8} className="login-cart flex-center">
-          {/* <Popover
-            content={LoginPopover}
-            trigger="click"
-            className="login-box flex-center "
-          >
-            <div className="user-icon">
-              <UserOutlined className="icon" />
-            </div>
-            <div className="login">
-              <p style={{ color: "#333333" }}>Đăng nhập / Đăng ký</p>
-              <p style={{ fontWeight: 500 }}>
-                Tài khoản của tôi <DownOutlined />
-              </p>
-            </div>
-          </Popover> */}
-
-          <Popover
-            content={LoginPopover}
-            trigger="click"
-            className="login-box flex-center "
-          >
-            <div className="user-icon">
-              <UserOutlined className="icon" />
-            </div>
-            <div className="login">
-              <p style={{ color: "#333333" }}>Tài khoản của</p>
-              <p style={{ fontWeight: 500 }}>
-                Thịnh Lâm <DownOutlined />
-              </p>
-            </div>
-          </Popover>
+          {isAuthenticated ? (
+            <Popover
+              content={LoginPopover}
+              trigger="click"
+              className="login-box flex-center "
+            >
+              <div className="user-icon">
+                <UserOutlined className="icon" />
+              </div>
+              <div className="login">
+                <p style={{ color: "#333333" }}>Tài khoản của</p>
+                <p style={{ fontWeight: 500 }}>
+                  {username} <DownOutlined />
+                </p>
+              </div>
+            </Popover>
+          ) : (
+            <Popover
+              content={LoginPopover}
+              trigger="click"
+              className="login-box flex-center "
+            >
+              <div className="user-icon">
+                <UserOutlined className="icon" />
+              </div>
+              <div className="login">
+                <p style={{ color: "#333333" }}>Đăng nhập / Đăng ký</p>
+                <p style={{ fontWeight: 500 }}>
+                  Tài khoản của tôi <DownOutlined />
+                </p>
+              </div>
+            </Popover>
+          )}
 
           <Popover
             placement="bottomRight"
