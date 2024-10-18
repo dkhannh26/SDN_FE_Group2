@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+
 import { Col, Row, Badge, Popover, Empty, Menu } from "antd";
 import "../assets/css/header.css";
 import Logo from "../assets/images/logo.webp";
@@ -8,6 +9,7 @@ import {
   ShoppingOutlined,
   SearchOutlined,
 } from "@ant-design/icons";
+
 import LoginPopover from "./login";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -135,7 +137,6 @@ const Header = () => {
               </div>
             </Popover>
           )}
-
           <Popover
             placement="bottomRight"
             content={cartPopover}

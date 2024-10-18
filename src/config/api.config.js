@@ -7,4 +7,6 @@ export const PATH = {
   login: baseURL + "account/login",
 
   checkAuth: baseURL + "account/check-auth",
+
+  register: baseURL + "account/register",
 };
