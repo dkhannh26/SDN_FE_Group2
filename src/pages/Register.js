@@ -8,12 +8,14 @@ import {
   notification,
   Radio,
   Row,
+  Select,
 } from "antd";
 import "../assets/css/register.css";
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { PATH } from "../config/api.config";
+import { options } from "./ProvinceData";
 
 const Register = () => {
   const [componentVariant, setComponentVariant] = useState("filled");
@@ -61,6 +63,11 @@ const Register = () => {
                 required: true,
                 message: "Please input your username!",
               },
+              {
+                pattern: /^[a-zA-Z0-9]{3,}$/,
+                message:
+                  "Username must have at least 3 letters, and only contain letters and numbers",
+              },
             ]}
           >
             <Input placeholder="Username" className="register-input" />
@@ -70,18 +77,15 @@ const Register = () => {
             rules={[
               {
                 required: true,
-                message: "Please input your address!",
+                message: "Please select your address!",
               },
             ]}
           >
-            <Input placeholder="Address" className="register-input" />
+            <Select placeholder="Address" options={options} />
+
+            {/* <Input placeholder="Address" className="register-input" /> */}
           </Form.Item>
-          {/* <Form.Item>
-            <Radio.Group>
-              <Radio value="Female">Female</Radio>
-              <Radio value="Male">Male</Radio>
-            </Radio.Group> */}
-          {/* </Form.Item> */}
+
           <Form.Item
             name="phone"
             rules={[
@@ -89,12 +93,12 @@ const Register = () => {
                 required: true,
                 message: "Please input your phone number!",
               },
+              {
+                pattern: /^[0-9]{10}$/,
+                message: "Phone number must be 10 digits!",
+              },
             ]}
           >
-            {/* <DatePicker
-              placeholder="Select birthday"
-              className="register-input"
-            /> */}
             <Input placeholder="Phone" className="register-input" />
           </Form.Item>
           <Form.Item
@@ -104,6 +108,7 @@ const Register = () => {
                 required: true,
                 message: "Please input your email!",
               },
+              { type: "email", message: "Please enter a valid email!" },
             ]}
           >
             <Input placeholder="Email" className="register-input" />
@@ -115,6 +120,7 @@ const Register = () => {
                 required: true,
                 message: "Please input your password!",
               },
+              { min: 6, message: "Password must be at least 6 characters!" },
             ]}
           >
             <Input.Password placeholder="Password" className="register-input" />

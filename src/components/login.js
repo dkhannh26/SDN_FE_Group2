@@ -5,13 +5,14 @@ import { PATH } from "../config/api.config";
 import { Button, Carousel, Form, Input, List, notification } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
+import ForgotPassword from "./forgotPassword";
 
 const LoginPopover = () => {
   const navigate = useNavigate();
-
   const [username, setUsernameState] = useState("");
   const [password, setPassword] = useState("");
-  const { isAuthenticated, setIsAuthenticated, setUsername } = useAuth(); // Get authentication state and functions
+  const { isAuthenticated, setIsAuthenticated, setUsername, user, setUser } =
+    useAuth(); // Get authentication state and functions
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -27,11 +28,17 @@ const LoginPopover = () => {
           if (res && res.data.EC === 0) {
             localStorage.setItem("token", res.data.token);
             setIsAuthenticated(true);
+            // setUsername(res);
             notification.success({
               message: res.data.message,
               description: "success",
             });
-            navigate("/customer/profile");
+            setUsernameState("");
+            setPassword("");
+
+            setTimeout(() => {
+              navigate("/customer/profile");
+            }, 1000);
           } else {
             notification.error({
               message: res.data.message,
@@ -113,7 +120,7 @@ const LoginPopover = () => {
             <div className="login-pop-navigate text">
               <p>
                 Khách hàng mới?
-                <a href="/"> Tạo tài khoản</a>
+                <a href="/customer/register"> Tạo tài khoản</a>
               </p>
               <p>
                 Quên mật khẩu?
@@ -130,61 +137,7 @@ const LoginPopover = () => {
               </p>
             </div>
           </form>
-
-          <form>
-            <div className="login-pop-title">
-              <p className="login-pop-title__1">KHÔI PHỤC MẬT KHẨU</p>
-              <p className="login-pop-title__2 text">Nhập email của bạn:</p>
-            </div>
-            <div className="login-pop-input">
-              <input
-                name="email"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
-                required
-              />
-              <label className="text">Username</label>
-            </div>
-            <div className="login-pop-recaptcha">
-              This site is protected by reCAPTCHA and the Google
-              <a
-                href="https://policies.google.com/privacy"
-                target="_blank"
-                rel="noreferrer"
-              >
-                {" "}
-                Privacy Policy{" "}
-              </a>
-              and{" "}
-              <a
-                href="https://policies.google.com/terms"
-                target="_blank"
-                rel="noreferrer"
-              >
-                {" "}
-                Terms of Service{" "}
-              </a>
-              apply.
-            </div>
-            <button type="submit" className="re-pass-btn">
-              KHÔI PHỤC
-            </button>
-            <div className="login-pop-navigate text">
-              <p>
-                Bạn đã nhớ mật khẩu?
-                <a
-                  href="#"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    carouselRef.current.prev();
-                  }}
-                >
-                  {" "}
-                  Trở về đăng nhập
-                </a>
-              </p>
-            </div>
-          </form>
+          <ForgotPassword carouselRef={carouselRef} />
         </Carousel>
       ) : (
         <div
@@ -198,6 +151,9 @@ const LoginPopover = () => {
           <Button
             className="pop-list-item"
             style={{ marginBottom: 8, border: "none" }}
+            onClick={() => {
+              navigate("/customer/profile");
+            }}
           >
             My Profile
           </Button>
@@ -214,6 +170,7 @@ const LoginPopover = () => {
               localStorage.clear("token");
               setIsAuthenticated(false);
               setUsername("");
+              setUser("");
               navigate("/customer");
             }}
           >
@@ -225,9 +182,4 @@ const LoginPopover = () => {
   );
 };
 
-<List
-  dataSource={["My Profile", "Change Password", "Logout"]}
-  renderItem={(item) => <List.Item className="pop-list-item">{item}</List.Item>}
-  style={{ width: 110 }}
-/>;
 export default LoginPopover;

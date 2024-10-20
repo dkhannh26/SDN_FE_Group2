@@ -17,7 +17,6 @@ import { PATH } from "../config/api.config";
 import { useAuth } from "./context/AuthContext";
 
 const Header = () => {
-  <LoginPopover />;
   const cartPopover = (
     <div className="cart-pop">
       <div className="card-pop-title text">

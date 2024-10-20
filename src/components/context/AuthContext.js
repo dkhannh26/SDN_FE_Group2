@@ -7,9 +7,12 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [username, setUsername] = useState("");
+  const [user, setUser] = useState({});
 
   const checkAuth = async () => {
     const token = localStorage.getItem("token");
+    // console.log(token);
+
     if (token) {
       try {
         const response = await axios.post(
@@ -24,6 +27,7 @@ export const AuthProvider = ({ children }) => {
         if (response.data.isAuthenticated) {
           setIsAuthenticated(true);
           setUsername(response.data.user.username);
+          setUser(response.data.user);
         } else {
           setIsAuthenticated(false);
         }
@@ -38,11 +42,18 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     checkAuth();
-  }, []);
+  }, [isAuthenticated]);
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, username, setIsAuthenticated, setUsername }}
+      value={{
+        isAuthenticated,
+        username,
+        setIsAuthenticated,
+        setUsername,
+        user,
+        setUser,
+      }}
     >
       {children}
     </AuthContext.Provider>

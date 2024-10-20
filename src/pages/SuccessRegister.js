@@ -5,18 +5,44 @@ import { PATH } from "../config/api.config";
 import axios from "axios";
 import { Button, Result } from "antd";
 // import "../assets/css/register.success.css";
+import { useAuth } from "../components/context/AuthContext";
 
-const SuccessRegister = () => {
-  const { token } = useParams();
-
+const SuccessRegister = (path) => {
+  const { token, id } = useParams();
+  // console.log(id);
+  const {
+    isAuthenticated,
+    username,
+    setIsAuthenticated,
+    setUsername,
+    user,
+    setUser,
+  } = useAuth();
   const [message, setMessage] = useState("");
   useEffect(() => {
-    let isMounted = true;
     const fetchData = async () => {
       try {
-        const res = await axios.post(`${PATH.register}/${token}`, token);
-        if (isMounted) {
-          setMessage(res.data.message);
+        if (id) {
+          // account/update/:accountId/:token
+
+          const res = await axios
+            .put(`${PATH.updateProfile}/${id}/${token}`, token)
+            .then((res) => {
+              console.log(res);
+              setIsAuthenticated(true);
+
+              if (res.data.EC === 0) {
+                setMessage(res.data.message);
+              }
+            });
+        } else {
+          const res = await axios
+            .post(`${PATH.register}/${token}`, token)
+            .then((res) => {
+              if (res.data.EC === 0) {
+                setMessage(res.data.message);
+              }
+            });
         }
 
         // console.log(res.data.message);
@@ -26,9 +52,6 @@ const SuccessRegister = () => {
     };
 
     fetchData();
-    return () => {
-      isMounted = false;
-    };
   }, []);
 
   return (
@@ -40,7 +63,7 @@ const SuccessRegister = () => {
         transform: "translate(-50%,-50%)",
       }}
       status="success"
-      title="Your account has been created successfully"
+      title={message}
       subTitle=""
       extra={[
         <Button href="/customer" type="primary" key="console">
