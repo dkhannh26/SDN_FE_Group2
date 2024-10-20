@@ -7,6 +7,8 @@ import DiscountTable from '../components/discount/DiscountTable';
 import DiscountModel from '../components/discount/DiscountModel';
 import VoucherTable from '../components/voucher/VoucherTable';
 import VoucherModel from '../components/voucher/VoucherModel';
+import OrderTable from '../components/order/OrderTable';
+import OrderModel from '../components/order/OrderModel';
 
 export const AdminRoutes = (
     <>
@@ -20,6 +22,11 @@ export const AdminRoutes = (
                 <Route index element={<VoucherTable />} />
                 <Route path='create' element={<VoucherModel type='create' />} />
                 <Route path='edit/:id' element={<VoucherModel type='edit' />} />
+            </Route>
+            <Route path='order' element={<Voucher />}>
+                <Route index element={<OrderTable />} />
+                <Route path='create' element={<OrderModel type='create' />} />
+                <Route path='edit/:id' element={<OrderModel type='edit' />} />
             </Route>
         </Route>
     </>

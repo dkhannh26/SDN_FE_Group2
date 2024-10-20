@@ -5,7 +5,7 @@ import { API_PATH } from "../config/api.config";
 import moment from 'moment';
 const { confirm } = Modal;
 
-export const showDeleteConfirm = (id, messageApi, getListDiscount, setDiscounts) => {
+export const showDeleteConfirm = (id, messageApi, getListDiscount, setDiscounts, URL) => {
     confirm({
         title: 'Are you sure delete this discount?',
         icon: <ExclamationCircleFilled />,
@@ -13,7 +13,7 @@ export const showDeleteConfirm = (id, messageApi, getListDiscount, setDiscounts)
         okType: 'danger',
         cancelText: 'No',
         onOk() {
-            axios.delete(API_PATH.discount + `/${id}`)
+            axios.delete(URL + `/${id}`)
                 .then(() => {
                     success('Deleted Succesfully', messageApi)
                 })
