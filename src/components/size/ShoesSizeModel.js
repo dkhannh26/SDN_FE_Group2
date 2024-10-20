@@ -63,7 +63,7 @@ const SizeModel = ({ type }) => {
                                 <InputNumber style={{ width: '100%' }} />
                             </Form.Item>
                         )}
-                        <Form.Item
+                        {/* <Form.Item
                             name="quantity"
                             label="Quantity"
                             rules={[
@@ -75,7 +75,7 @@ const SizeModel = ({ type }) => {
                             ]}
                         >
                             <InputNumber style={{ width: '100%' }} />
-                        </Form.Item>
+                        </Form.Item> */}
                         <Form.Item {...tailLayout}>
                             <Space>
                                 <Button type="primary" htmlType="submit" >

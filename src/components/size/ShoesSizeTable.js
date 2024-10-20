@@ -1,4 +1,4 @@
-import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
+import { DeleteOutlined } from '@ant-design/icons';
 import { Button, Col, Flex, Space, Table, message } from 'antd';
 import Title from 'antd/es/typography/Title';
 import React, { useEffect, useState } from 'react';
@@ -28,18 +28,12 @@ const SizeTable = () => {
             width: '15%',
         },
         {
-            title: 'Quantity',
-            dataIndex: 'quantity',
-            sorter: (a, b) => a.quantity - b.quantity,
-            width: '15%',
-        },
-        {
             title: 'Action',
             dataIndex: '_id',
             render: (_id) => {
                 return (
                     <Space>
-                        <Button shape="round" icon={<EditOutlined />} onClick={() => navigate(`edit/${_id}`)} ></Button>
+                        {/* <Button shape="round" icon={<EditOutlined />} onClick={() => navigate(`edit/${_id}`)} ></Button> */}
                         <Button danger shape="round" icon={<DeleteOutlined />} onClick={() => showDeleteConfirm(_id, messageApi, getListShoesSize, setSize, API_PATH.shoesSize)} ></Button>
                     </Space>
                 )

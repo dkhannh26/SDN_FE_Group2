@@ -1,4 +1,4 @@
-import { Button, Col, Form, InputNumber, Row, Select, Space } from 'antd';
+import { Button, Col, Form, Row, Select, Space } from 'antd';
 import Title from 'antd/es/typography/Title';
 import dayjs from 'dayjs';
 import React, { useEffect } from 'react';
@@ -67,7 +67,7 @@ const SizeModel = ({ type }) => {
                                 </Select>
                             </Form.Item>
                         )}
-                        <Form.Item
+                        {/* <Form.Item
                             name="quantity"
                             label="Quantity"
                             rules={[
@@ -79,7 +79,7 @@ const SizeModel = ({ type }) => {
                             ]}
                         >
                             <InputNumber style={{ width: '100%' }} />
-                        </Form.Item>
+                        </Form.Item> */}
                         <Form.Item {...tailLayout}>
                             <Space>
                                 <Button type="primary" htmlType="submit" >
