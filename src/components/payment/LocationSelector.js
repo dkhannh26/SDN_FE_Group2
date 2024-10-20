@@ -1,0 +1,112 @@
+import React, { useEffect, useState } from 'react';
+import { Col, Row, Select } from 'antd';
+import axios from 'axios';
+
+const { Option } = Select;
+
+const LocationSelector = ({ onSelect }) => {
+    const [cities, setCities] = useState([]); // Danh sách tỉnh/thành phố
+    const [districts, setDistricts] = useState([]); // Danh sách quận/huyện
+    const [wards, setWards] = useState([]); // Danh sách phường/xã
+    const [selectedCity, setSelectedCity] = useState(null); // Tỉnh/thành phố được chọn
+    const [selectedDistrict, setSelectedDistrict] = useState(null); // Quận/huyện được chọn
+    const [selectedWard, setSelectedWard] = useState(null); // Phường/xã được chọn
+
+    // Lấy dữ liệu từ API khi component được render lần đầu tiên
+    useEffect(() => {
+        const fetchCities = async () => {
+            try {
+                const response = await axios.get(
+                    'https://raw.githubusercontent.com/kenzouno1/DiaGioiHanhChinhVN/master/data.json'
+                );
+                setCities(response.data); // Lưu dữ liệu các tỉnh/thành phố vào state
+            } catch (error) {
+                console.error('Lỗi khi lấy dữ liệu tỉnh/thành phố:', error);
+            }
+        };
+
+        fetchCities(); // Gọi hàm để lấy dữ liệu
+    }, []);
+
+    // Khi chọn tỉnh/thành phố
+    const handleCityChange = (value) => {
+        setSelectedCity(value);
+        setSelectedDistrict(null); // Reset giá trị quận/huyện khi chọn tỉnh mới
+        setSelectedWard(null); // Reset giá trị phường/xã khi chọn tỉnh mới
+        const selectedCityData = cities.find((city) => city.Id === value);
+        setDistricts(selectedCityData ? selectedCityData.Districts : []);
+        setWards([]); // Xoá danh sách phường/xã khi chọn lại tỉnh
+
+        // Notify parent component
+        onSelect(value, null, null);
+    };
+
+    // Khi chọn quận/huyện
+    const handleDistrictChange = (value) => {
+        setSelectedDistrict(value);
+        setSelectedWard(null);
+        const selectedDistrictData = districts.find((district) => district.Id === value);
+        setWards(selectedDistrictData ? selectedDistrictData.Wards : []);
+
+        onSelect(selectedCity, value, null);
+    };
+
+    const handleWardChange = (value) => {
+        setSelectedWard(value);
+
+        onSelect(selectedCity, selectedDistrict, value);
+    };
+
+    return (
+        <Row gutter={[16, 16]} style={{ marginTop: '20px' }}>
+            <Col xs={24} md={8}>
+                <Select
+                    value={selectedCity}
+                    onChange={handleCityChange}
+                    placeholder="Chọn tỉnh/thành phố"
+                    style={{ width: '100%' }}
+                >
+                    {cities.map((city) => (
+                        <Option key={city.Id} value={city.Id}>
+                            {city.Name}
+                        </Option>
+                    ))}
+                </Select>
+            </Col>
+
+            <Col xs={24} md={8}>
+                <Select
+                    value={selectedDistrict}
+                    onChange={handleDistrictChange}
+                    placeholder="Chọn quận/huyện"
+                    style={{ width: '100%' }}
+                    disabled={!selectedCity}
+                >
+                    {districts.map((district) => (
+                        <Option key={district.Id} value={district.Id}>
+                            {district.Name}
+                        </Option>
+                    ))}
+                </Select>
+            </Col>
+
+            <Col xs={24} md={8}>
+                <Select
+                    value={selectedWard}
+                    onChange={handleWardChange}
+                    placeholder="Chọn phường/xã"
+                    style={{ width: '100%' }}
+                    disabled={!selectedDistrict}
+                >
+                    {wards.map((ward) => (
+                        <Option key={ward.Id} value={ward.Id}>
+                            {ward.Name}
+                        </Option>
+                    ))}
+                </Select>
+            </Col>
+        </Row>
+    );
+};
+
+export default LocationSelector;
