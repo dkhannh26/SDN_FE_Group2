@@ -127,9 +127,6 @@ const OrderTable = () => {
                 <Col>
                     <Title level={2}>Order Management</Title>
                 </Col>
-                <Col className="gutter-row" style={{ display: 'flex', justifyContent: 'flex-end  !important', alignItems: 'center !important', height: '100%' }}>
-                    <Button onClick={() => navigate(ORDER_URL.CREATE)}>Insert</Button>
-                </Col>
             </Flex>
             <Table
                 columns={columns}
@@ -145,9 +142,9 @@ const OrderTable = () => {
                             }}
                         />
                     ),
-                    expandedRowRender: expandedRowRender, // Xử lý hiển thị nội dung mở rộng
-                    expandedRowKeys: expandedRowKeys, // Các hàng hiện đang mở rộng
-                    onExpand: (expanded, record) => toggleExpand(record._id), // Điều khiển mở rộng khi nhấp vào                   
+                    expandedRowRender: expandedRowRender,
+                    expandedRowKeys: expandedRowKeys,
+                    onExpand: (expanded, record) => toggleExpand(record._id),
                 }}
 
             />
