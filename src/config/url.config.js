@@ -32,3 +32,11 @@ export const ACCESSORY_URL = {
     CREATE: '/admin/accessory/create',
     EDIT: '/admin/accessory/create'
 }
+export const SIZE_URL = {
+    PANTSHIRT_INDEX: '/admin/pantTshirtSize',
+    PANTSHIRT_CREATE: '/admin/pantTshirtSize/create',
+    PANTSHIRT_EDIT: '/admin/pantTshirtSize/create',
+    SHOES_INDEX: '/admin/shoesSize',
+    SHOES_CREATE: '/admin/shoesSize/create',
+    SHOES_EDIT: '/admin/shoesSize/create'
+}

@@ -8,6 +8,8 @@ export const API_PATH = {
     shoes: baseURL + 'product/shoes',
     accessory: baseURL + 'product/accessory',
     pant: baseURL + 'product/pant',
-    image: baseURL + 'images/upload'
+    image: baseURL + 'images/upload',
+    pantShirtSize: baseURL + 'size/pantShirtSize',
+    shoesSize: baseURL + 'size/shoesSize',
 }
 

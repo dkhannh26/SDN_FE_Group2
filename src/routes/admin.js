@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom';
 import Dashboard from '../pages/Dashboard';
 import Discount from '../pages/Discount';
 import Voucher from '../pages/Discount';
+import Size from '../pages/Size';
 import DiscountTable from '../components/discount/DiscountTable';
 import DiscountModel from '../components/discount/DiscountModel';
 import VoucherTable from '../components/voucher/VoucherTable';
@@ -18,6 +19,10 @@ import AccessoryModel from '../components/accessory/AccessoryModel';
 import ShoesAdmin from '../pages/product-admin/ShoesAdmin';
 import ShoesTable from '../components/shoes/ShoesTable';
 import ShoesModel from '../components/shoes/ShoesModel';
+import PantShirtSizeTable from '../components/size/PantShirtSizeTable';
+import PantShirtSizeModel from '../components/size/PantShirtSizeModel';
+import ShoesSizeTable from '../components/size/ShoesSizeTable';
+import ShoesSizeModel from '../components/size/ShoesSizeModel';
 
 export const AdminRoutes = (
     <>
@@ -51,6 +56,16 @@ export const AdminRoutes = (
                 <Route index element={<AccessoryTable />} />
                 <Route path='create' element={<AccessoryModel type='create' />} />
                 <Route path='edit/:id' element={<AccessoryModel type='edit' />} />
+            </Route>
+            <Route path='pantTshirtSize' element={<Size />}>
+                <Route index element={<PantShirtSizeTable />} />
+                <Route path='create' element={<PantShirtSizeModel type='create' />} />
+                <Route path='edit/:id' element={<PantShirtSizeModel type='edit' />} />
+            </Route>
+            <Route path='shoesSize' element={<Size />}>
+                <Route index element={<ShoesSizeTable />} />
+                <Route path='create' element={<ShoesSizeModel type='create' />} />
+                <Route path='edit/:id' element={<ShoesSizeModel type='edit' />} />
             </Route>
         </Route>
     </>
