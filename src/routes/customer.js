@@ -1,11 +1,10 @@
 import React from "react";
-import { Outlet, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 import Layout from "../components/layout";
 import Register from "../pages/Register";
 import SuccessRegister from "../pages/SuccessRegister";
 import User from "../pages/User";
 import ResetPassword from "../pages/ResetPassword";
-import { PATH } from "../config/api.config";
 export const CustomerRoutes = (
   <>
     <Route path="customer" element={<Layout />}>

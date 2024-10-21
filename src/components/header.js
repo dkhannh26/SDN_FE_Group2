@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import { Col, Row, Badge, Popover, Empty, Menu } from "antd";
 import "../assets/css/header.css";
@@ -11,9 +11,6 @@ import {
 } from "@ant-design/icons";
 
 import LoginPopover from "./login";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { PATH } from "../config/api.config";
 import { useAuth } from "./context/AuthContext";
 
 const Header = () => {
@@ -77,7 +74,7 @@ const Header = () => {
     },
   ];
 
-  const { isAuthenticated, username, setIsAuthenticated, setUsername } =
+  const { isAuthenticated, username } =
     useAuth();
 
   return (

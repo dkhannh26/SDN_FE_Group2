@@ -7,15 +7,6 @@ import { EnvironmentFilled, PhoneFilled, MailFilled, FacebookFilled, InstagramFi
 const Footer = () => {
     return (
         <div className='footer'>
-            <Row className='footer-top'>
-                <Col span={9} className='top__left'>
-                    <p className='top-title'>Nhận khuyến mãi</p>
-                </Col>
-                <Col span={15} className='top__right'>
-                    <input placeholder='Nhập email của bạn'/>
-                    <button></button>
-                </Col>
-            </Row>
             <Row className='container'>
                 {/* <Col span={6} className='footer-content'>
                     <div className='footer-item--title'>

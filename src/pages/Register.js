@@ -2,27 +2,21 @@ import React, { useState } from "react";
 import {
   Button,
   Col,
-  DatePicker,
   Form,
   Input,
   notification,
-  Radio,
   Row,
   Select,
 } from "antd";
 import "../assets/css/register.css";
 import { ArrowLeftOutlined } from "@ant-design/icons";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { PATH } from "../config/api.config";
 import { options } from "./ProvinceData";
 
 const Register = () => {
   const [componentVariant, setComponentVariant] = useState("filled");
-  const navigate = useNavigate();
   const onFinish = async (values) => {
-    const { username, phone, address, email, password } = values;
-
     // const res = await createUserApi(name, email, password);
     const res = await axios.post(`${PATH.register}`, values);
     if (res.data.success) {

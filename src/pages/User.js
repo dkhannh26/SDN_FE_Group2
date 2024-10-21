@@ -14,7 +14,6 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../components/context/AuthContext";
 import axios from "axios";
 import { PATH } from "../config/api.config";
-import { useParams } from "react-router-dom";
 import { options } from "./ProvinceData";
 
 const User = () => {
@@ -22,7 +21,6 @@ const User = () => {
 
   const {
     isAuthenticated,
-    username,
     setIsAuthenticated,
     setUsername,
     user,
@@ -82,7 +80,7 @@ const User = () => {
   useEffect(() => {
     const fetchData = async () => {
       if (isAuthenticated) {
-        const res = await axios
+        await axios
           .get(`${PATH.profile}/${user.username}`)
           .then((res) => {
             console.log(res.data.user);
@@ -115,7 +113,7 @@ const User = () => {
     const { email, phone, address } = values;
 
     try {
-      let res = axios
+      axios
         .put(`${PATH.updateProfile}/${user.username}`, {
           email,
           phone,

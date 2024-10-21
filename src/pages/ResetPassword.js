@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
 import { PATH } from "../config/api.config";
 import axios from "axios";
-import { Button, Card, Checkbox, Form, Input } from "antd";
+import { Button, Card, Form, Input } from "antd";
 import { useNavigate } from "react-router-dom";
 
 const ResetPassword = () => {
@@ -16,7 +15,7 @@ const ResetPassword = () => {
     const { password } = values;
 
     try {
-      let res = axios
+      axios
         .post(`${PATH.resetPassword}/${token}`, { password })
         .then((res) => {
           console.log(res);

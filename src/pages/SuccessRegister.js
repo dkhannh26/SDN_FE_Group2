@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import PropTypes from "prop-types";
 import { useParams } from "react-router-dom";
 import { PATH } from "../config/api.config";
 import axios from "axios";
@@ -11,12 +10,7 @@ const SuccessRegister = (path) => {
   const { token, id } = useParams();
   // console.log(id);
   const {
-    isAuthenticated,
-    username,
     setIsAuthenticated,
-    setUsername,
-    user,
-    setUser,
   } = useAuth();
   const [message, setMessage] = useState("");
   useEffect(() => {
@@ -25,7 +19,7 @@ const SuccessRegister = (path) => {
         if (id) {
           // account/update/:accountId/:token
 
-          const res = await axios
+          await axios
             .put(`${PATH.updateProfile}/${id}/${token}`, token)
             .then((res) => {
               console.log(res);
@@ -36,7 +30,7 @@ const SuccessRegister = (path) => {
               }
             });
         } else {
-          const res = await axios
+          await axios
             .post(`${PATH.register}/${token}`, token)
             .then((res) => {
               if (res.data.EC === 0) {

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import PropTypes from "prop-types";
 import axios from "axios";
 import { PATH } from "../config/api.config";
 import { notification } from "antd";
@@ -10,7 +9,7 @@ const ForgotPassword = ({ carouselRef }) => {
   const onSubmit = async (e) => {
     e.preventDefault();
     try {
-      let res = axios.post(PATH.forgotPassword, { email }).then((res) => {
+      axios.post(PATH.forgotPassword, { email }).then((res) => {
         if (res.data.success) {
           notification.success({
             message: res.data.message,

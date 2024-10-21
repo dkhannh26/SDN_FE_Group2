@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Routes } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import Dashboard from '../pages/Dashboard';
 import Discount from '../pages/Discount';
 import DiscountTable from '../components/discount/DiscountTable';
