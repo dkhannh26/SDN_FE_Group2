@@ -1,17 +1,30 @@
+import { MoneyCollectTwoTone } from '@ant-design/icons';
 import { Button, Card, Checkbox, Col, Image, Input, List, Row, Typography } from 'antd';
 import Title from 'antd/es/typography/Title';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { getListCart } from '../../services/cart.service';
 import LocationSelector from './LocationSelector';
-import { MoneyCollectOutlined, MoneyCollectTwoTone } from '@ant-design/icons';
+import { useLocation, useNavigate } from 'react-router';
+
 const { Text } = Typography;
 
+
 const PaymentModel = () => {
+    const navigate = useNavigate();
+    const location = useLocation();
     const [shippingMethods, setShippingMethods] = useState([]);
     const [selectedCity, setSelectedCity] = useState(null);
     const [selectedDistrict, setSelectedDistrict] = useState(null);
     const [selectedWard, setSelectedWard] = useState(null);
     const [selectedShippingMethod, setSelectedShippingMethod] = useState(null);
-    const [totalAmount, setTotalAmount] = useState(0); // Mock total amount for payment
+    const [carts, setCarts] = useState([])
+    const { voucherTotal } = location.state;
+    const [total, setTotal] = useState(Number);
+    const [totalAmount, setTotalAmount] = useState(0);
+    const [name, setName] = useState('Nguyen Thanh Son');
+    const [phone, setPhone] = useState('');
+    const [email, setEmail] = useState('sonntce171760@fpt.edu.vn');
+    const [address, setAddress] = useState('');
 
     // Mock function to simulate fetching shipping methods based on location
     const fetchShippingMethods = (city, district, ward) => {
@@ -48,56 +61,23 @@ const PaymentModel = () => {
         console.log(`checked = ${e.target.checked}`);
     };
 
-    const carts = [
-        {
-            _id: '1',
-            image: {
-                _id: 'image1',
-                file_extension: '.jpg',
-            },
-            tshirt: {
-                name: 'Áo thun màu đỏ',
-                price: 200000,
-                quantity: 5,
-            },
-            quantity: 2,
-            size: {
-                size_name: 'M',
-            },
-        },
-        {
-            _id: '2',
-            image: {
-                _id: 'image2',
-                file_extension: '.png',
-            },
-            tshirt: {
-                name: 'Áo thun màu xanh',
-                price: 150000,
-                quantity: 3,
-            },
-            quantity: 1,
-            size: {
-                size_name: 'L',
-            },
-        },
-        {
-            _id: '3',
-            image: {
-                _id: 'image3',
-                file_extension: '.jpg',
-            },
-            tshirt: {
-                name: 'Áo thun màu trắng',
-                price: 180000,
-                quantity: 2,
-            },
-            quantity: 1,
-            size: {
-                size_name: 'S',
-            },
-        },
-    ];
+    const onFinish = () => {
+        const values = {
+            name,
+            phone,
+            email,
+            address
+        };
+    }
+
+    useEffect(() => {
+        getListCart(setCarts, (total) => {
+            setTotal(total);
+        });
+        console.log(voucherTotal);
+    }, []);
+
+
 
     return (
         <div style={{ padding: '20px' }}>
@@ -105,21 +85,38 @@ const PaymentModel = () => {
                 <Col xs={24} md={14} style={{ textAlign: 'left', paddingLeft: '15%', paddingRight: '5%' }}>
                     <Title level={3}>Thông tin giao hàng</Title>
                     <Title level={4} style={{ color: '#888' }}>Bạn đã có tài khoản? <a>Đăng nhập</a></Title>
-                    <Input size="large" placeholder="Họ và Tên" />
+                    <Input
+                        size="large"
+                        placeholder="Họ và Tên"
+                        disabled
+                        defaultValue={name}
+                        onChange={(e) => setName(e.target.value)}
+                    />
                     <Row style={{ marginTop: '3%', display: 'flex', justifyContent: 'space-between' }}>
                         <Col xs={14}>
-                            <Input size="large" placeholder="Số điện thoại" />
+                            <Input
+                                size="large"
+                                placeholder="Số điện thoại"
+                                onChange={(e) => setPhone(e.target.value)}
+                            />
                         </Col>
                         <Col xs={8}>
-                            <Input size="large" placeholder="Email" />
+                            <Input
+                                size="large"
+                                placeholder="Email"
+                                defaultValue={email}
+                                disabled
+                            />
                         </Col>
                     </Row>
-                    <Input size="large" placeholder="Địa chỉ" style={{ marginTop: '3%' }} />
-
-                    {/* Location Selector */}
+                    <Input
+                        size="large"
+                        placeholder="Địa chỉ"
+                        style={{ marginTop: '3%' }}
+                        onChange={(e) => setAddress(e.target.value)}
+                    />
                     <LocationSelector onSelect={handleLocationSelect} />
 
-                    {/* Conditionally render shipping methods based on location */}
                     {selectedCity && selectedDistrict && selectedWard && (
                         <Card title="Phương thức vận chuyển" bordered style={{ marginTop: '20px' }}>
                             {shippingMethods.map((method, index) => (
@@ -148,7 +145,7 @@ const PaymentModel = () => {
                             <a>Giỏ hàng</a>
                         </Col>
                         <Col>
-                            <Button type='primary'>Hoàn tất đơn hàng</Button>
+                            <Button type='primary' onclick={onFinish}>Hoàn tất đơn hàng</Button>
                         </Col>
                     </Row>
                 </Col>
@@ -185,16 +182,16 @@ const PaymentModel = () => {
                             <Col>
                                 <Text strong style={{ fontSize: '16px', textAlign: 'left', display: 'block', color: '#888' }}>Tạm Tính</Text>
                             </Col>
-                            <Col>
-                                420.000<Text style={{ fontSize: '10px', color: 'black', textDecorationLine: 'underline' }}>đ</Text>
+                            <Col style={{ fontWeight: 'bold' }}>
+                                {total.toLocaleString()}<Text style={{ fontSize: '15px', textDecorationLine: 'underline' }}>đ</Text>
                             </Col>
                         </Row>
                         <Row style={{ alignItems: 'center', justifyContent: 'space-between' }}>
                             <Col>
-                                <Text strong style={{ fontSize: '16px', textAlign: 'left', display: 'block', color: '#888' }}>Phí vận chuyển</Text>
+                                <Text strong style={{ fontSize: '16px', textAlign: 'left', display: 'block', color: '#888' }}>Voucher giảm</Text>
                             </Col>
-                            <Col>
-                                420.000<Text style={{ fontSize: '10px', color: 'black', textDecorationLine: 'underline' }}>đ</Text>
+                            <Col style={{ fontWeight: 'bold' }}>
+                                {(total - voucherTotal).toLocaleString()}<Text style={{ fontSize: '15px', textDecorationLine: 'underline' }}>đ</Text>
                             </Col>
                         </Row>
                     </Card>
@@ -203,7 +200,7 @@ const PaymentModel = () => {
                             <Title level={4}>Tổng cộng</Title>
                         </Col>
                         <Col>
-                            <Title level={3}>840.000<Text style={{ fontSize: '20px', color: 'black', textDecorationLine: 'underline' }}>đ</Text></Title>
+                            <Title level={3}>{voucherTotal}<Text style={{ fontSize: '20px', color: 'black', textDecorationLine: 'underline' }}>đ</Text></Title>
                         </Col>
                     </Row>
                 </Col>
