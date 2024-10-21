@@ -59,27 +59,14 @@ const SizeModel = ({ type }) => {
                                 ]}
                             >
                                 <Select placeholder="Select a size">
-                                    <Select.Option value="X">X</Select.Option>
+                                    <Select.Option value="S">S</Select.Option>
                                     <Select.Option value="M">M</Select.Option>
                                     <Select.Option value="L">L</Select.Option>
+                                    <Select.Option value="XL">XL</Select.Option>
                                     <Select.Option value="XXL">XXL</Select.Option>
-                                    <Select.Option value="XXXL">XXXL</Select.Option>
                                 </Select>
                             </Form.Item>
                         )}
-                        {/* <Form.Item
-                            name="quantity"
-                            label="Quantity"
-                            rules={[
-                                {
-                                    required: true,
-                                    type: 'number',
-                                    min: 0
-                                },
-                            ]}
-                        >
-                            <InputNumber style={{ width: '100%' }} />
-                        </Form.Item> */}
                         <Form.Item {...tailLayout}>
                             <Space>
                                 <Button type="primary" htmlType="submit" >
