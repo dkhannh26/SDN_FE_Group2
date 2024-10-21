@@ -48,7 +48,10 @@ const ShoesTable = () => {
         {
             title: 'Discount percent',
             dataIndex: 'shoesDiscountPercent',
-            render: (percent) => `${percent}%`,
+            render: (percent) => {
+                if (!percent) return 'null'
+                return `${percent}%`;
+            },
             width: '20%',
         },
         {

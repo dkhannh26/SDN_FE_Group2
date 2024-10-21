@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { API_PATH } from '../../config/api.config';
 import { MESSAGE } from '../../config/message.config';
-import { ACCESSORY_URL, TSHIRT_URL } from '../../config/url.config';
+import { ACCESSORY_URL } from '../../config/url.config';
 import { showDeleteConfirm, success } from '../../utils/helper';
 import { getListAccessory } from '../../services/product/accessory.service';
 

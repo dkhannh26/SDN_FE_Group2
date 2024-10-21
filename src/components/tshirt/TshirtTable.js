@@ -3,12 +3,11 @@ import { Button, Col, Flex, Image, message, Space, Table } from 'antd';
 import Title from 'antd/es/typography/Title';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { DISCOUNT_URL, TSHIRT_URL } from '../../config/url.config';
-import { getListDiscount } from '../../services/discount.service';
-import { formatDate, showDeleteConfirm, success } from '../../utils/helper';
-import { MESSAGE } from '../../config/message.config';
-import { getListTshirt } from '../../services/product/tshirt.service';
 import { API_PATH } from '../../config/api.config';
+import { MESSAGE } from '../../config/message.config';
+import { TSHIRT_URL } from '../../config/url.config';
+import { getListTshirt } from '../../services/product/tshirt.service';
+import { showDeleteConfirm, success } from '../../utils/helper';
 
 const TshirtTable = () => {
     const [tshirts, setTshirts] = useState([])

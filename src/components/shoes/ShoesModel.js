@@ -34,6 +34,8 @@ const ShoesModel = ({ type }) => {
             discount_id: values.discount,
         }
 
+        console.log(shoes)
+
         if (type === 'create') {
             createShoes(shoes, fileList, navigate)
         } else {
@@ -108,42 +110,92 @@ const ShoesModel = ({ type }) => {
                                 })}
                             </Select>
                         </Form.Item>
-                        <Form.Item
-                            name="size39"
-                            label="Quantity of size 39"
-                            rules={[
-                                {
-                                    type: 'number',
-                                    min: 0
-                                },
-                            ]}
-                        >
-                            <InputNumber style={{ width: '17%', float: 'left' }} />
-                        </Form.Item>
-                        <Form.Item
-                            name="size40"
-                            label="Quantity of size 40"
-                            rules={[
-                                {
-                                    type: 'number',
-                                    min: 0
-                                },
-                            ]}
-                        >
-                            <InputNumber style={{ width: '17%', float: 'left' }} />
-                        </Form.Item>
-                        <Form.Item
-                            name="size41"
-                            label="Quantity of size 41"
-                            rules={[
-                                {
-                                    type: 'number',
-                                    min: 0
-                                },
-                            ]}
-                        >
-                            <InputNumber style={{ width: '17%', float: 'left' }} />
-                        </Form.Item>
+                        <Row >
+                            <Col offset={3} span={9}>
+                                <Form.Item
+                                    style={{ width: '440px' }}
+                                    name="size38"
+                                    label="Quantity of size 38"
+                                    rules={[
+                                        {
+                                            type: 'number',
+                                            min: 0
+                                        },
+                                    ]}
+                                >
+                                    <InputNumber style={{ width: '17%', float: 'left' }} />
+                                </Form.Item>
+                                <Form.Item
+                                    style={{ width: '440px' }}
+                                    name="size39"
+                                    label="Quantity of size 39"
+                                    rules={[
+                                        {
+                                            type: 'number',
+                                            min: 0
+                                        },
+                                    ]}
+                                >
+                                    <InputNumber style={{ width: '17%', float: 'left' }} />
+                                </Form.Item>
+                                <Form.Item
+                                    style={{ width: '440px' }}
+                                    name="size40"
+                                    label="Quantity of size 40"
+                                    rules={[
+                                        {
+                                            type: 'number',
+                                            min: 0
+                                        },
+                                    ]}
+                                >
+                                    <InputNumber style={{ width: '17%', float: 'left' }} />
+                                </Form.Item>
+                            </Col>
+                            <Col offset={2} span={10}>
+                                <Form.Item
+                                    style={{ width: '440px' }}
+                                    name="size41"
+                                    label="Quantity of size 41"
+                                    rules={[
+                                        {
+                                            type: 'number',
+                                            min: 0
+                                        },
+                                    ]}
+                                >
+                                    <InputNumber style={{ width: '17%', float: 'left' }} />
+                                </Form.Item>
+                                <Form.Item
+                                    style={{ width: '440px' }}
+                                    name="size42"
+                                    label="Quantity of size 42"
+                                    rules={[
+                                        {
+                                            type: 'number',
+                                            min: 0
+                                        },
+                                    ]}
+                                >
+
+                                    <InputNumber style={{ width: '17%', float: 'left' }} />
+                                </Form.Item>
+                                <Form.Item
+                                    style={{ width: '440px' }}
+                                    name="size43"
+                                    label="Quantity of size 43"
+                                    rules={[
+                                        {
+                                            type: 'number',
+                                            min: 0
+                                        },
+                                    ]}
+                                >
+                                    <InputNumber style={{ width: '17%', float: 'left' }} />
+                                </Form.Item>
+                            </Col>
+                        </Row>
+
 
                         <Form.Item
                             name="image"
@@ -166,7 +218,7 @@ const ShoesModel = ({ type }) => {
                         </Form.Item>
                     </Form>
                 </Col>
-            </Row>
+            </Row >
         </>
     );
 };
