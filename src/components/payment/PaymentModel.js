@@ -66,7 +66,8 @@ const PaymentModel = () => {
             name,
             phone,
             email,
-            address
+            address,
+            total
         };
     }
 
