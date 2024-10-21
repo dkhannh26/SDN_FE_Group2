@@ -47,19 +47,19 @@ export const menu = [
         title: 'Product',
         children: [
             {
-                key: '/tshirt',
+                key: 'tshirt',
                 label: 'T-shirt',
             },
             {
-                key: '/pant',
+                key: 'pant',
                 label: 'Pant',
             },
             {
-                key: '/shoes',
+                key: 'shoes',
                 label: 'Shoes',
             },
             {
-                key: '/accessory',
+                key: 'accessory',
                 label: 'Accessory',
             },
         ],
