@@ -112,7 +112,7 @@ export const editPant = (id, pant, fileList, navigate, setLoad) => {
             // console.log(img)
             if (img.url) {
                 fetch(img?.url)
-                    .then(response => response.blob())  // Chuyển phản hồi thành Blob
+                    .then(response => response.blob())  // Chuyển phản hồi thành Blobz
                     .then(blob => {
                         const file = new File([blob], img.name, { type: blob.type });
                         imgArrResult.push(file)
