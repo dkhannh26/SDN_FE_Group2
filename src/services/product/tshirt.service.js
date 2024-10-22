@@ -45,6 +45,7 @@ export const getTshirt = (id, form, handleFileListChange) => {
                         url: `${API_PATH.image}/${img.tshirt_id}/${img.img_id}${img.file_extension}`,
                     })
                 }
+                console.log(imgArrResult)
                 handleFileListChange(imgArrResult)
             }
 

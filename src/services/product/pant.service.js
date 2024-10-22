@@ -6,7 +6,7 @@ import { PANT_URL } from "../../config/url.config"
 export const getListPant = (setPants) => {
     axios.get(API_PATH.pant)
         .then((res) => {
-            console.log(res.data.data)
+
             setPants(res.data.data)
         })
         .catch(error => console.error(error))
@@ -64,6 +64,28 @@ export const getPant = (id, form, handleFileListChange) => {
         })
 }
 
+export const getPantCustomer = (id, setPant, setImages, setCanvas, selectSize) => {
+    axios.get(API_PATH.pant + `/${id}`)
+        .then((res) => {
+            // console.log(res.data)
+            setPant(res.data)
+            const images = res.data?.images
+            let imgArrResult = []
+
+            if (images) {
+                for (let img of images) {
+                    imgArrResult.push({
+                        url: `${API_PATH.image}/${img.pant_id}/${img.img_id}${img.file_extension}`,
+                    })
+                }
+            }
+            setCanvas(imgArrResult[0].url)
+            setImages(imgArrResult)
+            selectSize(Object.keys(res.data.size[0])[0], Object.values(res.data.size[0])[0])
+        }
+        )
+}
+
 export const createPant = (pant, fileList, navigate) => {
     axios.post(API_PATH.pant, pant)
         .then(res => {
@@ -83,7 +105,7 @@ export const createPant = (pant, fileList, navigate) => {
         })
 }
 
-export const editPant = (id, pant, fileList, navigate) => {
+export const editPant = (id, pant, fileList, navigate, setLoad) => {
     let imgArrResult = []
     if (fileList) { // xư lý các hình có sẵn trong antd để chuyển thành dạng file
         for (let img of fileList) {
@@ -111,10 +133,11 @@ export const editPant = (id, pant, fileList, navigate) => {
                         'Content-Type': 'multipart/form-data',
                     },
                 })
+                    .then(setLoad(true))
                     .then(
-                        navigate(PANT_URL.INDEX, {
+                        setTimeout(() => navigate(PANT_URL.INDEX, {
                             state: { message: MESSAGE.UPDATE_SUCCESS }
-                        })
+                        }), 1500)
                     )
             }
 

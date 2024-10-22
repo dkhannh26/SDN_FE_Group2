@@ -12,6 +12,7 @@ import {
 
 import LoginPopover from "./login";
 import { useAuth } from "./context/AuthContext";
+import { Link } from "react-router-dom";
 
 const Header = () => {
   const cartPopover = (
@@ -48,8 +49,10 @@ const Header = () => {
       key: "T-SHIRT",
     },
     {
-      label: "PANTS",
-      key: "PANTS",
+      label: (
+        <Link to='/customer/pant'>PANT</Link>
+      ),
+      key: "PANTS"
     },
     {
       label: "SHOES",
