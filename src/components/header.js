@@ -1,6 +1,7 @@
 import React from "react";
 
-import { Col, Row, Badge, Popover, Empty, Menu } from "antd";
+import { Col, Row, Badge, Popover, Empty, Menu, List, Divider, Skeleton } from "antd";
+import InfiniteScroll from 'react-infinite-scroll-component';
 import "../assets/css/header.css";
 import Logo from "../assets/images/logo.webp";
 import {
@@ -74,6 +75,34 @@ const Header = () => {
     },
   ];
 
+  const searchData = [
+    {
+      avatar: '	https://product.hstatic.net/1000344185/product/img_4125_4feb7a360b3b4f00bd2465a85ef2d9e3_small.jpg',
+      title: 'Ant Design Title 1',
+      des: <p>400,000₫<del>440,000₫</del></p>
+    },
+    {
+      avatar: '	https://product.hstatic.net/1000344185/product/img_4125_4feb7a360b3b4f00bd2465a85ef2d9e3_small.jpg',
+      title: 'Ant Design Title 2',
+      des: <p>400,000₫<del>440,000₫</del></p>
+    },
+    {
+      avatar: '	https://product.hstatic.net/1000344185/product/img_4125_4feb7a360b3b4f00bd2465a85ef2d9e3_small.jpg',
+      title: 'Ant Design Title 2',
+      des: <p>400,000₫<del>440,000₫</del></p>
+    },
+    {
+      avatar: '	https://product.hstatic.net/1000344185/product/img_4125_4feb7a360b3b4f00bd2465a85ef2d9e3_small.jpg',
+      title: 'Ant Design Title 2',
+      des: <p>400,000₫<del>440,000₫</del></p>
+    },
+    {
+      avatar: '	https://product.hstatic.net/1000344185/product/img_4125_4feb7a360b3b4f00bd2465a85ef2d9e3_small.jpg',
+      title: 'Ant Design Title 2',
+      des: <p>400,000₫<del>440,000₫</del></p>
+    },
+  ];
+
   const { isAuthenticated, username } =
     useAuth();
 
@@ -89,14 +118,31 @@ const Header = () => {
         <Col span={4}>
           <img src={Logo} alt="logo" className="logo" />
         </Col>
-        <Col span={9} className="flex-center">
-          <input
-            name="search"
-            placeholder="Tìm kiếm sản phẩm..."
-            className="search-input"
-          />
-          <div className="search-btn">
-            <SearchOutlined />
+        <Col span={9} style={{ position: "relative" }}>
+          <div className="flex-center">
+            <input
+              name="search"
+              placeholder="Tìm kiếm sản phẩm..."
+              className="search-input"
+            />
+            <div className="search-btn">
+              <SearchOutlined />
+            </div>
+          </div>
+          <div className="search-item">
+              <List
+              itemLayout="horizontal"
+              dataSource={searchData}
+              renderItem={(item, index) => (
+                <List.Item>
+                  <List.Item.Meta
+                    avatar={<img src={item.avatar} alt="" />}
+                    title={<a href="https://ant.design">{item.title}</a>}
+                    description={item.des}
+                  />
+                </List.Item>
+              )}
+            />
           </div>
         </Col>
         <Col span={8} className="login-cart flex-center">
