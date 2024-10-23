@@ -5,6 +5,8 @@ import React, { useEffect, useState } from 'react';
 import { getListCart } from '../../services/cart.service';
 import LocationSelector from './LocationSelector';
 import { useLocation, useNavigate } from 'react-router';
+import { createOrder } from '../../services/order.service';
+import { createPayment } from '../../services/payment.service';
 
 const { Text } = Typography;
 
@@ -12,19 +14,24 @@ const { Text } = Typography;
 const PaymentModel = () => {
     const navigate = useNavigate();
     const location = useLocation();
+    const [isLoading, setIsLoading] = useState(true);
     const [shippingMethods, setShippingMethods] = useState([]);
     const [selectedCity, setSelectedCity] = useState(null);
     const [selectedDistrict, setSelectedDistrict] = useState(null);
     const [selectedWard, setSelectedWard] = useState(null);
     const [selectedShippingMethod, setSelectedShippingMethod] = useState(null);
     const [carts, setCarts] = useState([])
-    const { voucherTotal } = location.state;
+    const [voucherTotal, setVoucherTotal] = useState(0);
     const [total, setTotal] = useState(Number);
     const [totalAmount, setTotalAmount] = useState(0);
     const [name, setName] = useState('Nguyen Thanh Son');
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('sonntce171760@fpt.edu.vn');
     const [address, setAddress] = useState('');
+    const [bankCode, setBankCode] = useState('');
+    const [language, setLanguage] = useState('vn');
+    const [isCOD, setIsCOD] = useState(false);
+    const [isVNPay, setIsVNPay] = useState(false);
 
     // Mock function to simulate fetching shipping methods based on location
     const fetchShippingMethods = (city, district, ward) => {
@@ -48,7 +55,6 @@ const PaymentModel = () => {
     // Handle selection of a shipping method
     const handleShippingMethodSelect = (method) => {
         setSelectedShippingMethod(method);
-        // Mock calculation of total amount based on shipping method
         if (method === 'Standard Shipping (5-7 days)') {
             setTotalAmount(500000); // 500,000 VND
         } else if (method === 'Express Shipping (2-3 days)') {
@@ -57,26 +63,101 @@ const PaymentModel = () => {
             setTotalAmount(700000); // 700,000 VND
         }
     };
-    const onChange = (e) => {
-        console.log(`checked = ${e.target.checked}`);
+    const handleCODChange = (e) => {
+        setIsCOD(e.target.checked);
+        if (e.target.checked) {
+            setIsVNPay(false);
+        }
+
+    };
+
+    const handleVNPayChange = (e) => {
+        setIsVNPay(e.target.checked);
+        if (e.target.checked) {
+            setIsCOD(false);
+        }
     };
 
     const onFinish = () => {
+        if (!isCOD && !isVNPay) {
+            alert('Vui lòng chọn phương thức thanh toán');
+            return;
+        }
         const values = {
             name,
             phone,
             email,
             address,
-            total
+            voucherTotal,
+            cartItems: carts.map(cart => ({ id: cart._id, quantity: cart.quantity, accessory_id: cart.accessory_id, shoes_size_detail_id: cart.shoes_size_detail_id, pant_shirt_detail_id: cart.pant_shirt_detail_id }))
         };
-    }
+        const order = {
+            phone: values.phone,
+            address: values.address,
+            total_price: values.voucherTotal,
+            orderItems: values.cartItems.map(item => ({
+                accessory_id: item.accessory_id,
+                quantity: item.quantity,
+                shoes_size_detail_id: item.shoes_size_detail_id,
+                pant_shirt_size_detail_id: item.pant_shirt_detail_id,
+            })),
+        };
+        if (isCOD) {
+            createOrder(order, navigate);
+        } else if (isVNPay) {
+            createPayment(voucherTotal, bankCode, language, name, address, phone);
+        }
+    };
+    useEffect(() => {
+        const fetchData = async () => {
+            await getListCart(setCarts, (total) => {
+                setTotal(total);
+                setIsLoading(false);
+            });
+
+            if (location.state && location.state.voucherTotal) {
+                setVoucherTotal(location.state.voucherTotal);
+            }
+        };
+
+        fetchData();
+    }, []);
+
 
     useEffect(() => {
-        getListCart(setCarts, (total) => {
-            setTotal(total);
-        });
-        console.log(voucherTotal);
-    }, []);
+        if (isLoading) return;
+        const params = new URLSearchParams(window.location.search);
+        const type = params.get('type');
+        const voucherTotal = params.get('voucherTotal');
+        const name = params.get('name');
+        const address = params.get('address');
+        const phone = params.get('phone');
+        console.log(phone);
+        console.log(type);
+        if (type === 'OK') {
+            const values = {
+                name,
+                phone,
+                email,
+                address,
+                voucherTotal,
+                cartItems: carts.map(cart => ({ id: cart._id, quantity: cart.quantity, accessory_id: cart.accessory_id, shoes_size_detail_id: cart.shoes_size_detail_id, pant_shirt_detail_id: cart.pant_shirt_detail_id }))
+            };
+            const order = {
+                phone: values.phone,
+                address: values.address,
+                total_price: values.voucherTotal,
+                orderItems: values.cartItems.map(item => ({
+                    accessory_id: item.accessory_id,
+                    quantity: item.quantity,
+                    shoes_size_detail_id: item.shoes_size_detail_id,
+                    pant_shirt_size_detail_id: item.pant_shirt_detail_id,
+                })),
+            };
+            createOrder(order, navigate);
+            console.log('aaaa');
+        }
+    }, [isLoading, carts]);
 
 
 
@@ -135,18 +216,29 @@ const PaymentModel = () => {
                     )}
                     <Title level={4}>Phương thức thanh toán</Title>
                     <Card style={{ padding: '16px' }}>
-                        <Checkbox onChange={onChange} style={{ fontSize: '18px', lineHeight: '24px' }}>
+                        <Checkbox onChange={handleCODChange} style={{ fontSize: '18px', lineHeight: '24px' }}>
                             <Title level={5} style={{ margin: 0, fontSize: '18px', color: '#888' }}>
                                 <MoneyCollectTwoTone /> Thanh toán khi nhận hàng (COD)
                             </Title>
                         </Checkbox>
+                        <Checkbox onChange={handleVNPayChange} style={{ fontSize: '18px', lineHeight: '24px', marginTop: '3%' }}>
+                            <Title level={5} style={{ margin: 0, fontSize: '18px', color: '#888', display: 'flex', alignItems: 'center' }}>
+                                <Image
+                                    src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8H-_-qAYkAhj5xnn22LxEr_uRDrxY7FuhMg&s'
+                                    alt='VNPay'
+                                    style={{ width: '24px', height: '24px', marginRight: '8px' }}
+                                />
+                                Thanh toán bằng ví VNPay
+                            </Title>
+                        </Checkbox>
+
                     </Card>
                     <Row style={{ alignItems: 'center', justifyContent: 'space-between', marginTop: '3%' }}>
                         <Col>
-                            <a>Giỏ hàng</a>
+                            <a onClick={() => navigate(-1)}>Giỏ hàng</a>
                         </Col>
                         <Col>
-                            <Button type='primary' onclick={onFinish}>Hoàn tất đơn hàng</Button>
+                            <Button type='primary' onClick={onFinish}>Hoàn tất đơn hàng</Button>
                         </Col>
                     </Row>
                 </Col>
@@ -201,7 +293,7 @@ const PaymentModel = () => {
                             <Title level={4}>Tổng cộng</Title>
                         </Col>
                         <Col>
-                            <Title level={3}>{voucherTotal}<Text style={{ fontSize: '20px', color: 'black', textDecorationLine: 'underline' }}>đ</Text></Title>
+                            <Title level={3}>{voucherTotal.toLocaleString()}<Text style={{ fontSize: '20px', color: 'black', textDecorationLine: 'underline' }}>đ</Text></Title>
                         </Col>
                     </Row>
                 </Col>

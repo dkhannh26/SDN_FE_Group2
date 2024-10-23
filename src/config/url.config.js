@@ -8,6 +8,11 @@ export const VOUCHER_URL = {
     CREATE: '/admin/voucher/create',
     EDIT: '/admin/voucher/create'
 }
+export const ORDER_URL = {
+    INDEX: '/admin/order',
+    CREATE: '/admin/order/create',
+    EDIT: '/admin/order/create',
+}
 export const CART_URL = {
     INDEX: '/customer/cart',
     CREATE: '/customer/cart/create',
