@@ -28,7 +28,7 @@ const AccessoryCustomer = () => {
                     <div className='product-filter'>
                         <FilterOutlined /> Filter
                         <Select
-                            defaultValue="Prices gradually increase"
+                            defaultValue="Price"
                             style={{
                                 marginLeft: 20
                             }}
@@ -36,11 +36,11 @@ const AccessoryCustomer = () => {
                             options={[
                                 {
                                     value: 'increase',
-                                    label: 'Prices gradually increase',
+                                    label: 'Increase',
                                 },
                                 {
                                     value: 'decrease',
-                                    label: 'Prices gradually decrease',
+                                    label: 'Decrease',
                                 },
                             ]}
                         />

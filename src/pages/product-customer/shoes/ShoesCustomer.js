@@ -24,12 +24,12 @@ const ShoesCustomer = () => {
     return (
         <Row>
             <Col offset={1} span={21}>
-                <Title level={2} style={{ marginTop: '20px' }}>Pants</Title>
+                <Title level={2} style={{ marginTop: '20px' }}>ShoesCustomer</Title>
                 <Row style={{ margin: '20px', marginLeft: 0 }}>
                     <div className='product-filter'>
                         <FilterOutlined /> Filter
                         <Select
-                            defaultValue="Prices gradually increase"
+                            defaultValue="Price"
                             style={{
                                 marginLeft: 20
                             }}
@@ -37,11 +37,11 @@ const ShoesCustomer = () => {
                             options={[
                                 {
                                     value: 'increase',
-                                    label: 'Prices gradually increase',
+                                    label: 'Increase',
                                 },
                                 {
                                     value: 'decrease',
-                                    label: 'Prices gradually decrease',
+                                    label: 'Decrease',
                                 },
                             ]}
                         />
