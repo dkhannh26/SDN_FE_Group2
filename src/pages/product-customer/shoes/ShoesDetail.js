@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import Title from 'antd/es/typography/Title';
 import '../../../assets/css/sizeBtn.css'
+import { getShoesCustomer } from '../../../services/product/shoes.service';
 const { Text } = Typography;
 const ShoesDetail = () => {
     const [canvas, setCanvas] = useState('https://top10hoabinh.com/wp-content/uploads/2022/10/anh-dang-load-2.jpg')
