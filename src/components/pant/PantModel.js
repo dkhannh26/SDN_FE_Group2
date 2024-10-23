@@ -38,12 +38,10 @@ const PantModel = ({ type }) => {
         }
     };
 
-
     useEffect(() => {
         getListDiscount(setDiscounts)
         if (type === 'edit') getPant(id, form, handleFileListChange)
     }, [id, type, form])
-
 
     return (
         <>

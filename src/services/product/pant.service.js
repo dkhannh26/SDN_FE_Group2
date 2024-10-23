@@ -15,7 +15,6 @@ export const getListPant = (setPants) => {
 export const getPant = (id, form, handleFileListChange) => {
     axios.get(API_PATH.pant + `/${id}`)
         .then((res) => {
-            console.log(res.data)
             let M, L, S, XL, XXL;
             for (const item of res.data.size) {
                 if (item['S'] !== undefined) {

@@ -15,12 +15,13 @@ const PantDeital = () => {
     const selectSize = (size, number) => {
         setSizeSelected(size)
         setSizeNumber(number)
+        setCount(1)
     }
 
     const [count, setCount] = useState(1);
 
     const handleIncrement = () => {
-        setCount(count + 1);
+        if (count < sizeNumber) setCount(count + 1);
     };
 
     const handleDecrement = () => {
@@ -146,7 +147,12 @@ const PantDeital = () => {
                         })}
                     </Col>
                     <Col span={6}>
-                        Số lượng: {sizeNumber}
+                        {
+                            sizeNumber !== 0 ?
+                                `${sizeNumber} sản phẩm có sẵn`
+                                :
+                                `Tạm hết hàng`
+                        }
                     </Col>
                 </Row>
                 <Row
