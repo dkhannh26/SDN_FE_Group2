@@ -1,27 +1,20 @@
 import { Button, Col, Image, InputNumber, Row, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { getPantCustomer } from '../../services/product/pant.service';
 import { useParams } from 'react-router-dom';
 import Title from 'antd/es/typography/Title';
-import '../../assets/css/sizeBtn.css'
+import { getAccessoryCustomer } from '../../../services/product/accessory.service';
 const { Text } = Typography;
-const PantDeital = () => {
+const AccessoryDetail = () => {
     const [canvas, setCanvas] = useState('https://top10hoabinh.com/wp-content/uploads/2022/10/anh-dang-load-2.jpg')
     const { id } = useParams();
-    const [pant, setPant] = useState()
+    const [accessory, setAccessory] = useState()
     const [images, setImages] = useState()
-    const [sizeSelected, setSizeSelected] = useState('')
-    const [sizeNumber, setSizeNumber] = useState(1)
-    const selectSize = (size, number) => {
-        setSizeSelected(size)
-        setSizeNumber(number)
-        setCount(1)
-    }
+    const [quantity, setQuantity] = useState(1)
 
     const [count, setCount] = useState(1);
 
     const handleIncrement = () => {
-        if (count < sizeNumber) setCount(count + 1);
+        if (count < quantity) setCount(count + 1);
     };
 
     const handleDecrement = () => {
@@ -31,9 +24,9 @@ const PantDeital = () => {
     };
 
     useEffect(() => {
-        getPantCustomer(id, setPant, setImages, setCanvas, selectSize)
+        getAccessoryCustomer(id, setAccessory, setImages, setCanvas, setQuantity)
     }, [])
-    console.log(pant)
+
     return (
         <Row style={{ margin: 40 }}>
             <Col span={14}>
@@ -67,7 +60,7 @@ const PantDeital = () => {
             </Col>
             <Col span={10}>
                 <Row>
-                    <Title level={4}>{pant?.name}</Title>
+                    <Title level={4}>{accessory?.name}</Title>
                 </Row>
                 <Row
                     style={{
@@ -89,7 +82,7 @@ const PantDeital = () => {
                     }}
                 >
                     {
-                        pant?.discount?.percent ? <Row
+                        accessory?.discount?.percent ? <Row
                             style={{
                                 justifyContent: 'center',
                                 alignItems: 'center',
@@ -102,23 +95,23 @@ const PantDeital = () => {
                                 fontWeight: 700
                             }}
                         >
-                            - {pant?.discount?.percent}%
+                            - {accessory?.discount?.percent}%
                         </Row> : ''
                     }
 
 
 
                     {
-                        pant?.discount?.percent ?
+                        accessory?.discount?.percent ?
                             <>
                                 <Text type="danger" style={{ marginRight: 10, fontWeight: 650, fontSize: 20 }}>
-                                    {(pant?.price - (pant?.price * pant?.discount?.percent / 100)).toLocaleString('vi-VN')}₫
+                                    {(accessory?.price - (accessory?.price * accessory?.discount?.percent / 100)).toLocaleString('vi-VN')}₫
                                 </Text>
-                                <Text delete> {(pant?.price)?.toLocaleString('vi-VN')}₫</Text>
+                                <Text delete> {(accessory?.price)?.toLocaleString('vi-VN')}₫</Text>
                             </>
                             :
                             <Text type="danger" style={{ marginRight: 10, fontWeight: 650, fontSize: 20 }}>
-                                {(pant?.price)?.toLocaleString('vi-VN')}₫
+                                {(accessory?.price)?.toLocaleString('vi-VN')}₫
                             </Text>
                     }
 
@@ -134,22 +127,12 @@ const PantDeital = () => {
                     }}
                 >
                     <Col span={18}>
-                        {pant?.size.map((item, index) => {
-                            return (
-                                <Button color="default"
-                                    variant={sizeSelected === Object.keys(item)[0] ? "solid" : ''}
-                                    className="size-button"
-                                    onClick={() => selectSize(Object.keys(item)[0], Object.values(item)[0])}
-                                >
-                                    {Object.keys(item)[0]}
-                                </Button>
-                            )
-                        })}
+                        ONE SIZE
                     </Col>
                     <Col span={6}>
                         {
-                            sizeNumber !== 0 ?
-                                `${sizeNumber} sản phẩm có sẵn`
+                            accessory?.quantity ?
+                                `${accessory.quantity} sản phẩm có sẵn`
                                 :
                                 `Tạm hết hàng`
                         }
@@ -170,7 +153,7 @@ const PantDeital = () => {
                     </div>
                 </Row>
                 {
-                    sizeNumber !== 0 ? <Row style={{ marginTop: 30 }}>
+                    accessory?.quantity !== 0 ? <Row style={{ marginTop: 30 }}>
                         <div class="box-1">
                             <div class="btn btn-one">
                                 <span>THÊM VÀO GIỎ HÀNG</span>
@@ -192,4 +175,4 @@ const PantDeital = () => {
     );
 };
 
-export default PantDeital;
+export default AccessoryDetail;

@@ -6,7 +6,22 @@ import { MESSAGE } from "../../config/message.config"
 export const getListShoes = (setShoesList) => {
     axios.get(API_PATH.shoes)
         .then((res) => {
-            console.log(res.data.data)
+            setShoesList(res.data.data)
+        })
+        .catch(error => console.error(error))
+}
+
+export const getListShoesIncrease = (setShoesList) => {
+    axios.get(API_PATH.shoes + '/increase')
+        .then((res) => {
+            setShoesList(res.data.data)
+        })
+        .catch(error => console.error(error))
+}
+
+export const getListShoesDecrease = (setShoesList) => {
+    axios.get(API_PATH.shoes + '/decrease')
+        .then((res) => {
             setShoesList(res.data.data)
         })
         .catch(error => console.error(error))
@@ -69,6 +84,29 @@ export const getShoes = (id, form, handleFileListChange) => {
                 size43: size43,
             });
         })
+}
+
+export const getShoesCustomer = (id, setShoes, setImages, setCanvas, selectSize) => {
+    axios.get(API_PATH.shoes + `/${id}`)
+        .then((res) => {
+            console.log(res.data)
+            setShoes(res.data)
+            const images = res.data?.images
+            let imgArrResult = []
+
+            if (images) {
+                for (let img of images) {
+                    imgArrResult.push({
+                        url: `${API_PATH.image}/${img.shoes_id}/${img.img_id}${img.file_extension}`,
+                    })
+                }
+            }
+            setCanvas(imgArrResult[0].url)
+            setImages(imgArrResult)
+            selectSize(Object.keys(res.data.size[0])[0], Object.values(res.data.size[0])[0])
+
+        }
+        )
 }
 
 export const createShoes = (shoes, fileList, navigate) => {

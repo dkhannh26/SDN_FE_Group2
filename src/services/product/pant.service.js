@@ -12,6 +12,24 @@ export const getListPant = (setPants) => {
         .catch(error => console.error(error))
 }
 
+
+export const getListPantIncrease = (setPants) => {
+    axios.get(API_PATH.pant + '/increase')
+        .then((res) => {
+            setPants(res.data.data)
+        })
+        .catch(error => console.error(error))
+}
+
+
+export const getListPantDecrease = (setPants) => {
+    axios.get(API_PATH.pant + '/decrease')
+        .then((res) => {
+            setPants(res.data.data)
+        })
+        .catch(error => console.error(error))
+}
+
 export const getPant = (id, form, handleFileListChange) => {
     axios.get(API_PATH.pant + `/${id}`)
         .then((res) => {

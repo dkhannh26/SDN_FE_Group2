@@ -11,6 +11,47 @@ export const getListAccessory = (setAccessories) => {
         .catch(error => console.error(error))
 }
 
+export const getAccessoryCustomer = (id, setAccessory, setImages, setCanvas, setQuantity) => {
+    axios.get(API_PATH.accessory + `/${id}`)
+        .then((res) => {
+            setAccessory(res.data)
+
+            console.log(res.data)
+            const images = res.data?.images
+            let imgArrResult = []
+
+            if (images) {
+                for (let img of images) {
+                    imgArrResult.push({
+                        url: `${API_PATH.image}/${img.accessory_id}/${img.img_id}${img.file_extension}`,
+                    })
+                }
+            }
+            console.log(imgArrResult)
+            setCanvas(imgArrResult[0].url)
+            setImages(imgArrResult)
+            setQuantity(res.data.quantity)
+            // selectSize(Object.keys(res.data.size[0])[0], Object.values(res.data.size[0])[0])
+        }
+        )
+}
+
+export const getListAccessoryIncrease = (setAccessories) => {
+    axios.get(API_PATH.accessory + '/increase')
+        .then((res) => {
+            setAccessories(res.data.data)
+        })
+        .catch(error => console.error(error))
+}
+
+export const getListAccessoryDecrease = (setAccessories) => {
+    axios.get(API_PATH.accessory + '/decrease')
+        .then((res) => {
+            setAccessories(res.data.data)
+        })
+        .catch(error => console.error(error))
+}
+
 export const getAccessory = (id, form, handleFileListChange) => {
     axios.get(API_PATH.accessory + `/${id}`)
         .then((res) => {

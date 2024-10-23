@@ -45,21 +45,27 @@ const Header = () => {
       key: "HOME",
     },
     {
-      label: "T-SHIRT",
+      label: (
+        <Link to='/customer/tshirt'>T-SHIRT</Link>
+      ),
       key: "T-SHIRT",
     },
     {
       label: (
-        <Link to='/customer/pant'>PANT</Link>
+        <Link to='/customer/pant'>PANTS</Link>
       ),
       key: "PANTS"
     },
     {
-      label: "SHOES",
+      label: (
+        <Link to='/customer/shoes'>SHOES</Link>
+      ),
       key: "SHOES",
     },
     {
-      label: "ACCESSORIES",
+      label: (
+        <Link to='/customer/accessory'>ACCESSORIES</Link>
+      ),
       key: "ACCESSORIES",
     },
 
