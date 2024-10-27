@@ -24,7 +24,7 @@ const ShoesCustomer = () => {
     return (
         <Row>
             <Col offset={1} span={21}>
-                <Title level={2} style={{ marginTop: '20px' }}>ShoesCustomer</Title>
+                <Title level={2} style={{ marginTop: '20px' }}>Shoes</Title>
                 <Row style={{ margin: '20px', marginLeft: 0 }}>
                     <div className='product-filter'>
                         <FilterOutlined /> Filter
