@@ -1,20 +1,26 @@
 import React from "react";
 
-import { Col, Row, Badge, Popover, Empty, Menu, List, Divider, Skeleton } from "antd";
-import InfiniteScroll from 'react-infinite-scroll-component';
-import "../assets/css/header.css";
-import Logo from "../assets/images/logo.webp";
 import {
   DownOutlined,
-  UserOutlined,
-  ShoppingOutlined,
   SearchOutlined,
+  ShoppingOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
+import { Badge, Col, Empty, List, Menu, Popover, Row } from "antd";
+import "../assets/css/header.css";
+import Logo from "../assets/images/logo.webp";
 
-import LoginPopover from "./login";
 import { useAuth } from "./context/AuthContext";
+import LoginPopover from "./login";
+import { useState } from "react";
+import { getSearchList } from "../services/product/search.service";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
+
+  const [searchFocus, setSearchForcus] = useState(false)
+  const [searchList, setSearchList] = useState([])
+
   const cartPopover = (
     <div className="cart-pop">
       <div className="card-pop-title text">
@@ -75,34 +81,7 @@ const Header = () => {
     },
   ];
 
-  const searchData = [
-    {
-      avatar: '	https://product.hstatic.net/1000344185/product/img_4125_4feb7a360b3b4f00bd2465a85ef2d9e3_small.jpg',
-      title: 'Ant Design Title 1',
-      des: <p>400,000₫<del>440,000₫</del></p>
-    },
-    {
-      avatar: '	https://product.hstatic.net/1000344185/product/img_4125_4feb7a360b3b4f00bd2465a85ef2d9e3_small.jpg',
-      title: 'Ant Design Title 2',
-      des: <p>400,000₫<del>440,000₫</del></p>
-    },
-    {
-      avatar: '	https://product.hstatic.net/1000344185/product/img_4125_4feb7a360b3b4f00bd2465a85ef2d9e3_small.jpg',
-      title: 'Ant Design Title 2',
-      des: <p>400,000₫<del>440,000₫</del></p>
-    },
-    {
-      avatar: '	https://product.hstatic.net/1000344185/product/img_4125_4feb7a360b3b4f00bd2465a85ef2d9e3_small.jpg',
-      title: 'Ant Design Title 2',
-      des: <p>400,000₫<del>440,000₫</del></p>
-    },
-    {
-      avatar: '	https://product.hstatic.net/1000344185/product/img_4125_4feb7a360b3b4f00bd2465a85ef2d9e3_small.jpg',
-      title: 'Ant Design Title 2',
-      des: <p>400,000₫<del>440,000₫</del></p>
-    },
-  ];
-
+  const navigate = useNavigate()
   const { isAuthenticated, username } =
     useAuth();
 
@@ -121,29 +100,142 @@ const Header = () => {
         <Col span={9} style={{ position: "relative" }}>
           <div className="flex-center">
             <input
+              onFocus={() => {
+                setSearchForcus(true)
+
+              }}
+              onBlur={() => {
+                setSearchForcus(false)
+              }}
+              onChange={(e) => {
+                let text = e.target.value
+                if (!text) setSearchList([])
+                if (text.startsWith(" ")) {
+                  text = text.trimStart();
+                } else {
+                  if (text) {
+                    getSearchList(text, setSearchList)
+                  }
+                }
+              }}
+              pattern="^[^\s].*"
               name="search"
               placeholder="Tìm kiếm sản phẩm..."
               className="search-input"
+              autocomplete="off"
             />
             <div className="search-btn">
               <SearchOutlined />
             </div>
           </div>
-          <div className="search-item">
-              <List
-              itemLayout="horizontal"
-              dataSource={searchData}
-              renderItem={(item, index) => (
-                <List.Item>
-                  <List.Item.Meta
-                    avatar={<img src={item.avatar} alt="" />}
-                    title={<a href="https://ant.design">{item.title}</a>}
-                    description={item.des}
-                  />
-                </List.Item>
-              )}
-            />
-          </div>
+          {searchFocus ? <div className="search-item">
+            {
+              searchList?.tshirts && (searchList?.tshirts?.length !== 0) ?
+                <List
+                  itemLayout="horizontal"
+                  dataSource={searchList?.tshirts}
+                  renderItem={(item, index) => (
+                    <List.Item>
+                      <List.Item.Meta
+                        avatar={<img src={'http://localhost:3000' + item.tshirtImg} alt="" />}
+                        title={<a href="https://ant.design">{item.tshirtName}</a>}
+                        description=
+                        {item.tshirtDiscountPercent ?
+                          <p>
+                            {(item.tshirtPrice - (item.tshirtPrice * item.tshirtDiscountPercent / 100)).toLocaleString('vi-VN')}₫
+                            <del>{(item.tshirtPrice).toLocaleString('vi-VN')}₫</del>
+                          </p>
+                          :
+                          <p>
+                            {(item.tshirtPrice).toLocaleString('vi-VN')}₫
+                          </p>
+                        }
+                      />
+                    </List.Item>
+                  )}
+                /> : <div></div>
+            }
+            {
+              searchList?.pants && (searchList?.pants?.length !== 0) ?
+                <List
+                  itemLayout="horizontal"
+                  dataSource={searchList?.pants}
+                  renderItem={(item, index) => (
+                    <List.Item>
+                      <List.Item.Meta
+                        avatar={<img src={'http://localhost:3000' + item.pantImg} alt="" />}
+                        title={<a href="https://ant.design">{item.pantName}</a>}
+                        description=
+                        {item.pantDiscountPercent ?
+                          <p>
+                            {(item.pantPrice - (item.pantPrice * item.pantDiscountPercent / 100)).toLocaleString('vi-VN')}₫
+                            <del>{(item.pantPrice).toLocaleString('vi-VN')}₫</del>
+                          </p>
+                          :
+                          <p>
+                            {(item.pantPrice).toLocaleString('vi-VN')}₫
+                          </p>
+                        }
+
+                      />
+                    </List.Item>
+                  )}
+                /> : ''
+            }
+            {
+              searchList?.shoesList && (searchList?.shoesList?.length !== 0) ?
+                <List
+                  itemLayout="horizontal"
+                  dataSource={searchList?.shoesList}
+                  renderItem={(item, index) => (
+                    <List.Item>
+                      <List.Item.Meta
+                        avatar={<img src={'http://localhost:3000' + item.shoesImg} alt="" />}
+                        title={<a href="https://ant.design">{item.shoesName}</a>}
+                        description=
+                        {item.shoesDiscountPercent ?
+                          <p>
+                            {(item.shoesPrice - (item.shoesPrice * item.shoesDiscountPercent / 100)).toLocaleString('vi-VN')}₫
+                            <del>{(item.shoesPrice).toLocaleString('vi-VN')}₫</del>
+                          </p>
+                          :
+                          <p>
+                            {(item.shoesPrice).toLocaleString('vi-VN')}₫
+                          </p>
+                        }
+                      />
+                    </List.Item>
+                  )}
+                /> : ''
+            }
+            {
+              searchList?.accessories && (searchList?.accessories?.length !== 0) ?
+                <List
+                  itemLayout="horizontal"
+                  dataSource={searchList?.accessories}
+                  renderItem={(item, index) => (
+                    <List.Item>
+                      <List.Item.Meta
+                        avatar={<img src={'http://localhost:3000' + item.accessoryImg} alt="" />}
+                        title={<a href="https://ant.design">{item.accessoryName}</a>}
+                        description=
+                        {item.accessoryDiscountPercent ?
+                          <p>
+                            {(item.accessoryPrice - (item.accessoryPrice * item.accessoryDiscountPercent / 100)).toLocaleString('vi-VN')}₫
+                            <del>{(item.accessoryPrice).toLocaleString('vi-VN')}₫</del>
+                          </p>
+                          :
+                          <p>
+                            {(item.accessoryPrice).toLocaleString('vi-VN')}₫
+                          </p>
+                        }
+                      />
+                    </List.Item>
+                  )}
+                /> : ''
+            }
+          </div> : ''}
+
         </Col>
         <Col span={8} className="login-cart flex-center">
           {isAuthenticated ? (
