@@ -4,6 +4,7 @@ export const API_PATH = {
   user: baseURL + 'users',
   discount: baseURL + 'discount',
   voucher: baseURL + 'voucher',
+  search: baseURL + 'product/search',
   tshirt: baseURL + 'product/tshirt',
   shoes: baseURL + 'product/shoes',
   accessory: baseURL + 'product/accessory',

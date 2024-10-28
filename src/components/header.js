@@ -1,20 +1,25 @@
 import React from "react";
 
-import { Col, Row, Badge, Popover, Empty, Menu } from "antd";
-import "../assets/css/header.css";
-import Logo from "../assets/images/logo.webp";
 import {
   DownOutlined,
-  UserOutlined,
-  ShoppingOutlined,
   SearchOutlined,
+  ShoppingOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
-
-import LoginPopover from "./login";
+import { Badge, Col, Empty, List, Menu, Popover, Row } from "antd";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import "../assets/css/header.css";
+import Logo from "../assets/images/logo.webp";
+import { getSearchList } from "../services/product/search.service";
 import { useAuth } from "./context/AuthContext";
-import { Link } from "react-router-dom";
+import LoginPopover from "./login";
 
 const Header = () => {
+
+  const [searchFocus, setSearchForcus] = useState(false)
+  const [searchList, setSearchList] = useState([])
+
   const cartPopover = (
     <div className="cart-pop">
       <div className="card-pop-title text">
@@ -83,6 +88,7 @@ const Header = () => {
     },
   ];
 
+  const navigate = useNavigate()
   const { isAuthenticated, username } =
     useAuth();
 
@@ -98,15 +104,167 @@ const Header = () => {
         <Col span={4}>
           <img src={Logo} alt="logo" className="logo" />
         </Col>
-        <Col span={9} className="flex-center">
-          <input
-            name="search"
-            placeholder="Tìm kiếm sản phẩm..."
-            className="search-input"
-          />
-          <div className="search-btn">
-            <SearchOutlined />
+        <Col span={9} style={{ position: "relative" }}>
+          <div className="flex-center">
+            <input
+              onFocus={() => {
+                setSearchForcus(true)
+
+              }}
+              onBlur={() => {
+                setTimeout(() => setSearchForcus(false), 100)
+              }}
+              onChange={(e) => {
+                let text = e.target.value
+                if (!text) setSearchList([])
+                if (text.startsWith(" ")) {
+                  text = text.trimStart();
+                } else {
+                  if (text) {
+                    getSearchList(text, setSearchList)
+                  }
+                }
+              }}
+              pattern="^[^\s].*"
+              name="search"
+              placeholder="Tìm kiếm sản phẩm..."
+              className="search-input"
+              autocomplete="off"
+            />
+            <div className="search-btn">
+              <SearchOutlined />
+            </div>
           </div>
+          {searchFocus ? <div className="search-item">
+            {
+              searchList?.tshirts && (searchList?.tshirts?.length !== 0) ?
+                <List
+                  itemLayout="horizontal"
+                  dataSource={searchList?.tshirts}
+                  renderItem={(item, index) => (
+                    <List.Item
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <List.Item.Meta
+                        onClick={() => {
+                          console.log('ao')
+                          navigate(`/customer/tshirt/${item.tshirtId}`)
+                        }}
+                        avatar={<img src={'http://localhost:3000' + item.tshirtImg} alt="" />}
+                        title={<p>{item.tshirtName}</p>}
+                        description=
+                        {item.tshirtDiscountPercent ?
+                          <p>
+                            {(item.tshirtPrice - (item.tshirtPrice * item.tshirtDiscountPercent / 100)).toLocaleString('vi-VN')}₫
+                            <del>{(item.tshirtPrice).toLocaleString('vi-VN')}₫</del>
+                          </p>
+                          :
+                          <p>
+                            {(item.tshirtPrice).toLocaleString('vi-VN')}₫
+                          </p>
+                        }
+                      />
+                    </List.Item>
+                  )}
+                /> : <div></div>
+            }
+            {
+              searchList?.pants && (searchList?.pants?.length !== 0) ?
+                <List
+                  itemLayout="horizontal"
+                  dataSource={searchList?.pants}
+                  renderItem={(item, index) => (
+                    <List.Item
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <List.Item.Meta
+                        onClick={() => {
+                          console.log('ao')
+                          navigate(`/customer/pant/${item.pantId}`)
+                        }}
+                        avatar={<img src={'http://localhost:3000' + item.pantImg} alt="" />}
+                        title={<p>{item.pantName}</p>}
+                        description=
+                        {item.pantDiscountPercent ?
+                          <p>
+                            {(item.pantPrice - (item.pantPrice * item.pantDiscountPercent / 100)).toLocaleString('vi-VN')}₫
+                            <del>{(item.pantPrice).toLocaleString('vi-VN')}₫</del>
+                          </p>
+                          :
+                          <p>
+                            {(item.pantPrice).toLocaleString('vi-VN')}₫
+                          </p>
+                        }
+
+                      />
+                    </List.Item>
+                  )}
+                /> : ''
+            }
+            {
+              searchList?.shoesList && (searchList?.shoesList?.length !== 0) ?
+                <List
+                  itemLayout="horizontal"
+                  dataSource={searchList?.shoesList}
+                  renderItem={(item, index) => (
+                    <List.Item
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <List.Item.Meta
+                        onClick={() => {
+                          navigate(`/customer/shoes/${item.shoesId}`)
+                        }}
+                        avatar={<img src={'http://localhost:3000' + item.shoesImg} alt="" />}
+                        title={<p >{item.shoesName}</p>}
+                        description=
+                        {item.shoesDiscountPercent ?
+                          <p>
+                            {(item.shoesPrice - (item.shoesPrice * item.shoesDiscountPercent / 100)).toLocaleString('vi-VN')}₫
+                            <del>{(item.shoesPrice).toLocaleString('vi-VN')}₫</del>
+                          </p>
+                          :
+                          <p>
+                            {(item.shoesPrice).toLocaleString('vi-VN')}₫
+                          </p>
+                        }
+                      />
+                    </List.Item>
+                  )}
+                /> : ''
+            }
+            {
+              searchList?.accessories && (searchList?.accessories?.length !== 0) ?
+                <List
+                  itemLayout="horizontal"
+                  dataSource={searchList?.accessories}
+                  renderItem={(item, index) => (
+                    <List.Item
+                      style={{ cursor: 'pointer' }}
+                    >
+                      <List.Item.Meta
+                        onClick={() => {
+                          navigate(`/customer/accessory/${item.accessoryId}`)
+                        }}
+                        avatar={<img src={'http://localhost:3000' + item.accessoryImg} alt="" />}
+                        title={<p>{item.accessoryName}</p>}
+                        description=
+                        {item.accessoryDiscountPercent ?
+                          <p>
+                            {(item.accessoryPrice - (item.accessoryPrice * item.accessoryDiscountPercent / 100)).toLocaleString('vi-VN')}₫
+                            <del>{(item.accessoryPrice).toLocaleString('vi-VN')}₫</del>
+                          </p>
+                          :
+                          <p>
+                            {(item.accessoryPrice).toLocaleString('vi-VN')}₫
+                          </p>
+                        }
+                      />
+                    </List.Item>
+                  )}
+                /> : ''
+            }
+          </div> : ''}
+
         </Col>
         <Col span={8} className="login-cart flex-center">
           {isAuthenticated ? (
@@ -158,7 +316,7 @@ const Header = () => {
       <Row className="container header-menu">
         <Menu mode="horizontal" items={items} />
       </Row>
-    </div>
+    </div >
   );
 };
 
