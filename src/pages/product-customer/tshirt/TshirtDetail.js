@@ -32,7 +32,7 @@ const TshirtDetail = () => {
 
     useEffect(() => {
         getTshirtCustomer(id, setTshirt, setImages, setCanvas, selectSize)
-    }, [])
+    }, [id])
     return (
         <Row style={{ margin: 40 }}>
             <Col span={14}>

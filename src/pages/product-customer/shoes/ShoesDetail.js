@@ -33,7 +33,7 @@ const ShoesDetail = () => {
     useEffect(() => {
         // console.log
         getShoesCustomer(id, setShoes, setImages, setCanvas, selectSize)
-    }, [])
+    }, [id])
     console.log(shoes)
     return (
         <Row style={{ margin: 40 }}>

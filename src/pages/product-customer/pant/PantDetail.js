@@ -32,7 +32,7 @@ const PantDetail = () => {
 
     useEffect(() => {
         getPantCustomer(id, setPant, setImages, setCanvas, selectSize)
-    }, [])
+    }, [id])
     console.log(pant)
     return (
         <Row style={{ margin: 40 }}>
