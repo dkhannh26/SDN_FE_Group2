@@ -11,6 +11,9 @@ const LocationSelector = ({ onSelect }) => {
     const [selectedCity, setSelectedCity] = useState(null); // Tỉnh/thành phố được chọn
     const [selectedDistrict, setSelectedDistrict] = useState(null); // Quận/huyện được chọn
     const [selectedWard, setSelectedWard] = useState(null); // Phường/xã được chọn
+    const [city, setCity] = useState(null);
+    const [district, setDistrict] = useState(null);
+    const [ward, setWard] = useState(null);
 
     // Lấy dữ liệu từ API khi component được render lần đầu tiên
     useEffect(() => {
@@ -31,6 +34,8 @@ const LocationSelector = ({ onSelect }) => {
     // Khi chọn tỉnh/thành phố
     const handleCityChange = (value) => {
         setSelectedCity(value);
+        const city = cities.find((city) => city.Id === value);
+        setCity(city.name)
         setSelectedDistrict(null); // Reset giá trị quận/huyện khi chọn tỉnh mới
         setSelectedWard(null); // Reset giá trị phường/xã khi chọn tỉnh mới
         const selectedCityData = cities.find((city) => city.Id === value);
@@ -38,23 +43,26 @@ const LocationSelector = ({ onSelect }) => {
         setWards([]); // Xoá danh sách phường/xã khi chọn lại tỉnh
 
         // Notify parent component
-        onSelect(value, null, null);
+        onSelect(city ? city.Name : "", null, null);
     };
 
     // Khi chọn quận/huyện
     const handleDistrictChange = (value) => {
         setSelectedDistrict(value);
+        const district = districts.find((District) => District.Id === value);
+        setDistrict(district.name);
         setSelectedWard(null);
         const selectedDistrictData = districts.find((district) => district.Id === value);
         setWards(selectedDistrictData ? selectedDistrictData.Wards : []);
 
-        onSelect(selectedCity, value, null);
+        onSelect(city, district ? district.Name : "", null);
     };
 
     const handleWardChange = (value) => {
         setSelectedWard(value);
-
-        onSelect(selectedCity, selectedDistrict, value);
+        const ward = wards.find((Wards) => Wards.Id === value);
+        setWard(ward.name);
+        onSelect(city, district, ward ? ward.Name : "");
     };
 
     return (

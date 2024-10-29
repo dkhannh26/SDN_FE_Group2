@@ -19,7 +19,7 @@ const PaymentModel = () => {
     const [selectedCity, setSelectedCity] = useState(null);
     const [selectedDistrict, setSelectedDistrict] = useState(null);
     const [selectedWard, setSelectedWard] = useState(null);
-    const [selectedShippingMethod, setSelectedShippingMethod] = useState(null);
+    // const [selectedShippingMethod, setSelectedShippingMethod] = useState(null);
     const [carts, setCarts] = useState([])
     const [voucherTotal, setVoucherTotal] = useState(0);
     const [total, setTotal] = useState(Number);
@@ -33,33 +33,39 @@ const PaymentModel = () => {
     const [isCOD, setIsCOD] = useState(false);
     const [isVNPay, setIsVNPay] = useState(false);
 
-    const fetchShippingMethods = (city, district, ward) => {
-        if (city && district && ward) {
-            setShippingMethods([
-                'Standard Shipping (5-7 days)',
-                'Express Shipping (2-3 days)',
-                'Same-day Delivery',
-            ]);
-        }
-    };
+    // const fetchShippingMethods = (city, district, ward) => {
+    //     if (city && district && ward) {
+    //         setShippingMethods([
+    //             'Standard Shipping (5-7 days)',
+    //             'Express Shipping (2-3 days)',
+    //             'Same-day Delivery',
+    //         ]);
+    //     }
+    // };
 
     const handleLocationSelect = (city, district, ward) => {
-        setSelectedCity(city);
-        setSelectedDistrict(district);
-        setSelectedWard(ward);
-        fetchShippingMethods(city, district, ward);
+        if (city) {
+            setSelectedCity(city);
+        }
+        if (district) {
+            setSelectedDistrict(district);
+        }
+        if (ward) {
+            setSelectedWard(ward);
+        }
+        // fetchShippingMethods(city, district, ward);
     };
 
-    const handleShippingMethodSelect = (method) => {
-        setSelectedShippingMethod(method);
-        if (method === 'Standard Shipping (5-7 days)') {
-            setTotalAmount(500000); // 500,000 VND
-        } else if (method === 'Express Shipping (2-3 days)') {
-            setTotalAmount(600000); // 600,000 VND
-        } else if (method === 'Same-day Delivery') {
-            setTotalAmount(700000); // 700,000 VND
-        }
-    };
+    // const handleShippingMethodSelect = (method) => {
+    //     setSelectedShippingMethod(method);
+    //     if (method === 'Standard Shipping (5-7 days)') {
+    //         setTotalAmount(500000); // 500,000 VND
+    //     } else if (method === 'Express Shipping (2-3 days)') {
+    //         setTotalAmount(600000); // 600,000 VND
+    //     } else if (method === 'Same-day Delivery') {
+    //         setTotalAmount(700000); // 700,000 VND
+    //     }
+    // };
     const handleCODChange = (e) => {
         setIsCOD(e.target.checked);
         if (e.target.checked) {
@@ -80,6 +86,7 @@ const PaymentModel = () => {
             alert('Vui lòng chọn phương thức thanh toán');
             return;
         }
+        console.log(selectedCity + ' ' + selectedDistrict + ' ' + selectedWard);
         const values = {
             name,
             phone,
@@ -90,7 +97,7 @@ const PaymentModel = () => {
         };
         const order = {
             phone: values.phone,
-            address: values.address,
+            address: selectedCity + ' ' + selectedDistrict + ' ' + selectedWard + ' ' + values.address,
             total_price: values.voucherTotal,
             orderItems: values.cartItems.map(item => ({
                 accessory_id: item.accessory_id,
@@ -102,7 +109,7 @@ const PaymentModel = () => {
         if (isCOD) {
             createOrder(order, navigate);
         } else if (isVNPay) {
-            createPayment(voucherTotal, bankCode, language, name, address, phone);
+            createPayment(voucherTotal, bankCode, language, name, selectedCity + ' ' + selectedDistrict + ' ' + selectedWard + ' ' + address, phone);
         }
     };
     useEffect(() => {
@@ -129,8 +136,7 @@ const PaymentModel = () => {
         const name = params.get('name');
         const address = params.get('address');
         const phone = params.get('phone');
-        console.log(phone);
-        console.log(type);
+        console.log(selectedCity + ' ' + selectedDistrict + ' ' + selectedWard);
         if (type === 'OK') {
             const values = {
                 name,
@@ -196,7 +202,7 @@ const PaymentModel = () => {
                     />
                     <LocationSelector onSelect={handleLocationSelect} />
 
-                    {selectedCity && selectedDistrict && selectedWard && (
+                    {/* {selectedCity && selectedDistrict && selectedWard && (
                         <Card title="Phương thức vận chuyển" bordered style={{ marginTop: '20px' }}>
                             {shippingMethods.map((method, index) => (
                                 <div key={index} style={{ marginBottom: '10px' }}>
@@ -210,7 +216,7 @@ const PaymentModel = () => {
                                 </div>
                             ))}
                         </Card>
-                    )}
+                    )} */}
                     <Title level={4}>Phương thức thanh toán</Title>
                     <Card style={{ padding: '16px' }}>
                         <Checkbox onChange={handleCODChange} style={{ fontSize: '18px', lineHeight: '24px' }}>

@@ -1,12 +1,11 @@
-import { DeleteOutlined, EyeInvisibleOutlined, CheckOutlined, CloseOutlined, EyeOutlined } from '@ant-design/icons';
+import { CheckOutlined, CloseOutlined, DeleteOutlined, EyeInvisibleOutlined, EyeOutlined } from '@ant-design/icons';
 import { Button, Col, Flex, Space, Table, message } from 'antd';
 import Title from 'antd/es/typography/Title';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { MESSAGE } from '../../config/message.config';
-import { ORDER_URL } from '../../config/url.config';
-import { cancelOrder, confirmOrder, getListOrder, getOrderDetails } from '../../services/order.service';
 import { API_PATH } from "../../config/api.config";
+import { MESSAGE } from '../../config/message.config';
+import { cancelOrder, confirmOrder, getListOrder, getOrderDetails } from '../../services/order.service';
 import { showDeleteConfirm, success } from '../../utils/helper';
 
 const OrderTable = () => {
