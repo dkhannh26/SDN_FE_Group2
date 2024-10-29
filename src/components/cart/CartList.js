@@ -50,7 +50,7 @@ const CartList = () => {
     }, [totalAmount]);
 
     console.log(total);
-    // let amount = carts?.map(cart => cart.tshirt.price * cart.quantity);
+    // let amount = carts?.map(cart => cart.product.price * cart.quantity);
     // console.log('amount', amount)
     // const total = amount.reduce((a, b) => a + b, 0);
     // setTotalAmount(total);
@@ -73,17 +73,23 @@ const CartList = () => {
 
                             <List.Item>
                                 <List.Item.Meta
-                                    avatar={<Image width={100} src={`http://localhost:3000/uploads/${item.image._id}${item.image.file_extension}`} />}
+                                    avatar={
+                                        item.productImage ? (
+                                            <Image width={100} src={`http://localhost:3000/uploads/${item.productImage._id}${item.productImage.file_extension}`} />
+                                        ) : (
+                                            <Image width={100} src="path-to-default-image" />
+                                        )
+                                    }
                                     title={
-                                        <Text style={{ display: 'block', textAlign: 'left', fontSize: '15px', fontWeight: 'bold' }}>{item.tshirt.name}</Text>
+                                        <Text style={{ display: 'block', textAlign: 'left', fontSize: '15px', fontWeight: 'bold' }}>{item.product.name}</Text>
                                     }
                                     description={(
                                         <div style={{ marginTop: '5px', display: 'block', textAlign: 'left' }}>
-                                            <Text style={{ color: '#888' }}>{(item.tshirt.price * item.quantity).toLocaleString()}<Text style={{ fontSize: '10px', color: '#888', textDecorationLine: 'underline' }}>đ</Text></Text>
+                                            <Text style={{ color: '#888' }}>{(item.product.price * item.quantity).toLocaleString()}<Text style={{ fontSize: '10px', color: '#888', textDecorationLine: 'underline' }}>đ</Text></Text>
                                             <br />
-                                            <Text style={{ color: '#888' }}>Kích thước: {item.size.size_name}</Text>
+                                            <Text style={{ color: '#888' }}>Kích thước: {item.productSize ? item.productSize.size_name : "Không có kích thước"}</Text>
                                             <br />
-                                            <InputNumber min={1} max={item.tshirt.quantity} defaultValue={item.quantity} onChange={(value) => onChange(value, item._id)} />
+                                            <InputNumber min={1} max={item.product.quantity} defaultValue={item.quantity} onChange={(value) => onChange(value, item._id)} />
                                         </div>
                                     )}
                                     style={{ marginLeft: '10px' }}
@@ -93,7 +99,7 @@ const CartList = () => {
                                     <br />
                                     <br />
                                     <br />
-                                    <Text style={{ fontSize: '15px', color: 'black', fontWeight: 'bold' }}>{(item.tshirt.price * item.quantity).toLocaleString()}<Text style={{ fontSize: '10px', color: 'black', textDecorationLine: 'underline' }}>đ</Text></Text>
+                                    <Text style={{ fontSize: '15px', color: 'black', fontWeight: 'bold' }}>{(item.product.price * item.quantity).toLocaleString()}<Text style={{ fontSize: '10px', color: 'black', textDecorationLine: 'underline' }}>đ</Text></Text>
                                 </div>
                             </List.Item>
                         )}

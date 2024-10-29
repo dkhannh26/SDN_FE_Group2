@@ -8,7 +8,7 @@ export const getListCart = (setCarts, setTotal) => {
     axios.get(API_PATH.cart)
         .then((res) => {
             setCarts(res.data)
-            const amount = res.data?.map(cart => cart.tshirt.price * cart.quantity)
+            const amount = res.data?.map(cart => cart.product.price * cart.quantity)
             setTotal(amount.reduce((a, b) => a + b, 0))
         })
 
@@ -42,8 +42,10 @@ export const editCart = (id, cart, setTotalAmount) => {
     axios.put(API_PATH.cart + `/${id}`, cart)
         .then((res) => {
             const updatedCart = res.data;
-            const totalAmount = updatedCart.tshirt.price * updatedCart.quantity;
+            console.log(updatedCart);
+            const totalAmount = updatedCart.product.price * updatedCart.quantity;
             setTotalAmount(totalAmount)
+            console.log(totalAmount);
         })
         .catch(error => {
             console.log(error)

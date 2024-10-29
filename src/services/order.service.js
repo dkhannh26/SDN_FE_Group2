@@ -45,22 +45,36 @@ export const editOrder = (id, order, navigate) => {
 }
 
 export const getOrderDetails = (id, setOrderDetails) => {
-    axios.get(API_PATH.orderDetails + `/${id}`)
+    return axios.get(API_PATH.orderDetails + `/${id}`)
         .then((res) => {
-            setOrderDetails(res.data)
+            setOrderDetails(res.data);
+            return res.data;
         })
-}
+        .catch(error => console.error(error));
+};
 
-export const confirmOrder = (id, messageApi, getListOrder, setOrders) => {
-    axios.put(API_PATH.confirmOrder + `/${id}`)
+export const confirmOrder = (id, messageApi, getListOrder, setOrders, orderDetails) => {
+    const quantities = orderDetails.map(detail => detail.quantity);
+    const pant_shirt_size_detail_id = orderDetails.map(detail => detail.pant_shirt_size_detail_id);
+    const shoes_size_detail_id = orderDetails.map(detail => detail.shoes_size_detail_id);
+    const accessory_id = orderDetails.map(detail => detail.accessory_id);
+
+    const updateData = {
+        quantities,
+        pant_shirt_size_detail_id,
+        shoes_size_detail_id,
+        accessory_id
+    };
+
+    axios.put(API_PATH.confirmOrder + `/${id}`, { updateData })
         .then(() => {
-            success('Confirm Succesfully', messageApi)
+            success('Confirm Successfully', messageApi);
+            return getListOrder(setOrders);
         })
-        .then(() => {
-            getListOrder(setOrders)
-        })
-        .catch(error => console.error(error))
-}
+        .catch(error => {
+            console.error(error);
+        });
+};
 
 export const cancelOrder = (id, messageApi, getListOrder, setOrders) => {
     axios.put(API_PATH.cancelOrder + `/${id}`)

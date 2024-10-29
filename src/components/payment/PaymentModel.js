@@ -33,7 +33,6 @@ const PaymentModel = () => {
     const [isCOD, setIsCOD] = useState(false);
     const [isVNPay, setIsVNPay] = useState(false);
 
-    // Mock function to simulate fetching shipping methods based on location
     const fetchShippingMethods = (city, district, ward) => {
         if (city && district && ward) {
             setShippingMethods([
@@ -44,7 +43,6 @@ const PaymentModel = () => {
         }
     };
 
-    // Trigger fetching of shipping methods when location is selected
     const handleLocationSelect = (city, district, ward) => {
         setSelectedCity(city);
         setSelectedDistrict(district);
@@ -52,7 +50,6 @@ const PaymentModel = () => {
         fetchShippingMethods(city, district, ward);
     };
 
-    // Handle selection of a shipping method
     const handleShippingMethodSelect = (method) => {
         setSelectedShippingMethod(method);
         if (method === 'Standard Shipping (5-7 days)') {
@@ -89,7 +86,7 @@ const PaymentModel = () => {
             email,
             address,
             voucherTotal,
-            cartItems: carts.map(cart => ({ id: cart._id, quantity: cart.quantity, accessory_id: cart.accessory_id, shoes_size_detail_id: cart.shoes_size_detail_id, pant_shirt_detail_id: cart.pant_shirt_detail_id }))
+            cartItems: carts.map(cart => ({ id: cart._id, quantity: cart.quantity, accessory_id: cart.accessory_id, shoes_size_detail_id: cart.shoes_size_detail_id, pant_shirt_size_detail_id: cart.pant_shirt_size_detail_id }))
         };
         const order = {
             phone: values.phone,
@@ -99,7 +96,7 @@ const PaymentModel = () => {
                 accessory_id: item.accessory_id,
                 quantity: item.quantity,
                 shoes_size_detail_id: item.shoes_size_detail_id,
-                pant_shirt_size_detail_id: item.pant_shirt_detail_id,
+                pant_shirt_size_detail_id: item.pant_shirt_size_detail_id,
             })),
         };
         if (isCOD) {
@@ -141,7 +138,7 @@ const PaymentModel = () => {
                 email,
                 address,
                 voucherTotal,
-                cartItems: carts.map(cart => ({ id: cart._id, quantity: cart.quantity, accessory_id: cart.accessory_id, shoes_size_detail_id: cart.shoes_size_detail_id, pant_shirt_detail_id: cart.pant_shirt_detail_id }))
+                cartItems: carts.map(cart => ({ id: cart._id, quantity: cart.quantity, accessory_id: cart.accessory_id, shoes_size_detail_id: cart.shoes_size_detail_id, pant_shirt_size_detail_id: cart.pant_shirt_size_detail_id }))
             };
             const order = {
                 phone: values.phone,
@@ -151,7 +148,7 @@ const PaymentModel = () => {
                     accessory_id: item.accessory_id,
                     quantity: item.quantity,
                     shoes_size_detail_id: item.shoes_size_detail_id,
-                    pant_shirt_size_detail_id: item.pant_shirt_detail_id,
+                    pant_shirt_size_detail_id: item.pant_shirt_size_detail_id,
                 })),
             };
             createOrder(order, navigate);
@@ -253,19 +250,25 @@ const PaymentModel = () => {
 
                             <List.Item>
                                 <List.Item.Meta
-                                    avatar={<Image width={100} src={`http://localhost:3000/uploads/${item.image._id}${item.image.file_extension}`} />}
+                                    avatar={
+                                        item.productImage ? (
+                                            <Image width={100} src={`http://localhost:3000/uploads/${item.productImage._id}${item.productImage.file_extension}`} />
+                                        ) : (
+                                            <Image width={100} src="path-to-default-image" />
+                                        )
+                                    }
                                     title={
-                                        <Text style={{ display: 'block', textAlign: 'left', fontSize: '15px', fontWeight: 'bold' }}>{item.tshirt.name}</Text>
+                                        <Text style={{ display: 'block', textAlign: 'left', fontSize: '15px', fontWeight: 'bold' }}>{item.product.name}</Text>
                                     }
                                     description={(
                                         <div style={{ marginTop: '5px', display: 'block', textAlign: 'left' }}>
-                                            <Text style={{ color: '#888' }}>Kích thước: {item.size.size_name}</Text>
+                                            <Text style={{ color: '#888' }}>Kích thước: {item.productSize ? item.productSize.size_name : "Không có kích thước"}</Text>
                                         </div>
                                     )}
                                     style={{ marginLeft: '10px' }}
                                 />
                                 <div style={{ textAlign: 'right' }}>
-                                    <Text style={{ fontSize: '15px', color: 'black', fontWeight: 'bold' }}>{(item.tshirt.price * item.quantity).toLocaleString()}<Text style={{ fontSize: '10px', color: 'black', textDecorationLine: 'underline' }}>đ</Text></Text>
+                                    <Text style={{ fontSize: '15px', color: 'black', fontWeight: 'bold' }}>{(item.product.price * item.quantity).toLocaleString()}<Text style={{ fontSize: '10px', color: 'black', textDecorationLine: 'underline' }}>đ</Text></Text>
                                 </div>
                             </List.Item>
                         )}

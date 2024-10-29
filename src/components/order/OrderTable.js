@@ -60,10 +60,19 @@ const OrderTable = () => {
             render: (_id, record) => {
                 return (
                     <Space>
+                        ${_id}
                         {record.status === 'pending' && (
                             <>
                                 <Button shape="round" icon={<CloseOutlined style={{ color: 'red' }} />} onClick={() => cancelOrder(_id, messageApi, getListOrder, setOrders)}></Button>
-                                <Button shape="round" icon={<CheckOutlined style={{ color: 'green' }} />} onClick={() => confirmOrder(_id, messageApi, getListOrder, setOrders)}></Button>
+                                <Button
+                                    shape="round"
+                                    icon={<CheckOutlined style={{ color: 'green' }} />}
+                                    onClick={() => {
+                                        getOrderDetails(_id, setOrderDetails).then(orderDetails => {
+                                            confirmOrder(_id, messageApi, getListOrder, setOrders, orderDetails);
+                                        });
+                                    }}
+                                ></Button>
                             </>
                         )}
                         <Button danger shape="round" icon={<DeleteOutlined />} onClick={() => showDeleteConfirm(_id, messageApi, getListOrder, setOrders, API_PATH.order)}></Button>
@@ -80,7 +89,6 @@ const OrderTable = () => {
             : [...expandedRowKeys, id];
         setExpandedRowKeys(newExpandedRowKeys);
 
-        // Gọi hàm lấy chi tiết đơn hàng khi mở rộng
         if (!orderDetails[id]) {
             getOrderDetails(id, (details) => {
                 setOrderDetails((prev) => ({ ...prev, [id]: details }));
@@ -96,8 +104,8 @@ const OrderTable = () => {
             <div>
                 {details.map((detail) => (
                     <div key={detail._id} style={{ borderBottom: '1px solid #888' }}>
-                        <p><b>Name:</b> {detail.pantShirt?.tshirt_name}</p>
-                        <p><b>Price:</b> {detail.pantShirt?.tshirt_price}</p>
+                        <p><b>Name:</b> {detail.product?.name}</p>
+                        <p><b>Price:</b> {detail.product?.price}</p>
                         <p><b>Quantity:</b> {detail.quantity}</p>
                     </div>
                 ))}
