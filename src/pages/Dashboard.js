@@ -2,6 +2,7 @@ import { Layout, Menu, theme } from 'antd';
 import React from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { menu } from '../config/menu.config';
+import '../assets/css/admin.css';
 
 const { Header, Content, Footer, Sider } = Layout;
 

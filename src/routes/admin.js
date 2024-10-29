@@ -23,6 +23,7 @@ import PantShirtSizeTable from '../components/size/PantShirtSizeTable';
 import PantShirtSizeModel from '../components/size/PantShirtSizeModel';
 import ShoesSizeTable from '../components/size/ShoesSizeTable';
 import ShoesSizeModel from '../components/size/ShoesSizeModel';
+import LoginAdmin from '../pages/loginAdmin';
 
 export const AdminRoutes = (
     <>
@@ -66,6 +67,8 @@ export const AdminRoutes = (
                 <Route index element={<ShoesSizeTable />} />
                 <Route path='create' element={<ShoesSizeModel type='create' />} />
                 <Route path='edit/:id' element={<ShoesSizeModel type='edit' />} />
+            </Route>
+            <Route path='login' element={<LoginAdmin />}>
             </Route>
         </Route>
     </>
