@@ -87,6 +87,22 @@ export const cancelOrder = (id, messageApi, getListOrder, setOrders) => {
         .catch(error => console.error(error))
 }
 
+export const getListPendingOrder = (setOrderDetails) => {
+    axios.get(API_PATH.pendingOrder)
+        .then((res) => {
+            setOrderDetails(res.data);
+        })
+        .catch(error => console.error(error))
+}
+
+export const getListDoneOrder = (setOrderDetails) => {
+    axios.get(API_PATH.doneOrder)
+        .then((res) => {
+            setOrderDetails(res.data);
+        })
+        .catch(error => console.error(error))
+}
+
 export const success = (message, messageApi) => {
     messageApi.open({
         type: 'success',

@@ -65,6 +65,8 @@ const LocationSelector = ({ onSelect }) => {
         onSelect(city, district, ward ? ward.Name : "");
     };
 
+
+
     return (
         <Row gutter={[16, 16]} style={{ marginTop: '20px' }}>
             <Col xs={24} md={8}>
@@ -72,7 +74,7 @@ const LocationSelector = ({ onSelect }) => {
                     value={selectedCity}
                     onChange={handleCityChange}
                     placeholder="Chọn tỉnh/thành phố"
-                    style={{ width: '100%' }}
+                    style={{ width: '100%', padding: '0 !important' }}
                 >
                     {cities.map((city) => (
                         <Option key={city.Id} value={city.Id}>

@@ -1,5 +1,5 @@
-import React from 'react';
 import { Layout, Menu, theme } from 'antd';
+import React from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { menu } from '../config/menu.config';
 
@@ -26,7 +26,6 @@ const Dashboard = () => {
     const onMenuClick = (menuItem) => {
         navigate(menuItem.key);
     };
-
 
     return (
         <Layout hasSider>

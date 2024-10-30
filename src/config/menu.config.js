@@ -11,6 +11,7 @@ import {
 } from '@ant-design/icons';
 import React from 'react';
 
+
 export const menu = [
     {
         icon: UserOutlined,
@@ -47,19 +48,19 @@ export const menu = [
         title: 'Product',
         children: [
             {
-                key: '/tshirt',
+                key: 'tshirt',
                 label: 'T-shirt',
             },
             {
-                key: '/pant',
+                key: 'pant',
                 label: 'Pant',
             },
             {
-                key: '/shoes',
+                key: 'shoes',
                 label: 'Shoes',
             },
             {
-                key: '/accessory',
+                key: 'accessory',
                 label: 'Accessory',
             },
         ],
@@ -67,7 +68,17 @@ export const menu = [
     {
         icon: CompressOutlined,
         title: 'Size',
-        key: '/size'
+        key: '/size',
+        children: [
+            {
+                key: '/admin/pantTshirtSize',
+                label: 'Pant T-shirt Size',
+            },
+            {
+                key: '/admin/shoesSize',
+                label: 'Shoes Size',
+            },
+        ],
     },
     {
         icon: FileDoneOutlined,

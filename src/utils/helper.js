@@ -7,7 +7,7 @@ const { confirm } = Modal;
 
 export const showDeleteConfirm = (id, messageApi, getListDiscount, setDiscounts, URL) => {
     confirm({
-        title: 'Are you sure delete this discount?',
+        title: 'Are you sure delete?',
         icon: <ExclamationCircleFilled />,
         okText: 'Yes',
         okType: 'danger',
