@@ -2,7 +2,7 @@ import { EyeInvisibleOutlined, EyeOutlined, TruckOutlined } from "@ant-design/ic
 import { Button, Image, List, Table, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { getListDoneOrder, getListOrder, getListPendingOrder, getOrderDetails } from "../../services/order.service";
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 const OrderCustomer = () => {
     const [status, setStatus] = useState("pending"); // Trạng thái hiện tại
@@ -60,7 +60,6 @@ const OrderCustomer = () => {
         const details = orderDetails[record._id];
         console.log(details);
         if (!details || details.length === 0) return null;
-        const filteredData = order.filter(item => item.status === status);
         return (
             <>
                 <List
@@ -90,15 +89,15 @@ const OrderCustomer = () => {
                             <List.Item.Meta
                                 avatar={
                                     item.productImage ? (
-                                        <Image width={100} src={`http://localhost:3000/uploads/${item.productImage._id}${item.productImage.file_extension}`} />
+                                        <Image width={100} height={200} src={`http://localhost:3000/uploads/${item.productImage._id}${item.productImage.file_extension}`} />
                                     ) : (
-                                        <Image width={100} src="path-to-default-image" />
+                                        <Image width={170} height={200} src="https://product.hstatic.net/1000344185/product/img_4125_4feb7a360b3b4f00bd2465a85ef2d9e3_small.jpg" />
                                     )
                                 }
                                 title={`${item.product.name} - Size: ${item.size ? item.size.size_name : "Không có kích thước"}`}
                                 description={`x${item.quantity}`}
                             />
-                            <div>{item.product.price}đ</div>
+                            <Title level={3}>{item.product.price}đ</Title>
                         </List.Item>
                     )}
                 />
