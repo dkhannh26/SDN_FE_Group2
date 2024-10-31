@@ -12,6 +12,7 @@ export const API_PATH = {
   image: baseURL + 'images/upload',
   pantShirtSize: baseURL + 'size/pantShirtSize',
   shoesSize: baseURL + 'size/shoesSize',
+  statistic: baseURL + 'statistic'
 }
 export const PATH = {
   user: baseURL + "users",

@@ -14,7 +14,7 @@ const AccessoryModel = ({ type }) => {
     const { id } = useParams();
     const [discounts, setDiscounts] = useState()
     const [fileList, setFileList] = useState([]);
-
+    const currentDate = new Date();
     const handleFileListChange = (newFileList) => {
         setFileList(newFileList);
     };
@@ -105,9 +105,11 @@ const AccessoryModel = ({ type }) => {
                                 allowClear
                             >
                                 {discounts?.map((discount) => {
-                                    return (
+                                    const date = new Date(discount?.expired_at)
+                                    if (date > currentDate) return (
                                         <Option value={discount._id}>{discount.percent}%</Option>
                                     )
+                                    return null
                                 })}
                             </Select>
                         </Form.Item>

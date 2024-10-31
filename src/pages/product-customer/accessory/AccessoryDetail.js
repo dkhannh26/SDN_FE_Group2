@@ -25,7 +25,7 @@ const AccessoryDetail = () => {
 
     useEffect(() => {
         getAccessoryCustomer(id, setAccessory, setImages, setCanvas, setQuantity)
-    }, [])
+    }, [id])
 
     return (
         <Row style={{ margin: 40 }}>

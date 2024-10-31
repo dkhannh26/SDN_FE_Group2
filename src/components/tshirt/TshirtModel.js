@@ -14,7 +14,9 @@ const TshirtModel = ({ type }) => {
     const { id } = useParams();
     const [discounts, setDiscounts] = useState()
     const [fileList, setFileList] = useState([]);
+    const [error, setError] = useState(null)
 
+    const currentDate = new Date();
     const handleFileListChange = (newFileList) => {
         setFileList(newFileList);
     };
@@ -32,7 +34,7 @@ const TshirtModel = ({ type }) => {
         }
 
         if (type === 'create') {
-            createTshirt(tshirt, fileList, navigate)
+            createTshirt(tshirt, fileList, navigate, setError)
         } else {
             editTshirt(id, tshirt, fileList, navigate)
         }
@@ -62,10 +64,13 @@ const TshirtModel = ({ type }) => {
                         style={{
                             maxWidth: 600,
                         }}
+
                     >
                         <Form.Item
                             name="name"
                             label="Name"
+                            validateStatus={error ? 'error' : ''}
+                            help={error ? error : null}
                             rules={[
                                 {
                                     required: true,
@@ -77,12 +82,14 @@ const TshirtModel = ({ type }) => {
                         <Form.Item
                             name="price"
                             label="Price"
+
                             rules={[
                                 {
                                     required: true,
                                     type: 'number',
                                     min: 0,
                                 },
+
                             ]}
                         >
                             <InputNumber style={{ width: '100%' }} />
@@ -97,9 +104,11 @@ const TshirtModel = ({ type }) => {
                                 allowClear
                             >
                                 {discounts?.map((discount) => {
-                                    return (
+                                    const date = new Date(discount?.expired_at)
+                                    if (date > currentDate) return (
                                         <Option value={discount._id}>{discount.percent}%</Option>
                                     )
+                                    return null
                                 })}
                             </Select>
                         </Form.Item>

@@ -23,6 +23,7 @@ import PantShirtSizeTable from '../components/size/PantShirtSizeTable';
 import PantShirtSizeModel from '../components/size/PantShirtSizeModel';
 import ShoesSizeTable from '../components/size/ShoesSizeTable';
 import ShoesSizeModel from '../components/size/ShoesSizeModel';
+import Statistic from '../pages/Statistic';
 
 export const AdminRoutes = (
     <>
@@ -67,6 +68,7 @@ export const AdminRoutes = (
                 <Route path='create' element={<ShoesSizeModel type='create' />} />
                 <Route path='edit/:id' element={<ShoesSizeModel type='edit' />} />
             </Route>
+            <Route path='statistic' element={<Statistic />}></Route>
         </Route>
     </>
 );
