@@ -1,5 +1,5 @@
 import { MoneyCollectTwoTone } from '@ant-design/icons';
-import { Button, Card, Checkbox, Col, Image, Input, List, Row, Typography } from 'antd';
+import { Button, Card, Checkbox, Col, Form, Image, Input, List, Row, Typography, message } from 'antd';
 import Title from 'antd/es/typography/Title';
 import React, { useEffect, useState } from 'react';
 import { getListCart } from '../../services/cart.service';
@@ -7,6 +7,10 @@ import LocationSelector from './LocationSelector';
 import { useLocation, useNavigate } from 'react-router';
 import { createOrder } from '../../services/order.service';
 import { createPayment } from '../../services/payment.service';
+import axios from 'axios';
+import { useAuth } from '../context/AuthContext';
+import { PATH } from '../../config/api.config';
+import { layout } from '../../config/style.config';
 
 const { Text } = Typography;
 
@@ -15,7 +19,6 @@ const PaymentModel = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const [isLoading, setIsLoading] = useState(true);
-    const [shippingMethods, setShippingMethods] = useState([]);
     const [selectedCity, setSelectedCity] = useState(null);
     const [selectedDistrict, setSelectedDistrict] = useState(null);
     const [selectedWard, setSelectedWard] = useState(null);
@@ -23,7 +26,6 @@ const PaymentModel = () => {
     const [carts, setCarts] = useState([])
     const [voucherTotal, setVoucherTotal] = useState(0);
     const [total, setTotal] = useState(Number);
-    const [totalAmount, setTotalAmount] = useState(0);
     const [name, setName] = useState('Nguyen Thanh Son');
     const [phone, setPhone] = useState('');
     const [email, setEmail] = useState('sonntce171760@fpt.edu.vn');
@@ -32,6 +34,7 @@ const PaymentModel = () => {
     const [language, setLanguage] = useState('vn');
     const [isCOD, setIsCOD] = useState(false);
     const [isVNPay, setIsVNPay] = useState(false);
+    const [paymentMethod, setPaymentMethod] = useState(null);
 
     // const fetchShippingMethods = (city, district, ward) => {
     //     if (city && district && ward) {
@@ -69,7 +72,9 @@ const PaymentModel = () => {
     const handleCODChange = (e) => {
         setIsCOD(e.target.checked);
         if (e.target.checked) {
-            setIsVNPay(false);
+            setPaymentMethod('COD');
+        } else {
+            setPaymentMethod(null);
         }
 
     };
@@ -77,13 +82,50 @@ const PaymentModel = () => {
     const handleVNPayChange = (e) => {
         setIsVNPay(e.target.checked);
         if (e.target.checked) {
-            setIsCOD(false);
+            setPaymentMethod('VNPay');
+        } else {
+            setPaymentMethod(null);
         }
     };
+    const {
+        isAuthenticated,
+        user,
+    } = useAuth();
 
+    const [initialValues, setInitialValues] = useState({
+        userId: "",
+        username: "",
+        email: "",
+        phone: "",
+        address: "",
+    });
+    useEffect(() => {
+        const fetchData = async () => {
+            if (isAuthenticated) {
+                try {
+                    const res = await axios.get(`${PATH.profile}/${user.username}`);
+                    setInitialValues({
+                        userId: res.data.user._id,
+                        username: res?.data?.user?.username,
+                        email: res?.data?.user?.email,
+                        phone: res?.data?.user?.phone,
+                        address: res?.data?.user?.address,
+                    });
+                } catch (error) {
+                    console.error("Error fetching data:", error);
+                }
+            }
+        };
+
+        fetchData();
+    }, [isAuthenticated]);
     const onFinish = () => {
         if (!isCOD && !isVNPay) {
             alert('Vui lòng chọn phương thức thanh toán');
+            return;
+        }
+        if (!selectedCity || !selectedDistrict || !selectedWard) {
+            message.error('Vui lòng chọn đầy đủ thông tin địa chỉ!');
             return;
         }
         console.log(selectedCity + ' ' + selectedDistrict + ' ' + selectedWard);
@@ -96,6 +138,7 @@ const PaymentModel = () => {
             cartItems: carts.map(cart => ({ id: cart._id, quantity: cart.quantity, accessory_id: cart.accessory_id, shoes_size_detail_id: cart.shoes_size_detail_id, pant_shirt_size_detail_id: cart.pant_shirt_size_detail_id }))
         };
         const order = {
+            account_id: initialValues.userId,
             phone: values.phone,
             address: selectedCity + ' ' + selectedDistrict + ' ' + selectedWard + ' ' + values.address,
             total_price: values.voucherTotal,
@@ -114,18 +157,19 @@ const PaymentModel = () => {
     };
     useEffect(() => {
         const fetchData = async () => {
-            await getListCart(setCarts, (total) => {
-                setTotal(total);
-                setIsLoading(false);
-            });
-
+            if (initialValues.userId) {
+                await getListCart(initialValues.userId, setCarts, (total) => {
+                    setTotal(total);
+                    setIsLoading(false);
+                });
+            }
             if (location.state && location.state.voucherTotal) {
                 setVoucherTotal(location.state.voucherTotal);
             }
         };
 
         fetchData();
-    }, []);
+    }, [initialValues]);
 
 
     useEffect(() => {
@@ -147,6 +191,7 @@ const PaymentModel = () => {
                 cartItems: carts.map(cart => ({ id: cart._id, quantity: cart.quantity, accessory_id: cart.accessory_id, shoes_size_detail_id: cart.shoes_size_detail_id, pant_shirt_size_detail_id: cart.pant_shirt_size_detail_id }))
             };
             const order = {
+                account_id: initialValues.userId,
                 phone: values.phone,
                 address: values.address,
                 total_price: values.voucherTotal,
@@ -161,48 +206,89 @@ const PaymentModel = () => {
             console.log('aaaa');
         }
     }, [isLoading, carts]);
-
-
-
+    console.log(selectedCity + ' ' + selectedDistrict + ' ' + selectedWard);
+    if (isLoading) return <div>Loading...</div>;
+    const validateMessages = {
+        required: '${label} is required!',
+    };
     return (
         <div style={{ padding: '20px' }}>
             <Row gutter={16} style={{ marginTop: '3%' }}>
                 <Col xs={24} md={14} style={{ textAlign: 'left', paddingLeft: '15%', paddingRight: '5%' }}>
                     <Title level={3}>Thông tin giao hàng</Title>
-                    <Title level={4} style={{ color: '#888' }}>Bạn đã có tài khoản? <a>Đăng nhập</a></Title>
-                    <Input
-                        size="large"
-                        placeholder="Họ và Tên"
-                        disabled
-                        defaultValue={name}
-                        onChange={(e) => setName(e.target.value)}
-                    />
-                    <Row style={{ marginTop: '3%', display: 'flex', justifyContent: 'space-between' }}>
-                        <Col xs={14}>
-                            <Input
-                                size="large"
-                                placeholder="Số điện thoại"
-                                onChange={(e) => setPhone(e.target.value)}
-                            />
-                        </Col>
-                        <Col xs={8}>
-                            <Input
-                                size="large"
-                                placeholder="Email"
-                                defaultValue={email}
-                                disabled
-                            />
-                        </Col>
-                    </Row>
-                    <Input
-                        size="large"
-                        placeholder="Địa chỉ"
-                        style={{ marginTop: '3%' }}
-                        onChange={(e) => setAddress(e.target.value)}
-                    />
-                    <LocationSelector onSelect={handleLocationSelect} />
+                    <Form
+                        name="nest-messages"
+                        onFinish={onFinish}
 
-                    {/* {selectedCity && selectedDistrict && selectedWard && (
+                        validateMessages={validateMessages}
+                    >
+                        <Form.Item
+                            name={['user', 'name']}
+                            initialValue={initialValues.username}
+                            rules={[
+                                {
+                                    required: true,
+                                },
+                            ]}
+                        >
+                            <Input
+                                size="large"
+                                placeholder="Họ và Tên"
+                                disabled
+                                defaultValue={initialValues.username}
+                                onChange={(e) => setName(e.target.value)}
+                            />
+                        </Form.Item>
+                        <Row style={{ marginTop: '3%', display: 'flex', justifyContent: 'space-between' }}>
+                            <Col xs={14}>
+                                <Form.Item
+                                    name="phone"
+                                    rules={[
+                                        {
+                                            required: true,
+                                            message: 'Please enter your phone number.',
+                                        },
+                                        {
+                                            pattern: /^[0-9]{10}$/,
+                                            message: 'Phone number must be exactly 10 digits.',
+                                        },
+                                    ]}
+                                >
+                                    <Input
+                                        size="large"
+                                        placeholder="Số điện thoại"
+                                        onChange={(e) => setPhone(e.target.value)}
+
+                                    />
+                                </Form.Item>
+                            </Col>
+                            <Col xs={8}>
+                                <Input
+                                    size="large"
+                                    placeholder="Email"
+                                    defaultValue={initialValues.email}
+                                    disabled
+                                />
+                            </Col>
+                        </Row>
+                        <Form.Item
+                            name={'address'}
+                            rules={[
+                                {
+                                    required: true,
+                                },
+                            ]}
+                        >
+                            <Input
+                                size="large"
+                                placeholder="Địa chỉ"
+                                onChange={(e) => setAddress(e.target.value)}
+                                required
+                            />
+                        </Form.Item>
+                        <LocationSelector onSelect={handleLocationSelect} />
+
+                        {/* {selectedCity && selectedDistrict && selectedWard && (
                         <Card title="Phương thức vận chuyển" bordered style={{ marginTop: '20px' }}>
                             {shippingMethods.map((method, index) => (
                                 <div key={index} style={{ marginBottom: '10px' }}>
@@ -217,33 +303,41 @@ const PaymentModel = () => {
                             ))}
                         </Card>
                     )} */}
-                    <Title level={4}>Phương thức thanh toán</Title>
-                    <Card style={{ padding: '16px' }}>
-                        <Checkbox onChange={handleCODChange} style={{ fontSize: '18px', lineHeight: '24px' }}>
-                            <Title level={5} style={{ margin: 0, fontSize: '18px', color: '#888' }}>
-                                <MoneyCollectTwoTone /> Thanh toán khi nhận hàng (COD)
-                            </Title>
-                        </Checkbox>
-                        <Checkbox onChange={handleVNPayChange} style={{ fontSize: '18px', lineHeight: '24px', marginTop: '3%' }}>
-                            <Title level={5} style={{ margin: 0, fontSize: '18px', color: '#888', display: 'flex', alignItems: 'center' }}>
-                                <Image
-                                    src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8H-_-qAYkAhj5xnn22LxEr_uRDrxY7FuhMg&s'
-                                    alt='VNPay'
-                                    style={{ width: '24px', height: '24px', marginRight: '8px' }}
-                                />
-                                Thanh toán bằng ví VNPay
-                            </Title>
-                        </Checkbox>
-
-                    </Card>
-                    <Row style={{ alignItems: 'center', justifyContent: 'space-between', marginTop: '3%' }}>
-                        <Col>
-                            <a onClick={() => navigate(-1)}>Giỏ hàng</a>
-                        </Col>
-                        <Col>
-                            <Button type='primary' onClick={onFinish}>Hoàn tất đơn hàng</Button>
-                        </Col>
-                    </Row>
+                        <Title level={4}>Phương thức thanh toán</Title>
+                        <Card style={{ padding: '16px' }}>
+                            <Checkbox
+                                checked={paymentMethod === 'COD'}
+                                onChange={handleCODChange}
+                                style={{ fontSize: '18px', lineHeight: '24px' }}
+                            >
+                                <Title level={5} style={{ margin: 0, fontSize: '18px', color: '#888' }}>
+                                    <MoneyCollectTwoTone /> Thanh toán khi nhận hàng (COD)
+                                </Title>
+                            </Checkbox>
+                            <Checkbox
+                                checked={paymentMethod === 'VNPay'}
+                                onChange={handleVNPayChange}
+                                style={{ fontSize: '18px', lineHeight: '24px', marginTop: '3%' }}
+                            >
+                                <Title level={5} style={{ margin: 0, fontSize: '18px', color: '#888', display: 'flex', alignItems: 'center' }}>
+                                    <Image
+                                        src='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8H-_-qAYkAhj5xnn22LxEr_uRDrxY7FuhMg&s'
+                                        alt='VNPay'
+                                        style={{ width: '24px', height: '24px', marginRight: '8px' }}
+                                    />
+                                    Thanh toán bằng ví VNPay
+                                </Title>
+                            </Checkbox>
+                        </Card>
+                        <Row style={{ alignItems: 'center', justifyContent: 'space-between', marginTop: '3%' }}>
+                            <Col>
+                                <a onClick={() => navigate(-1)}>Giỏ hàng</a>
+                            </Col>
+                            <Col>
+                                <Button type='primary' htmlType="submit">Hoàn tất đơn hàng</Button>
+                            </Col>
+                        </Row>
+                    </Form>
                 </Col>
 
                 <Col xs={24} md={8} style={{ padding: '20px', backgroundColor: '#f0f0f0', borderRadius: '8px' }}>

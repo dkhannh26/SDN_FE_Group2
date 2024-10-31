@@ -2,6 +2,9 @@ import { EyeInvisibleOutlined, EyeOutlined, TruckOutlined } from "@ant-design/ic
 import { Button, Image, List, Table, Typography } from "antd";
 import { useEffect, useState } from "react";
 import { getListDoneOrder, getListOrder, getListPendingOrder, getOrderDetails } from "../../services/order.service";
+import { useAuth } from "../context/AuthContext";
+import axios from "axios";
+import { PATH } from "../../config/api.config";
 const { Text, Title } = Typography;
 
 const OrderCustomer = () => {
@@ -104,12 +107,45 @@ const OrderCustomer = () => {
             </>
         );
     };
+    const {
+        isAuthenticated,
+        user,
+    } = useAuth();
 
+    const [initialValues, setInitialValues] = useState({
+        userId: "",
+        username: "",
+        email: "",
+        phone: "",
+        address: "",
+    });
     useEffect(() => {
-        if (status === "pending") {
-            getListPendingOrder(setOrders);
-        } else if (status === "done") {
-            getListDoneOrder(setOrders);
+        const fetchData = async () => {
+            if (isAuthenticated) {
+                try {
+                    const res = await axios.get(`${PATH.profile}/${user.username}`);
+                    setInitialValues({
+                        userId: res.data.user._id,
+                        username: res?.data?.user?.username,
+                        email: res?.data?.user?.email,
+                        phone: res?.data?.user?.phone,
+                        address: res?.data?.user?.address,
+                    });
+                } catch (error) {
+                    console.error("Error fetching data:", error);
+                }
+            }
+        };
+
+        fetchData();
+    }, [isAuthenticated]);
+    useEffect(() => {
+        if (initialValues.userId) {
+            if (status === "pending") {
+                getListPendingOrder(initialValues.userId, setOrders);
+            } else if (status === "done") {
+                getListDoneOrder(initialValues.userId, setOrders);
+            }
         }
     }, [status]);
 

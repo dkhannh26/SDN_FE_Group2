@@ -5,8 +5,8 @@ import { DISCOUNT_URL } from "../config/url.config"
 import { MESSAGE } from "../config/message.config"
 import { json } from "react-router-dom"
 
-export const getListCart = (setCarts, setTotal) => {
-    axios.get(API_PATH.cart)
+export const getListCart = (id, setCarts, setTotal) => {
+    axios.get(API_PATH.cart + `/${id}`)
         .then((res) => {
             setCarts(res.data)
             const amount = res.data?.map(cart => cart.product.price * cart.quantity)
@@ -62,3 +62,17 @@ export const editCart = (id, cart, setTotalAmount) => {
             console.log(error)
         })
 }
+
+export const AddCartDup = (id, cart, navigate) => {
+    axios.put(API_PATH.cart + `/${id}`, cart)
+        .then((res) => {
+            const updatedQuantity = res.data;
+            console.log(updatedQuantity);
+            navigate(CART_URL.INDEX, {
+                state: { message: MESSAGE.CREATE_SUCCESS }
+            });
+        })
+        .catch(error => {
+            console.log(error);
+        });
+};

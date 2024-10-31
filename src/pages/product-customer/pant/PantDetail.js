@@ -1,16 +1,19 @@
 import { Button, Col, Image, InputNumber, Row, Typography } from 'antd';
-import React, { useEffect, useState } from 'react';
-import { getPantCustomer } from '../../../services/product/pant.service';
-import { useNavigate, useParams } from 'react-router-dom';
 import Title from 'antd/es/typography/Title';
-import '../../../assets/css/sizeBtn.css'
-import { createCart, getProductDetail } from '../../../services/cart.service';
-import create from '@ant-design/icons/lib/components/IconFont';
+import axios from 'axios';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import '../../../assets/css/sizeBtn.css';
+import { useAuth } from '../../../components/context/AuthContext';
+import { PATH } from '../../../config/api.config';
+import { AddCartDup, createCart, editCart, getListCart, getProductDetail } from '../../../services/cart.service';
+import { getPantCustomer } from '../../../services/product/pant.service';
 const { Text } = Typography;
 const PantDetail = () => {
     const navigate = useNavigate();
     const [canvas, setCanvas] = useState('https://top10hoabinh.com/wp-content/uploads/2022/10/anh-dang-load-2.jpg')
-    const { id } = useParams();
+    const [cart, setCarts] = useState([])
+    const [total, setTotal] = useState(0);
     const [productDetail, setProductDetail] = useState([])
     const [pant, setPant] = useState()
     const [images, setImages] = useState()
@@ -21,6 +24,7 @@ const PantDetail = () => {
         setSizeNumber(number)
         setCount(1)
     }
+
 
     const [count, setCount] = useState(1);
 
@@ -33,26 +37,82 @@ const PantDetail = () => {
             setCount(count - 1);
         }
     };
-    const onFinish = () => {
-        getProductDetail(id, setProductDetail);
-        console.log(id);
-        console.log(productDetail);
-    };
+    const onFinish = async () => {
+        try {
+            await getProductDetail(id, setProductDetail);
 
-    useEffect(() => {
-        if (productDetail.pants) {
-            console.log(productDetail);
-            const cart = {
-                pant_shirt_size_detail_id: productDetail.pants[0]._id,
-                quantity: count
-            };
-            createCart(cart, navigate);
+            if (initialValues.userId) {
+                await getListCart(initialValues.userId, setCarts, (total) => {
+                    setTotal(total);
+                });
+            }
+        } catch (error) {
+            console.error("Error in onFinish:", error);
         }
-    }, [productDetail]);
+    };
+    const { id } = useParams();
+    const {
+        isAuthenticated,
+        user,
+    } = useAuth();
+
+    const [initialValues, setInitialValues] = useState({
+        userId: "",
+        username: "",
+        email: "",
+        phone: "",
+        address: "",
+    });
+    useEffect(() => {
+        const fetchData = async () => {
+            if (isAuthenticated) {
+                await axios
+                    .get(`${PATH.profile}/${user.username}`)
+                    .then((res) => {
+
+                        setInitialValues({
+                            userId: res.data.user._id,
+                            username: res?.data?.user?.username,
+                            email: res?.data?.user?.email,
+                            phone: res?.data?.user?.phone,
+                            address: res?.data?.user?.address,
+                        });
+                    });
+            }
+        };
+
+        fetchData();
+    }, [isAuthenticated]);
+
     useEffect(() => {
         getPantCustomer(id, setPant, setImages, setCanvas, selectSize)
     }, [id])
-    console.log(pant)
+
+    useEffect(() => {
+        getPantCustomer(id, setPant, setImages, setCanvas, selectSize)
+        if (productDetail.pants) {
+            const matchingCartItem = cart.find(item => item.pant_shirt_size_detail_id?._id === productDetail.pants[0]._id);
+
+            if (matchingCartItem) {
+                const updatedQuantity = matchingCartItem.quantity + count;
+                console.log(matchingCartItem.product.quantity);
+                if (updatedQuantity > matchingCartItem.product.quantity) {
+                    alert('sold out');
+                } else {
+                    AddCartDup(matchingCartItem._id, { quantity: updatedQuantity }, navigate);
+                }
+            } else {
+                const newCart = {
+                    account_id: initialValues.userId,
+                    pant_shirt_size_detail_id: productDetail.pants[0]._id,
+                    quantity: count
+                };
+                createCart(newCart, navigate);
+            }
+        }
+
+    }, [cart], [productDetail])
+
     return (
         <Row style={{ margin: 40 }}>
             <Col span={14}>

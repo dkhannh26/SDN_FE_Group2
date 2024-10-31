@@ -87,16 +87,16 @@ export const cancelOrder = (id, messageApi, getListOrder, setOrders) => {
         .catch(error => console.error(error))
 }
 
-export const getListPendingOrder = (setOrderDetails) => {
-    axios.get(API_PATH.pendingOrder)
+export const getListPendingOrder = (id, setOrderDetails) => {
+    axios.get(API_PATH.pendingOrder + `/${id}`)
         .then((res) => {
             setOrderDetails(res.data);
         })
         .catch(error => console.error(error))
 }
 
-export const getListDoneOrder = (setOrderDetails) => {
-    axios.get(API_PATH.doneOrder)
+export const getListDoneOrder = (id, setOrderDetails) => {
+    axios.get(API_PATH.doneOrder + `/${id}`)
         .then((res) => {
             setOrderDetails(res.data);
         })

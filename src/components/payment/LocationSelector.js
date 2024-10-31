@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Col, Row, Select } from 'antd';
+import { Col, Row, Select, message } from 'antd';
 import axios from 'axios';
 
 const { Option } = Select;
@@ -65,7 +65,21 @@ const LocationSelector = ({ onSelect }) => {
         onSelect(city, district, ward ? ward.Name : "");
     };
 
-
+    const isFormValid = () => {
+        if (!selectedCity) {
+            message.error('Vui lòng chọn tỉnh/thành phố!');
+            return false;
+        }
+        if (!selectedDistrict) {
+            message.error('Vui lòng chọn quận/huyện!');
+            return false;
+        }
+        if (!selectedWard) {
+            message.error('Vui lòng chọn phường/xã!');
+            return false;
+        }
+        return true;
+    };
 
     return (
         <Row gutter={[16, 16]} style={{ marginTop: '20px' }}>

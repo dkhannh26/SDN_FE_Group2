@@ -14,9 +14,9 @@ import Logo from "../assets/images/logo.webp";
 import { getSearchList } from "../services/product/search.service";
 import { useAuth } from "./context/AuthContext";
 import LoginPopover from "./login";
+import { CART_URL } from "../config/url.config";
 
 const Header = () => {
-
   const [searchFocus, setSearchForcus] = useState(false)
   const [searchList, setSearchList] = useState([])
 
@@ -34,7 +34,7 @@ const Header = () => {
         <p style={{ color: "red", fontWeight: "600", fontSize: 16 }}>0đ</p>
       </div>
       <div className="flex-space-between cart-pop-navigate">
-        <button className="login-pop-btn">
+        <button className="login-pop-btn" onClick={() => navigate(CART_URL.INDEX)} >
           <span>XEM GIỎ HÀNG</span>
         </button>
         <button className="login-pop-btn">

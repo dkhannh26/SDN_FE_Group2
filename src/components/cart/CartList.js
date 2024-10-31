@@ -7,11 +7,13 @@ import { Button, Card, Col, Form, Image, Input, InputNumber, List, Row, Space, T
 import Title from 'antd/es/typography/Title';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { API_PATH } from "../../config/api.config";
+import { API_PATH, PATH } from "../../config/api.config";
 import { PAYMENT_URL } from '../../config/url.config';
 import { editCart, getListCart } from '../../services/cart.service';
 import { getListVoucher } from '../../services/voucher.service';
 import { showDeleteConfirm } from '../../utils/helper';
+import { useAuth } from '../context/AuthContext';
+import axios from 'axios';
 
 
 const { Text } = Typography;
@@ -26,7 +28,6 @@ const CartList = () => {
     const [total, setTotal] = useState(Number);
     const [initialTotal, setInitialTotal] = useState(0);
 
-    // let total
     const onChange = (value, id) => {
         const updatedCart = { quantity: value };
         editCart(id, updatedCart, setTotalAmount)
@@ -38,17 +39,49 @@ const CartList = () => {
         setIsCheck(voucherId);
         setTotal(initialTotal - percent);
     };
+    const {
+        isAuthenticated,
+        user,
+    } = useAuth();
 
+    const [initialValues, setInitialValues] = useState({
+        userId: "",
+        username: "",
+        email: "",
+        phone: "",
+        address: "",
+    });
+    useEffect(() => {
+        const fetchData = async () => {
+            if (isAuthenticated) {
+                await axios
+                    .get(`${PATH.profile}/${user.username}`)
+                    .then((res) => {
+                        setInitialValues({
+                            userId: res.data.user._id,
+                            username: res?.data?.user?.username,
+                            email: res?.data?.user?.email,
+                            phone: res?.data?.user?.phone,
+                            address: res?.data?.user?.address,
+                        });
+                    })
+                    .catch((error) => console.error("Error fetching data:", error));
+            }
+        };
+
+        fetchData();
+    }, [isAuthenticated]);
 
     useEffect(() => {
-        getListVoucher(setVoucher);
-        getListCart(setCarts, (total) => {
-            setTotal(total);
-            setInitialTotal(total);
-        });
-        setIsCheck(null);
-    }, [totalAmount]);
-
+        if (initialValues.userId) {
+            getListVoucher(setVoucher);
+            getListCart(initialValues.userId, setCarts, (total) => {
+                setTotal(total);
+                setInitialTotal(total);
+            });
+            setIsCheck(null);
+        }
+    }, [totalAmount, initialValues.userId]);
     console.log(total);
     // let amount = carts?.map(cart => cart.product.price * cart.quantity);
     // console.log('amount', amount)
@@ -89,13 +122,13 @@ const CartList = () => {
                                             <br />
                                             <Text style={{ color: '#888' }}>Kích thước: {item.productSize ? item.productSize.size_name : "Không có kích thước"}</Text>
                                             <br />
-                                            <InputNumber min={1} max={item.product.quantity} defaultValue={item.quantity} onChange={(value) => onChange(value, item._id)} />
+                                            <InputNumber min={1} max={item.product.quantity} defaultValue={Math.min(item.quantity, item.product.quantity)} onChange={(value) => onChange(value, item._id)} />
                                         </div>
                                     )}
                                     style={{ marginLeft: '10px' }}
                                 />
                                 <div style={{ textAlign: 'right' }}>
-                                    <Button type="link" onClick={() => showDeleteConfirm(item._id, messageApi, getListCart, setCarts, API_PATH.cart)}><CloseOutlined style={{ color: 'black' }} /></Button>
+                                    <Button type="link" onClick={() => showDeleteConfirm(item._id, messageApi, () => getListCart(initialValues.userId, setCarts), setCarts, API_PATH.cart)}><CloseOutlined style={{ color: 'black' }} /></Button>
                                     <br />
                                     <br />
                                     <br />
