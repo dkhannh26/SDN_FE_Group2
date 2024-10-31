@@ -160,3 +160,32 @@ export const showDeletePermanently = (
     },
   });
 };
+
+export const showDeleteImportConfirm = (
+  id,
+  messageApi,
+  getListImport,
+  setImports
+) => {
+  confirm({
+    title: "Are you sure delete this import?",
+    icon: <ExclamationCircleFilled />,
+    okText: "Yes",
+    okType: "danger",
+    cancelText: "No",
+    onOk() {
+      axios
+        .delete(API_PATH.import + `/${id}`)
+        .then(() => {
+          success("Deleted Succesfully", messageApi);
+        })
+        .then(() => {
+          getListImport(setImports);
+        })
+        .catch((error) => console.error(error));
+    },
+    onCancel() {
+      console.log("Cancel");
+    },
+  });
+};

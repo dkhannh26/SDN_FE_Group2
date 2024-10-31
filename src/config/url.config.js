@@ -46,3 +46,8 @@ export const ACCOUNT_URL = {
   CREATE: "/admin/account/create",
   EDIT: "/admin/account/create",
 };
+export const IMPORT_URL = {
+  INDEX: "/admin/import",
+  CREATE: "/admin/import/create",
+  EDIT: "/admin/import/create",
+};

@@ -4,6 +4,9 @@ import Dashboard from "../pages/Dashboard";
 import Discount from "../pages/Discount";
 import Voucher from "../pages/Discount";
 import Size from "../pages/Size";
+import Import from "../pages/Import";
+import ImportTable from "../components/import/ImportTable";
+import ImportModel from "../components/import/ImportModel";
 import DiscountTable from "../components/discount/DiscountTable";
 import DiscountModel from "../components/discount/DiscountModel";
 import VoucherTable from "../components/voucher/VoucherTable";
@@ -73,6 +76,11 @@ export const AdminRoutes = (
       <Route index element={<AccountTable />} />
       <Route path="create" element={<AccountModel type="create" />} />
       <Route path="edit/:id" element={<AccountModel type="edit" />} />
+    </Route>
+    <Route path="import" element={<Import />}>
+      <Route index element={<ImportTable />} />
+      <Route path="create" element={<ImportModel type="create" />} />
+      <Route path="edit/:id" element={<ImportModel type="edit" />} />
     </Route>
   </Route>
 );
