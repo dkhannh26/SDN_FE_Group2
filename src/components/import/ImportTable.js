@@ -1,39 +1,16 @@
-import {
-  CheckOutlined,
-  CloseOutlined,
-  DeleteOutlined,
-  EditOutlined,
-  EyeOutlined,
-} from "@ant-design/icons";
-import {
-  Button,
-  Col,
-  Flex,
-  message,
-  Space,
-  Table,
-  Modal,
-  Upload,
-  List,
-  Tag,
-} from "antd";
+import { CheckOutlined, DeleteOutlined, EyeOutlined } from "@ant-design/icons";
+import { Button, Col, Flex, message, Modal, Space, Table } from "antd";
 import Title from "antd/es/typography/Title";
 import React, { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { DISCOUNT_URL, IMPORT_URL } from "../../config/url.config";
-import { getListDiscount } from "../../services/discount.service";
-import {
-  formatDate,
-  showDeleteConfirm,
-  showDeleteImportConfirm,
-  success,
-} from "../../utils/helper";
 import { MESSAGE } from "../../config/message.config";
+import { IMPORT_URL } from "../../config/url.config";
 import {
   confirmImport,
   getDetailImport,
   getListImport,
 } from "../../services/import.service";
+import { showDeleteImportConfirm, success } from "../../utils/helper";
 
 const ImportTable = () => {
   const [discounts, setDiscounts] = useState([]);
@@ -44,7 +21,6 @@ const ImportTable = () => {
   const location = useLocation();
   const { state } = location;
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [isConfirm, setIsConfirm] = useState(false);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -89,13 +65,28 @@ const ImportTable = () => {
         return (
           <Space>
             {record.confirm === undefined ? (
-              <Button
-                shape="round"
-                icon={<CheckOutlined />}
-                onClick={() => {
-                  confirmImport(_id, navigate);
-                }}
-              ></Button>
+              <>
+                <Button
+                  shape="round"
+                  icon={<CheckOutlined />}
+                  onClick={() => {
+                    confirmImport(_id, navigate);
+                  }}
+                ></Button>
+                <Button
+                  danger
+                  shape="round"
+                  icon={<DeleteOutlined />}
+                  onClick={() =>
+                    showDeleteImportConfirm(
+                      _id,
+                      messageApi,
+                      getListImport,
+                      setImports
+                    )
+                  }
+                ></Button>
+              </>
             ) : (
               ""
             )}
@@ -107,20 +98,6 @@ const ImportTable = () => {
                 getDetailImport(setImportDetail, _id);
                 showModal();
               }}
-            ></Button>
-
-            <Button
-              danger
-              shape="round"
-              icon={<DeleteOutlined />}
-              onClick={() =>
-                showDeleteImportConfirm(
-                  _id,
-                  messageApi,
-                  getListImport,
-                  setImports
-                )
-              }
             ></Button>
           </Space>
         );
@@ -195,7 +172,6 @@ const ImportTable = () => {
         </Col>
       </Flex>
       <Table columns={columns} dataSource={imports} />
-      {/* <Table columns={columnDetail} dataSource={importDetail} /> */}
 
       <Modal
         title="Data Table"

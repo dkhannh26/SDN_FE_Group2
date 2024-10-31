@@ -17,35 +17,12 @@ export const getListImport = (setImports) => {
     .catch((error) => console.error(error));
 };
 
-export const getDiscount = (id, dayjs, form) => {
-  axios.get(API_PATH.discount + `/${id}`).then((res) => {
-    const date = dayjs(res.data.expired_at);
-    form.setFieldsValue({
-      percent: res.data.percent,
-      date: date,
-    });
-  });
-};
-
 export const createImport = (importList, navigate) => {
   axios
     .post(API_PATH.import + `/createDetail`, importList)
     .then(
       navigate(IMPORT_URL.INDEX, {
         state: { message: MESSAGE.CREATE_SUCCESS },
-      })
-    )
-    .catch((error) => {
-      console.log(error);
-    });
-};
-
-export const editDiscount = (id, discount, navigate) => {
-  axios
-    .put(API_PATH.discount + `/${id}`, discount)
-    .then(
-      navigate(DISCOUNT_URL.INDEX, {
-        state: { message: MESSAGE.UPDATE_SUCCESS },
       })
     )
     .catch((error) => {
@@ -63,7 +40,7 @@ export const getDetailImport = (setImportDetail, _id) => {
         name: item.name,
         price: item.price,
         quantity: item.quantity,
-
+        size: item.size,
         key: index,
       }))
     );
