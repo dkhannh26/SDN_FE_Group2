@@ -63,6 +63,7 @@ export const getDetailImport = (setImportDetail, _id) => {
         name: item.name,
         price: item.price,
         quantity: item.quantity,
+
         key: index,
       }))
     );

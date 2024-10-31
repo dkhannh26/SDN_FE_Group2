@@ -144,13 +144,17 @@ const ImportTable = () => {
     {
       title: "Price",
       dataIndex: "price",
-      width: "25%",
+      width: "15%",
+    },
+    {
+      title: "Size",
+      dataIndex: "size",
+      width: "10%",
     },
 
     {
       title: "Quantity",
       dataIndex: "quantity",
-
       width: "10%",
     },
   ];
