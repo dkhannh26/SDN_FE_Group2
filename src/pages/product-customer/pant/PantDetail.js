@@ -1,13 +1,17 @@
 import { Button, Col, Image, InputNumber, Row, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { getPantCustomer } from '../../../services/product/pant.service';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Title from 'antd/es/typography/Title';
 import '../../../assets/css/sizeBtn.css'
+import { createCart, getProductDetail } from '../../../services/cart.service';
+import create from '@ant-design/icons/lib/components/IconFont';
 const { Text } = Typography;
 const PantDetail = () => {
+    const navigate = useNavigate();
     const [canvas, setCanvas] = useState('https://top10hoabinh.com/wp-content/uploads/2022/10/anh-dang-load-2.jpg')
     const { id } = useParams();
+    const [productDetail, setProductDetail] = useState([])
     const [pant, setPant] = useState()
     const [images, setImages] = useState()
     const [sizeSelected, setSizeSelected] = useState('')
@@ -29,7 +33,22 @@ const PantDetail = () => {
             setCount(count - 1);
         }
     };
+    const onFinish = () => {
+        getProductDetail(id, setProductDetail);
+        console.log(id);
+        console.log(productDetail);
+    };
 
+    useEffect(() => {
+        if (productDetail.pants) {
+            console.log(productDetail);
+            const cart = {
+                pant_shirt_size_detail_id: productDetail.pants[0]._id,
+                quantity: count
+            };
+            createCart(cart, navigate);
+        }
+    }, [productDetail]);
     useEffect(() => {
         getPantCustomer(id, setPant, setImages, setCanvas, selectSize)
     }, [id])
@@ -171,7 +190,7 @@ const PantDetail = () => {
                 </Row>
                 {
                     sizeNumber !== 0 ? <Row style={{ marginTop: 30 }}>
-                        <div class="box-1">
+                        <div class="box-1" onClick={onFinish}>
                             <div class="btn btn-one">
                                 <span>THÊM VÀO GIỎ HÀNG</span>
                             </div>

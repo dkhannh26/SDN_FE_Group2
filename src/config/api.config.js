@@ -5,6 +5,7 @@ export const API_PATH = {
   discount: baseURL + 'discount',
   voucher: baseURL + 'voucher',
   cart: baseURL + 'cart',
+  productDetail: baseURL + 'cart/product',
   order: baseURL + 'order',
   confirmOrder: baseURL + 'order/confirm',
   cancelOrder: baseURL + 'order/cancel',

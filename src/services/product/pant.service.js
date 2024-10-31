@@ -84,7 +84,7 @@ export const getPant = (id, form, handleFileListChange) => {
 export const getPantCustomer = (id, setPant, setImages, setCanvas, selectSize) => {
     axios.get(API_PATH.pant + `/${id}`)
         .then((res) => {
-            // console.log(res.data)
+            console.log(res.data)
             setPant(res.data)
             const images = res.data?.images
             let imgArrResult = []
@@ -96,7 +96,7 @@ export const getPantCustomer = (id, setPant, setImages, setCanvas, selectSize) =
                     })
                 }
             }
-            setCanvas(imgArrResult[0].url)
+            // setCanvas(imgArrResult[0].url)
             setImages(imgArrResult)
             selectSize(Object.keys(res.data.size[0])[0], Object.values(res.data.size[0])[0])
         }

@@ -3,6 +3,7 @@ import { API_PATH } from "../config/api.config"
 import { CART_URL } from "../config/url.config"
 import { DISCOUNT_URL } from "../config/url.config"
 import { MESSAGE } from "../config/message.config"
+import { json } from "react-router-dom"
 
 export const getListCart = (setCarts, setTotal) => {
     axios.get(API_PATH.cart)
@@ -26,13 +27,23 @@ export const getDiscount = (id, dayjs, form) => {
         })
 }
 
-export const createDiscount = (discount, navigate) => {
-    axios.post(API_PATH.discount, discount)
+export const createCart = (cart, navigate) => {
+    axios.post(API_PATH.cart, cart)
         .then(
-            navigate(DISCOUNT_URL.INDEX, {
+            navigate(CART_URL.INDEX, {
                 state: { message: MESSAGE.CREATE_SUCCESS }
             })
         )
+        .catch(error => {
+            console.log(error)
+        })
+}
+
+export const getProductDetail = (id, setProductDetail) => {
+    axios.get(API_PATH.productDetail + `/${id}`)
+        .then((res) => {
+            setProductDetail(res.data);
+        })
         .catch(error => {
             console.log(error)
         })
