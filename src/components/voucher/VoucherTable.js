@@ -3,10 +3,11 @@ import { Button, Col, Flex, message, Space, Table } from 'antd';
 import Title from 'antd/es/typography/Title';
 import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { VOUCHER_URL } from '../../config/url.config';
-import { showDeleteVoucherConfirm, success } from '../../utils/helper';
+import { API_PATH } from '../../config/api.config';
 import { MESSAGE } from '../../config/message.config';
+import { VOUCHER_URL } from '../../config/url.config';
 import { getListVoucher } from '../../services/voucher.service';
+import { showDeleteConfirm, success } from '../../utils/helper';
 
 const VoucherTable = () => {
     const [vouchers, setVouchers] = useState([])
@@ -39,7 +40,7 @@ const VoucherTable = () => {
                 return (
                     <Space>
                         <Button shape="round" icon={<EditOutlined />} onClick={() => navigate(`edit/${_id}`)} ></Button>
-                        <Button danger shape="round" icon={<DeleteOutlined />} onClick={() => showDeleteVoucherConfirm(_id, messageApi, getListVoucher, setVouchers)} ></Button>
+                        <Button danger shape="round" icon={<DeleteOutlined />} onClick={() => showDeleteConfirm(_id, messageApi, getListVoucher, setVouchers, API_PATH.voucher)} ></Button>
                     </Space>
                 )
             },
