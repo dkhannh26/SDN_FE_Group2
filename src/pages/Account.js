@@ -1,13 +1,12 @@
-import React from 'react';
-import { Outlet } from 'react-router-dom';
+import React from "react";
+import { Outlet } from "react-router-dom";
 
 const Account = () => {
-    return (
-        <>
-            <Outlet></Outlet>
-        </>
-    )
-}
+  return (
+    <>
+      <Outlet></Outlet>
+    </>
+  );
+};
 
 export default Account;
-

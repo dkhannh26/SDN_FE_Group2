@@ -4,7 +4,6 @@ import Dashboard from "../pages/Dashboard";
 import Discount from "../pages/Discount";
 import Voucher from "../pages/Discount";
 import Size from "../pages/Size";
-import Account from "../pages/Discount";
 import DiscountTable from "../components/discount/DiscountTable";
 import DiscountModel from "../components/discount/DiscountModel";
 import VoucherTable from "../components/voucher/VoucherTable";
@@ -24,6 +23,7 @@ import PantShirtSizeTable from "../components/size/PantShirtSizeTable";
 import PantShirtSizeModel from "../components/size/PantShirtSizeModel";
 import ShoesSizeTable from "../components/size/ShoesSizeTable";
 import ShoesSizeModel from "../components/size/ShoesSizeModel";
+import Account from "../pages/Account";
 import AccountTable from "../components/account/AccountTable";
 import AccountModel from "../components/account/AccountModel";
 

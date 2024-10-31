@@ -44,5 +44,5 @@ export const SIZE_URL = {
 export const ACCOUNT_URL = {
   INDEX: "/admin/account",
   CREATE: "/admin/account/create",
-  EDIT: "/admin/account/edit",
+  EDIT: "/admin/account/create",
 };
