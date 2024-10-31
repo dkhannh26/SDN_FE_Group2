@@ -14,7 +14,7 @@ const PantModel = ({ type }) => {
     const { id } = useParams();
     const [discounts, setDiscounts] = useState()
     const [fileList, setFileList] = useState([]);
-
+    const [load, setLoad] = useState(false)
     const handleFileListChange = (newFileList) => {
         setFileList(newFileList);
     };
@@ -34,16 +34,14 @@ const PantModel = ({ type }) => {
         if (type === 'create') {
             createPant(pant, fileList, navigate)
         } else {
-            editPant(id, pant, fileList, navigate)
+            editPant(id, pant, fileList, navigate, setLoad)
         }
     };
-
 
     useEffect(() => {
         getListDiscount(setDiscounts)
         if (type === 'edit') getPant(id, form, handleFileListChange)
     }, [id, type, form])
-
 
     return (
         <>
@@ -151,7 +149,7 @@ const PantModel = ({ type }) => {
                         </Form.Item>
                         <Form.Item {...tailLayout}>
                             <Space>
-                                <Button type="primary" htmlType="submit" >
+                                <Button type="primary" htmlType="submit" loading={load} >
                                     {type === 'create' ? 'Insert' : 'Edit'}
                                 </Button>
                                 <Button htmlType="button" onClick={() => navigate(-1)}>

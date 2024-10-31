@@ -11,6 +11,46 @@ export const getListTshirt = (setTshirts) => {
         .catch(error => console.error(error))
 }
 
+export const getTshirtCustomer = (id, setTshirt, setImages, setCanvas, selectSize) => {
+    axios.get(API_PATH.tshirt + `/${id}`)
+        .then((res) => {
+            // console.log(res.data)
+            setTshirt(res.data)
+            const images = res.data?.images
+            let imgArrResult = []
+
+            if (images) {
+                for (let img of images) {
+                    imgArrResult.push({
+                        url: `${API_PATH.image}/${img.tshirt_id}/${img.img_id}${img.file_extension}`,
+                    })
+                }
+            }
+            setCanvas(imgArrResult[0].url)
+            setImages(imgArrResult)
+            selectSize(Object.keys(res.data.size[0])[0], Object.values(res.data.size[0])[0])
+        }
+        )
+}
+
+export const getListTshirtIncrease = (setTshirtList) => {
+    axios.get(API_PATH.tshirt + '/increase')
+        .then((res) => {
+            setTshirtList(res.data.data)
+            console.log('/increase')
+        })
+        .catch(error => console.error(error))
+}
+
+export const getListTshirtDecrease = (setTshirtList) => {
+    axios.get(API_PATH.tshirt + '/decrease')
+        .then((res) => {
+            setTshirtList(res.data.data)
+        })
+        .catch(error => console.error(error))
+}
+
+
 export const getTshirt = (id, form, handleFileListChange) => {
     axios.get(API_PATH.tshirt + `/${id}`)
         .then((res) => {
@@ -45,6 +85,7 @@ export const getTshirt = (id, form, handleFileListChange) => {
                         url: `${API_PATH.image}/${img.tshirt_id}/${img.img_id}${img.file_extension}`,
                     })
                 }
+                console.log(imgArrResult)
                 handleFileListChange(imgArrResult)
             }
 
