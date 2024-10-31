@@ -14,6 +14,7 @@ export const API_PATH = {
   shoesSize: baseURL + "size/shoesSize",
   account: baseURL + "admin/account",
   import: baseURL + "import",
+  admin: baseURL + "admin",
 };
 export const PATH = {
   user: baseURL + "users",
