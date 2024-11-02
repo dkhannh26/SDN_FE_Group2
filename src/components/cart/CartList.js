@@ -79,7 +79,7 @@ const CartList = () => {
             });
             setIsCheck(null);
         }
-    }, [totalAmount, initialValues.userId]);
+    }, [totalAmount, initialValues.userId, carts]);
     console.log(carts);
     // let amount = carts?.map(cart => cart.product.price * cart.quantity);
     // console.log('amount', amount)
