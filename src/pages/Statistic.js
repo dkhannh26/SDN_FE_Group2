@@ -75,7 +75,7 @@ const Statistic = () => {
                 <Col span={6}>
                     <div style={areaNumberStyle}>
                         <Typography style={{ textAlign: 'left', fontSize: 18 }}>Buyers</Typography>
-                        <Title level={2} style={{ margin: 0 }}>100</Title>
+                        <Title level={2} style={{ margin: 0 }}>{statistic?.accountNumber}</Title>
                     </div>
                 </Col>
                 <Col span={6}>
