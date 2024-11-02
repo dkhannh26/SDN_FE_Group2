@@ -32,9 +32,7 @@ const CartList = () => {
         const updatedCart = { quantity: value };
         editCart(id, updatedCart, setTotalAmount)
     };
-    const handleContinueShopping = () => {
-        console.log('Tiếp tục mua hàng');
-    };
+
     const handleVoucherClick = (voucherId, percent) => {
         setIsCheck(voucherId);
         setTotal(initialTotal - percent);
@@ -82,7 +80,7 @@ const CartList = () => {
             setIsCheck(null);
         }
     }, [totalAmount, initialValues.userId]);
-    console.log(total);
+    console.log(carts);
     // let amount = carts?.map(cart => cart.product.price * cart.quantity);
     // console.log('amount', amount)
     // const total = amount.reduce((a, b) => a + b, 0);
@@ -102,15 +100,18 @@ const CartList = () => {
                     <List
                         itemLayout="horizontal"
                         dataSource={carts}
-                        renderItem={(item) => (
-
-                            <List.Item>
+                        renderItem={(item) => {
+                            return (<List.Item>
                                 <List.Item.Meta
                                     avatar={
                                         item.productImage ? (
-                                            <Image width={100} src={`http://localhost:3000/uploads/${item.productImage._id}${item.productImage.file_extension}`} />
+                                            <Image width={100} src={`${API_PATH.image}/${item.product.product_id}/${item.productImage._id}${item.productImage.file_extension}`} />
+                                            // {`${API_PATH.image}/${item.product.product_id}/${item.productImage._id}${item.productImage.file_extension}`}
+                                            // <span>{item.productImage ? item.productImage._id : "default extension"}</span>
+
                                         ) : (
                                             <Image width={100} src="path-to-default-image" />
+                                            // <span>{item.productImage ? item.productImage.file_extension : "default extension"}</span>
                                         )
                                     }
                                     title={
@@ -132,17 +133,18 @@ const CartList = () => {
                                     <br />
                                     <br />
                                     <br />
-                                    <Text style={{ fontSize: '15px', color: 'black', fontWeight: 'bold' }}>{(item.product.price * item.quantity).toLocaleString()}<Text style={{ fontSize: '10px', color: 'black', textDecorationLine: 'underline' }}>đ</Text></Text>
+                                    <Text style={{ fontSize: '15px', color: 'black', fontWeight: 'bold' }}>{((item.product.price - (item.product.price * (item.product.discount / 100))) * item.quantity).toLocaleString()}<Text style={{ fontSize: '10px', color: 'black', textDecorationLine: 'underline' }}>đ</Text></Text>
                                 </div>
-                            </List.Item>
-                        )}
+                            </List.Item>)
+                        }
+                        }
                     />
-                    <Card bordered={false} style={{ backgroundColor: '#f5f5f5' }}>
+                    {/* <Card bordered={false} style={{ backgroundColor: '#f5f5f5' }}>
                         <Text strong style={{ fontSize: '16px', textAlign: 'left', display: 'block', color: '#888' }}>Ghi chú đơn hàng</Text>
                         <Form.Item style={{ marginTop: '10px' }}>
                             <Input.TextArea rows={4} placeholder="Nhập ghi chú đơn hàng của bạn" style={{ width: '100%', borderColor: '#000000' }} />
                         </Form.Item>
-                    </Card>
+                    </Card> */}
                 </Col>
 
                 <Col xs={24} md={8}>
@@ -168,15 +170,12 @@ const CartList = () => {
                                     {total.toLocaleString()}<Text style={{ fontSize: '15px', color: 'red', textDecorationLine: 'underline' }}>đ</Text>
                                 </Text>
                             </Row>
-                            <Button type="primary" block style={{ marginTop: '20px', backgroundColor: 'red', borderColor: 'red' }} onClick={() => navigate(PAYMENT_URL.INDEX, { state: { voucherTotal: total } })}>
+                            {carts.length != 0 ? <Button type="primary" block style={{ marginTop: '20px', backgroundColor: 'red', borderColor: 'red' }} onClick={() => navigate(PAYMENT_URL.INDEX, { state: { voucherTotal: total } })}>
                                 <Text style={{ fontWeight: 'bold', color: 'white', fontSize: '14px' }}>THANH TOÁN</Text>
-                            </Button>
+                            </Button> : ''}
+
                         </Card>
-                        <div style={{ textAlign: 'center', marginTop: '10px' }}>
-                            <Text type="secondary" style={{ cursor: 'pointer' }} onClick={handleContinueShopping}>
-                                <FontAwesomeIcon icon={faReply} /> Tiếp tục mua hàng
-                            </Text>
-                        </div>
+
                     </div>
                 </Col>
             </Row>

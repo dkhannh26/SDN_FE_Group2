@@ -103,7 +103,7 @@ export const getShoesCustomer = (id, setShoes, setImages, setCanvas, selectSize)
             }
             setCanvas(imgArrResult[0].url)
             setImages(imgArrResult)
-            selectSize(Object.keys(res.data.size[0])[0], Object.values(res.data.size[0])[0])
+            selectSize(Object.keys(res.data.size[0])[0], Object.values(res.data.size[0])[0], Object.values(res.data.size[0])[1])
 
         }
         )

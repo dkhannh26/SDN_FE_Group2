@@ -2,14 +2,14 @@ import { MoneyCollectTwoTone } from '@ant-design/icons';
 import { Button, Card, Checkbox, Col, Form, Image, Input, List, Row, Typography, message } from 'antd';
 import Title from 'antd/es/typography/Title';
 import React, { useEffect, useState } from 'react';
-import { getListCart } from '../../services/cart.service';
+import { deleteCart, getListCart } from '../../services/cart.service';
 import LocationSelector from './LocationSelector';
 import { useLocation, useNavigate } from 'react-router';
 import { createOrder } from '../../services/order.service';
 import { createPayment } from '../../services/payment.service';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
-import { PATH } from '../../config/api.config';
+import { API_PATH, PATH } from '../../config/api.config';
 import { layout } from '../../config/style.config';
 
 const { Text } = Typography;
@@ -150,6 +150,7 @@ const PaymentModel = () => {
             })),
         };
         if (isCOD) {
+            deleteCart(initialValues.userId);
             createOrder(order, navigate);
         } else if (isVNPay) {
             createPayment(voucherTotal, bankCode, language, name, selectedCity + ' ' + selectedDistrict + ' ' + selectedWard + ' ' + address, phone);
@@ -202,6 +203,7 @@ const PaymentModel = () => {
                     pant_shirt_size_detail_id: item.pant_shirt_size_detail_id,
                 })),
             };
+            deleteCart(initialValues.userId);
             createOrder(order, navigate);
             console.log('aaaa');
         }
@@ -352,7 +354,7 @@ const PaymentModel = () => {
                                 <List.Item.Meta
                                     avatar={
                                         item.productImage ? (
-                                            <Image width={100} src={`http://localhost:3000/uploads/${item.productImage._id}${item.productImage.file_extension}`} />
+                                            <Image width={100} src={`${API_PATH.image}/${item.product.product_id}/${item.productImage._id}${item.productImage.file_extension}`} />
                                         ) : (
                                             <Image width={100} src="path-to-default-image" />
                                         )
@@ -368,7 +370,7 @@ const PaymentModel = () => {
                                     style={{ marginLeft: '10px' }}
                                 />
                                 <div style={{ textAlign: 'right' }}>
-                                    <Text style={{ fontSize: '15px', color: 'black', fontWeight: 'bold' }}>{(item.product.price * item.quantity).toLocaleString()}<Text style={{ fontSize: '10px', color: 'black', textDecorationLine: 'underline' }}>đ</Text></Text>
+                                    <Text style={{ fontSize: '15px', color: 'black', fontWeight: 'bold' }}>{((item.product.price - (item.product.price * (item.product.discount / 100))) * item.quantity).toLocaleString()}<Text style={{ fontSize: '10px', color: 'black', textDecorationLine: 'underline' }}>đ</Text></Text>
                                 </div>
                             </List.Item>
                         )}
@@ -396,7 +398,7 @@ const PaymentModel = () => {
                             <Title level={4}>Tổng cộng</Title>
                         </Col>
                         <Col>
-                            <Title level={3}>{voucherTotal.toLocaleString()}<Text style={{ fontSize: '20px', color: 'black', textDecorationLine: 'underline' }}>đ</Text></Title>
+                            <Title level={3}><span style={{ color: 'red' }}>{voucherTotal.toLocaleString()}</span><Text style={{ fontSize: '20px', color: 'red', textDecorationLine: 'underline' }}>đ</Text></Title>
                         </Col>
                     </Row>
                 </Col>

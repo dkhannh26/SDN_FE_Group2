@@ -1,22 +1,33 @@
 import { Button, Col, Image, InputNumber, Row, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Title from 'antd/es/typography/Title';
 import '../../../assets/css/sizeBtn.css'
 import { getShoesCustomer } from '../../../services/product/shoes.service';
+import { useAuth } from '../../../components/context/AuthContext';
+import axios from 'axios';
+import { PATH } from '../../../config/api.config';
+import { AddCartDup, createCart, getListCart, getProductDetail } from '../../../services/cart.service';
 const { Text } = Typography;
 const ShoesDetail = () => {
     const [canvas, setCanvas] = useState('https://top10hoabinh.com/wp-content/uploads/2022/10/anh-dang-load-2.jpg')
     const { id } = useParams();
+    const [cart, setCarts] = useState([])
+    const [total, setTotal] = useState(0);
+    const navigate = useNavigate();
+    const [productDetail, setProductDetail] = useState([])
     const [shoes, setShoes] = useState()
     const [images, setImages] = useState()
     const [sizeSelected, setSizeSelected] = useState('')
     const [sizeNumber, setSizeNumber] = useState(1)
-    const selectSize = (size, number) => {
-        setSizeSelected(size)
-        setSizeNumber(number)
-        setCount(1)
-    }
+    const [detailId, setProductDetailId] = useState('')
+    const selectSize = (size, number, detailId) => {
+        setSizeSelected(size);
+        setSizeNumber(number);
+        setProductDetailId(detailId);
+        setCount(1);
+    };
+
 
     const [count, setCount] = useState(1);
 
@@ -30,11 +41,80 @@ const ShoesDetail = () => {
         }
     };
 
+    const onFinish = async () => {
+        try {
+            await getProductDetail(id, setProductDetail);
+
+            if (initialValues.userId) {
+                await getListCart(initialValues.userId, setCarts, (total) => {
+                    setTotal(total);
+                });
+            }
+        } catch (error) {
+            console.error("Error in onFinish:", error);
+        }
+    };
+    const {
+        isAuthenticated,
+        user,
+    } = useAuth();
+
+    const [initialValues, setInitialValues] = useState({
+        userId: "",
+        username: "",
+        email: "",
+        phone: "",
+        address: "",
+    });
     useEffect(() => {
-        // console.log
+        const fetchData = async () => {
+            if (isAuthenticated) {
+                await axios
+                    .get(`${PATH.profile}/${user.username}`)
+                    .then((res) => {
+
+                        setInitialValues({
+                            userId: res?.data?.user?._id,
+                            username: res?.data?.user?.username,
+                            email: res?.data?.user?.email,
+                            phone: res?.data?.user?.phone,
+                            address: res?.data?.user?.address,
+                        });
+                    });
+            }
+        };
+
+        fetchData();
+    }, [isAuthenticated]);
+
+    useEffect(() => {
         getShoesCustomer(id, setShoes, setImages, setCanvas, selectSize)
     }, [id])
-    console.log(shoes)
+
+    useEffect(() => {
+        getShoesCustomer(id, setShoes, setImages, setCanvas, selectSize)
+        if (productDetail.shoes) {
+            const matchingCartItem = cart.find(item => item.shoes_size_detail_id?._id === detailId);
+
+            if (matchingCartItem) {
+                const updatedQuantity = matchingCartItem.quantity + count;
+                console.log(matchingCartItem.product.quantity);
+                if (updatedQuantity > matchingCartItem.product.quantity) {
+                    alert('sold out');
+                } else {
+                    AddCartDup(matchingCartItem._id, { quantity: updatedQuantity }, navigate);
+                }
+            } else {
+                const newCart = {
+                    account_id: initialValues.userId,
+                    shoes_size_detail_id: detailId,
+                    quantity: count
+                };
+                createCart(newCart, navigate);
+            }
+        }
+
+    }, [cart], [productDetail])
     return (
         <Row style={{ margin: 40 }}>
             <Col span={14}>
@@ -137,14 +217,16 @@ const ShoesDetail = () => {
                     <Col span={18}>
                         {shoes?.size.map((item, index) => {
                             return (
-                                <Button color="default"
+                                <Button
+                                    key={index}
+                                    color="default"
                                     variant={sizeSelected === Object.keys(item)[0] ? "solid" : ''}
                                     className="size-button"
-                                    onClick={() => selectSize(Object.keys(item)[0], Object.values(item)[0])}
+                                    onClick={() => selectSize(Object.keys(item)[0], Object.values(item)[0], Object.values(item)[1])}
                                 >
                                     {Object.keys(item)[0]}
                                 </Button>
-                            )
+                            );
                         })}
                     </Col>
                     <Col span={6}>
@@ -172,7 +254,7 @@ const ShoesDetail = () => {
                 </Row>
                 {
                     sizeNumber !== 0 ? <Row style={{ marginTop: 30 }}>
-                        <div class="box-1">
+                        <div class="box-1" onClick={onFinish}>
                             <div class="btn btn-one">
                                 <span>THÊM VÀO GIỎ HÀNG</span>
                             </div>

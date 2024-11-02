@@ -104,7 +104,7 @@ const OrderTable = () => {
                 {details.map((detail) => (
                     <div key={detail._id} style={{ borderBottom: '1px solid #888' }}>
                         <p><b>Name:</b> {detail.product?.name}</p>
-                        <p><b>Price:</b> {detail.product?.price}</p>
+                        <p><b>Price:</b> <del>{detail.product?.price.toLocaleString()}đ</del> <span style={{ color: 'red' }}>{((detail.product?.price - (detail.product?.price * (detail.discount / 100))) * detail.quantity).toLocaleString()}đ</span></p>
                         <p><b>Quantity:</b> {detail.quantity}</p>
                     </div>
                 ))}

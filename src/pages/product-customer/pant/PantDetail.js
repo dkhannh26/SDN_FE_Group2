@@ -10,8 +10,8 @@ import { AddCartDup, createCart, editCart, getListCart, getProductDetail } from 
 import { getPantCustomer } from '../../../services/product/pant.service';
 const { Text } = Typography;
 const PantDetail = () => {
-    const navigate = useNavigate();
     const [canvas, setCanvas] = useState('https://top10hoabinh.com/wp-content/uploads/2022/10/anh-dang-load-2.jpg')
+    const navigate = useNavigate();
     const [cart, setCarts] = useState([])
     const [total, setTotal] = useState(0);
     const [productDetail, setProductDetail] = useState([])
@@ -19,11 +19,13 @@ const PantDetail = () => {
     const [images, setImages] = useState()
     const [sizeSelected, setSizeSelected] = useState('')
     const [sizeNumber, setSizeNumber] = useState(1)
-    const selectSize = (size, number) => {
-        setSizeSelected(size)
-        setSizeNumber(number)
-        setCount(1)
-    }
+    const [detailId, setProductDetailId] = useState('')
+    const selectSize = (size, number, detailId) => {
+        setSizeSelected(size);
+        setSizeNumber(number);
+        setProductDetailId(detailId);
+        setCount(1);
+    };
 
 
     const [count, setCount] = useState(1);
@@ -71,7 +73,7 @@ const PantDetail = () => {
                     .then((res) => {
 
                         setInitialValues({
-                            userId: res.data.user._id,
+                            userId: res?.data?.user?._id,
                             username: res?.data?.user?.username,
                             email: res?.data?.user?.email,
                             phone: res?.data?.user?.phone,
@@ -91,7 +93,7 @@ const PantDetail = () => {
     useEffect(() => {
         getPantCustomer(id, setPant, setImages, setCanvas, selectSize)
         if (productDetail.pants) {
-            const matchingCartItem = cart.find(item => item.pant_shirt_size_detail_id?._id === productDetail.pants[0]._id);
+            const matchingCartItem = cart.find(item => item.pant_shirt_size_detail_id?._id === detailId);
 
             if (matchingCartItem) {
                 const updatedQuantity = matchingCartItem.quantity + count;
@@ -104,7 +106,7 @@ const PantDetail = () => {
             } else {
                 const newCart = {
                     account_id: initialValues.userId,
-                    pant_shirt_size_detail_id: productDetail.pants[0]._id,
+                    pant_shirt_size_detail_id: detailId,
                     quantity: count
                 };
                 createCart(newCart, navigate);
@@ -215,14 +217,16 @@ const PantDetail = () => {
                     <Col span={18}>
                         {pant?.size.map((item, index) => {
                             return (
-                                <Button color="default"
+                                <Button
+                                    key={index}
+                                    color="default"
                                     variant={sizeSelected === Object.keys(item)[0] ? "solid" : ''}
                                     className="size-button"
-                                    onClick={() => selectSize(Object.keys(item)[0], Object.values(item)[0])}
+                                    onClick={() => selectSize(Object.keys(item)[0], Object.values(item)[0], Object.values(item)[1])}
                                 >
                                     {Object.keys(item)[0]}
                                 </Button>
-                            )
+                            );
                         })}
                     </Col>
                     <Col span={6}>

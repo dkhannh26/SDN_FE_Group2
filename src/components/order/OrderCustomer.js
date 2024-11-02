@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { getListDoneOrder, getListOrder, getListPendingOrder, getOrderDetails } from "../../services/order.service";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
-import { PATH } from "../../config/api.config";
+import { API_PATH, PATH } from "../../config/api.config";
 const { Text, Title } = Typography;
 
 const OrderCustomer = () => {
@@ -12,6 +12,7 @@ const OrderCustomer = () => {
     const [order, setOrders] = useState([]);
     const [orderDetails, setOrderDetails] = useState([]);
     const [expandedRowKeys, setExpandedRowKeys] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
     const columns = [
         {
             title: 'No.',
@@ -75,11 +76,8 @@ const OrderCustomer = () => {
                         </div>
                     }
                     footer={
-                        <div style={{ textAlign: 'right', fontSize: 20, display: 'flex', justifyContent: 'space-between' }}>
-                            <Button color="danger" variant="solid">
-                                Feedback
-                            </Button>
-                            <p><b style={{ marginRight: 10 }}>Total:</b> <span>{record.total_price}</span></p>
+                        <div style={{ textAlign: 'right', fontSize: 20, display: 'flex', justifyContent: 'flex-end' }}>
+                            <p style={{ margin: 0 }}><b style={{ marginRight: 10 }}>Total:</b> <span style={{ color: 'red', fontWeight: 'bold' }}>{record.total_price.toLocaleString()}đ</span></p>
                         </div>
                     }
 
@@ -87,22 +85,26 @@ const OrderCustomer = () => {
                     dataSource={details}
                     bordered
                     style={{ marginBottom: 10 }}
-                    renderItem={(item) => (
-                        <List.Item>
-                            <List.Item.Meta
-                                avatar={
-                                    item.productImage ? (
-                                        <Image width={100} height={200} src={`http://localhost:3000/uploads/${item.productImage._id}${item.productImage.file_extension}`} />
-                                    ) : (
-                                        <Image width={170} height={200} src="https://product.hstatic.net/1000344185/product/img_4125_4feb7a360b3b4f00bd2465a85ef2d9e3_small.jpg" />
-                                    )
-                                }
-                                title={`${item.product.name} - Size: ${item.size ? item.size.size_name : "Không có kích thước"}`}
-                                description={`x${item.quantity}`}
-                            />
-                            <Title level={3}>{item.product.price}đ</Title>
-                        </List.Item>
-                    )}
+                    renderItem={(item) => {
+                        console.log(`${API_PATH.image}/${item.product.id}/${item.productImage.id}${item.productImage.file_extension}`);
+                        return (
+                            <List.Item>
+                                <List.Item.Meta
+                                    avatar={
+                                        item.productImage ? (
+                                            <Image width={100} src={`${API_PATH.image}/${item.product.id}/${item.productImage.id}${item.productImage.file_extension}`} />
+                                        ) : (
+                                            <Image width={170} height={200} src="https://product.hstatic.net/1000344185/product/img_4125_4feb7a360b3b4f00bd2465a85ef2d9e3_small.jpg" />
+                                        )
+                                    }
+                                    title={`${item.product.name} - Size: ${item.size ? item.size.size_name : "Không có kích thước"}`}
+                                    description={`x${item.quantity}`}
+                                />
+                                <Title level={4}><del>{item.product?.price.toLocaleString()}đ</del><span style={{ color: 'red' }}>{((item.product?.price - (item.product?.price * (item.discount / 100))) * item.quantity).toLocaleString()}đ</span></Title>
+
+                            </List.Item>
+                        )
+                    }}
                 />
             </>
         );
@@ -131,6 +133,7 @@ const OrderCustomer = () => {
                         phone: res?.data?.user?.phone,
                         address: res?.data?.user?.address,
                     });
+                    setIsLoading(false);
                 } catch (error) {
                     console.error("Error fetching data:", error);
                 }
@@ -149,6 +152,7 @@ const OrderCustomer = () => {
         }
     }, [status]);
 
+    if (isLoading) return <div>Loading...</div>;
 
     return (
         <>

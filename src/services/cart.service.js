@@ -9,7 +9,8 @@ export const getListCart = (id, setCarts, setTotal) => {
     axios.get(API_PATH.cart + `/${id}`)
         .then((res) => {
             setCarts(res.data)
-            const amount = res.data?.map(cart => cart.product.price * cart.quantity)
+            const amount = res.data?.map(cart => ((cart.product.price - (cart.product.price * (cart.product.discount / 100))) * cart.quantity))
+            // ((item.product.price - (item.product.price * (item.product.discount / 100))) * item.quantity)
             setTotal(amount.reduce((a, b) => a + b, 0))
         })
 
@@ -76,3 +77,13 @@ export const AddCartDup = (id, cart, navigate) => {
             console.log(error);
         });
 };
+
+export const deleteCart = (id) => {
+    axios.delete(API_PATH.cartDelete + `/${id}`)
+        .then((res) => {
+            console.log(res.data);
+        })
+        .catch(error => {
+            console.log(error);
+        })
+}
