@@ -4,6 +4,9 @@ import { useParams } from 'react-router-dom';
 import Title from 'antd/es/typography/Title';
 import CustomerFeedback from '../../../components/feedback/CustomerFeedback';
 import { getAccessoryCustomer } from '../../../services/product/accessory.service';
+import axios from 'axios';
+import { PATH } from '../../../config/api.config';
+import { useAuth } from '../../../components/context/AuthContext';
 const { Text } = Typography;
 const AccessoryDetail = () => {
     const [canvas, setCanvas] = useState('https://top10hoabinh.com/wp-content/uploads/2022/10/anh-dang-load-2.jpg')
@@ -23,7 +26,38 @@ const AccessoryDetail = () => {
             setCount(count - 1);
         }
     };
+    const {
+        isAuthenticated,
+        user,
+    } = useAuth();
 
+    const [initialValues, setInitialValues] = useState({
+        userId: "",
+        username: "",
+        email: "",
+        phone: "",
+        address: "",
+    });
+    useEffect(() => {
+        const fetchData = async () => {
+            if (isAuthenticated) {
+                await axios
+                    .get(`${PATH.profile}/${user.username}`)
+                    .then((res) => {
+
+                        setInitialValues({
+                            userId: res?.data?.user?._id,
+                            username: res?.data?.user?.username,
+                            email: res?.data?.user?.email,
+                            phone: res?.data?.user?.phone,
+                            address: res?.data?.user?.address,
+                        });
+                    });
+            }
+        };
+
+        fetchData();
+    }, [isAuthenticated]);
     useEffect(() => {
         getAccessoryCustomer(id, setAccessory, setImages, setCanvas, setQuantity)
     }, [])
@@ -175,7 +209,7 @@ const AccessoryDetail = () => {
                 </Col>
             </Row>
             <Row>
-                <CustomerFeedback />
+                <CustomerFeedback accessory_id={id} userId={initialValues.userId} />
             </Row>
         </>
     );

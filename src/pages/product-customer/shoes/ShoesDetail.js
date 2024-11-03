@@ -5,6 +5,9 @@ import Title from 'antd/es/typography/Title';
 import '../../../assets/css/sizeBtn.css'
 import CustomerFeedback from '../../../components/feedback/CustomerFeedback';
 import { getShoesCustomer } from '../../../services/product/shoes.service';
+import { PATH } from '../../../config/api.config';
+import axios from 'axios';
+import { useAuth } from '../../../components/context/AuthContext';
 const { Text } = Typography;
 const ShoesDetail = () => {
     const [canvas, setCanvas] = useState('https://top10hoabinh.com/wp-content/uploads/2022/10/anh-dang-load-2.jpg')
@@ -30,7 +33,38 @@ const ShoesDetail = () => {
             setCount(count - 1);
         }
     };
+    const {
+        isAuthenticated,
+        user,
+    } = useAuth();
 
+    const [initialValues, setInitialValues] = useState({
+        userId: "",
+        username: "",
+        email: "",
+        phone: "",
+        address: "",
+    });
+    useEffect(() => {
+        const fetchData = async () => {
+            if (isAuthenticated) {
+                await axios
+                    .get(`${PATH.profile}/${user.username}`)
+                    .then((res) => {
+
+                        setInitialValues({
+                            userId: res?.data?.user?._id,
+                            username: res?.data?.user?.username,
+                            email: res?.data?.user?.email,
+                            phone: res?.data?.user?.phone,
+                            address: res?.data?.user?.address,
+                        });
+                    });
+            }
+        };
+
+        fetchData();
+    }, [isAuthenticated]);
     useEffect(() => {
         // console.log
         getShoesCustomer(id, setShoes, setImages, setCanvas, selectSize)
@@ -193,7 +227,7 @@ const ShoesDetail = () => {
                 </Col>
             </Row>
             <Row>
-                <CustomerFeedback />
+                <CustomerFeedback shoes_id={id} userId={initialValues.userId} />
             </Row>
         </>
     );

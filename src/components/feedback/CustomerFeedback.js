@@ -1,19 +1,46 @@
-import { Button, Col, Form, List, Modal, Row } from 'antd';
+import { Button, Col, Form, List, Modal, Row, message } from 'antd';
 import TextArea from 'antd/es/input/TextArea';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import '../../assets/css/feedback.css';
+import { createFeedback, getFeedBack, getListFeedback, updateFeedback } from '../../services/feedback.service';
+import { API_PATH } from '../../config/api.config';
+import { showDeleteConfirm } from '../../utils/helper';
 
-const CustomerFeedback = () => {
-
-    const onFinish = (values) => {
-        console.log('Success:', values);
-    };
-
-    const onFinishFailed = (errorInfo) => {
-        console.log('Failed:', errorInfo);
-    };
-
+const CustomerFeedback = ({ accessory_id, pant_id, tshirt_id, shoes_id, userId }) => {
+    const [feedback, setFeedback] = useState([]);
+    const [form] = Form.useForm();
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [messageApi, contextHolder] = message.useMessage()
+    const [currentFeedback, setCurrentFeedback] = useState(false);
+    const [id, setId] = useState('');
+
+    const selectId = accessory_id || pant_id || tshirt_id || shoes_id
+    const onFinish = (values) => {
+        console.log('Success:', values.content);
+        console.log(userId);
+        const feedbackData = {
+            content: values.content,
+            account_id: userId,
+            accessory_id: accessory_id,
+            pant_id: pant_id,
+            tshirt_id: tshirt_id,
+            shoes_id: shoes_id
+        }
+        if (currentFeedback) {
+            updateFeedback(id, feedbackData)
+        } else {
+            createFeedback(feedbackData)
+        }
+        setIsModalOpen(false)
+    };
+    const editFeedback = (feedbackItem, id) => {
+        setCurrentFeedback(true);
+        setId(id)
+        console.log(id);
+        form.setFieldsValue({ content: feedbackItem.content });
+        setIsModalOpen(true);
+    };
+
     const showModal = () => {
         setIsModalOpen(true);
     };
@@ -23,32 +50,13 @@ const CustomerFeedback = () => {
     const handleCancel = () => {
         setIsModalOpen(false);
     };
+    useEffect(() => {
+        getListFeedback(selectId, setFeedback)
+    }, [feedback], [isModalOpen])
 
-    const listFeedback = [
-        {
-            name: 'customer',
-            createAt: 'thoi gian viet feedback',
-            content: 'Giao hàng siêu nhanh, chăm sóc khách hàng tốt, áo dày dặn, vải mát đường may đẹp, nói chung là mua đi mọi người ơi 10 điểm cho shoppppp',
-        },
-        {
-            name: 'customer',
-            createAt: 'thoi gian viet feedback',
-            content: 'Giao hàng siêu nhanh, chăm sóc khách hàng tốt, áo dày dặn, vải mát đường may đẹp, nói chung là mua đi mọi người ơi 10 điểm cho shoppppp',
-        },
-        {
-            name: 'customer',
-            createAt: 'thoi gian viet feedback',
-            content: 'Giao hàng siêu nhanh, chăm sóc khách hàng tốt, áo dày dặn, vải mát đường may đẹp, nói chung là mua đi mọi người ơi 10 điểm cho shoppppp',
-        },
-        {
-            name: 'customer',
-            createAt: 'thoi gian viet feedback',
-            content: 'Giao hàng siêu nhanh, chăm sóc khách hàng tốt, áo dày dặn, vải mát đường may đẹp, nói chung là mua đi mọi người ơi 10 điểm cho shoppppp',
-        },
-    ];
 
     return (
-        <div style={{ width: 900, margin: 'auto'}}>
+        <div style={{ width: 900, margin: 'auto' }}>
             <Row style={{ justifyContent: 'space-between', marginBottom: 30 }}>
                 <p style={{ fontSize: 25 }}>Feedback</p>
                 <Button type="primary" onClick={showModal}>
@@ -59,24 +67,22 @@ const CustomerFeedback = () => {
                 <Form
                     className='customer-feedback'
                     name="basic"
+                    form={form}
                     initialValues={{
                         remember: true,
                     }}
                     onFinish={onFinish}
-                    onFinishFailed={onFinishFailed}
-                    autoComplete="off"
                 >
-
                     <Form.Item
-                        // name='content' --- muốn báo lỗi input thì tắt cmt
+                        name='content'
                         rules={[
                             {
-                                required: true,
-                                message: 'Content length must be between 3 and 1000 characters, please re-enter.',
+                                min: 3,
+                                max: 200,
+                                message: 'Content length must be between 3 and 200 characters.',
                             },
                         ]}
                     >
-                        <p>Content:</p>
                         <TextArea autoSize={{
                             minRows: 4,
                             maxRows: 5,
@@ -87,7 +93,7 @@ const CustomerFeedback = () => {
                         <Button color="default" variant="solid" htmlType="submit" style={{ marginRight: 15 }}>
                             Send feedback
                         </Button>
-                        <Button color="default" variant="outlined" onClick={handleCancel}>
+                        <Button color="default" variant="outlined" onClick={() => form.resetFields()}>
                             Cancel
                         </Button>
                     </Form.Item>
@@ -97,27 +103,31 @@ const CustomerFeedback = () => {
 
             <List
                 itemLayout="horizontal"
-                dataSource={listFeedback}
+                dataSource={feedback}
                 split={false}
                 renderItem={(item, index) => (
-                    <List.Item style={{marginBottom: 10}}>
+                    <List.Item style={{ marginBottom: 10 }}>
                         <Row>
                             <Col span={6}>
-                                <b>{item.name}</b>
-                                <p>{item.createAt}</p>
+                                <b>{item.account_id.username}</b>
+                                <p>{item.createdAt}</p>
                             </Col>
-                            <Col span={18}>
+                            <Col span={20}>
                                 {item.content}
-                                <Row style={{marginTop: 10}}>
-                                    <Button style={{ backgroundColor: 'green', color: 'white', marginRight: 10 }}>Edit</Button>
-                                    <Button style={{ backgroundColor: 'red', color: 'white' }}>Remove</Button>
+                                <Row style={{ marginTop: 10 }}>
+                                    {userId === item.account_id._id && (
+                                        <>
+                                            <Button style={{ backgroundColor: 'green', color: 'white', marginRight: 10 }} onClick={() => editFeedback(item)}>Edit</Button>
+                                            <Button style={{ backgroundColor: 'red', color: 'white' }} onClick={() => showDeleteConfirm(item._id, messageApi, getFeedBack, setFeedback, API_PATH.feedback)}>Remove</Button>
+                                        </>
+                                    )}
                                 </Row>
                             </Col>
                         </Row>
-                    </List.Item>
+                    </List.Item >
                 )}
             />
-        </div>
+        </div >
     );
 };
 

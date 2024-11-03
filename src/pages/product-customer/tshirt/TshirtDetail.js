@@ -5,6 +5,9 @@ import Title from 'antd/es/typography/Title';
 import '../../../assets/css/sizeBtn.css'
 import { getTshirtCustomer } from '../../../services/product/tshirt.service';
 import CustomerFeedback from '../../../components/feedback/CustomerFeedback';
+import { PATH } from '../../../config/api.config';
+import axios from 'axios';
+import { useAuth } from '../../../components/context/AuthContext';
 const { Text } = Typography;
 const TshirtDetail = () => {
     const [canvas, setCanvas] = useState('https://top10hoabinh.com/wp-content/uploads/2022/10/anh-dang-load-2.jpg')
@@ -30,7 +33,38 @@ const TshirtDetail = () => {
             setCount(count - 1);
         }
     };
+    const {
+        isAuthenticated,
+        user,
+    } = useAuth();
 
+    const [initialValues, setInitialValues] = useState({
+        userId: "",
+        username: "",
+        email: "",
+        phone: "",
+        address: "",
+    });
+    useEffect(() => {
+        const fetchData = async () => {
+            if (isAuthenticated) {
+                await axios
+                    .get(`${PATH.profile}/${user.username}`)
+                    .then((res) => {
+
+                        setInitialValues({
+                            userId: res?.data?.user?._id,
+                            username: res?.data?.user?.username,
+                            email: res?.data?.user?.email,
+                            phone: res?.data?.user?.phone,
+                            address: res?.data?.user?.address,
+                        });
+                    });
+            }
+        };
+
+        fetchData();
+    }, [isAuthenticated]);
     useEffect(() => {
         getTshirtCustomer(id, setTshirt, setImages, setCanvas, selectSize)
     }, [id])
@@ -192,7 +226,7 @@ const TshirtDetail = () => {
                 </Col>
             </Row>
             <Row>
-                <CustomerFeedback></CustomerFeedback>
+                <CustomerFeedback tshirt_id={id} userId={initialValues.userId} />
             </Row>
         </>
     );
