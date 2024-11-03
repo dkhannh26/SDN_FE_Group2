@@ -6,27 +6,25 @@ import moment from "moment";
 import { getListAccount } from "../services/account.service";
 const { confirm } = Modal;
 
-export const showDeleteConfirm = (id, messageApi, getList, setItem, URL) => {
+export const showDeleteConfirm = (id, messageApi, getListDiscount, setDiscounts, URL) => {
   confirm({
-    title: "Are you sure delete?",
+    title: 'Are you sure delete?',
     icon: <ExclamationCircleFilled />,
-    okText: "Yes",
-    okType: "danger",
-    cancelText: "No",
+    okText: 'Yes',
+    okType: 'danger',
+    cancelText: 'No',
     onOk() {
-      axios
-        .delete(URL + `/${id}`)
-
+      axios.delete(URL + `/${id}`)
         .then(() => {
-          success("Deleted Succesfully", messageApi);
+          success('Deleted Succesfully', messageApi)
         })
         .then(() => {
-          getList(setItem);
+          getListDiscount(setDiscounts)
         })
-        .catch((error) => console.error(error));
+        .catch(error => console.error(error))
     },
     onCancel() {
-      console.log("Cancel");
+      console.log('Cancel');
     },
   });
 };

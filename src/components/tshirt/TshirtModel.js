@@ -108,8 +108,9 @@ const TshirtModel = ({ type }) => {
                             label="Quantity of size S"
                             rules={[
                                 {
+                                    required: true,
                                     type: 'number',
-                                    min: 0
+                                    min: 0,
                                 },
                             ]}
                         >
@@ -120,8 +121,9 @@ const TshirtModel = ({ type }) => {
                             label="Quantity of size M"
                             rules={[
                                 {
+                                    required: true,
                                     type: 'number',
-                                    min: 0
+                                    min: 0,
                                 },
                             ]}
                         >
@@ -132,8 +134,9 @@ const TshirtModel = ({ type }) => {
                             label="Quantity of size L"
                             rules={[
                                 {
+                                    required: true,
                                     type: 'number',
-                                    min: 0
+                                    min: 0,
                                 },
                             ]}
                         >

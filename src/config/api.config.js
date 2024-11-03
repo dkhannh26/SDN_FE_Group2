@@ -14,7 +14,19 @@ export const API_PATH = {
   shoesSize: baseURL + "size/shoesSize",
   account: baseURL + "admin/account",
   import: baseURL + "import",
-};
+  cart: baseURL + 'cart',
+  cartDelete: baseURL + 'cart/delete',
+  productDetail: baseURL + 'cart/product',
+  order: baseURL + 'order',
+  confirmOrder: baseURL + 'order/confirm',
+  cancelOrder: baseURL + 'order/cancel',
+  orderDetails: baseURL + 'order/details',
+  pendingOrder: baseURL + 'order/pending',
+  doneOrder: baseURL + 'order/done',
+  payment: baseURL + 'payment',
+  search: baseURL + 'product/search',
+  image: baseURL + 'images/upload'
+}
 export const PATH = {
   user: baseURL + "users",
   discount: baseURL + "discount",
@@ -33,3 +45,4 @@ export const PATH = {
 
   profile: baseURL + "account",
 };
+

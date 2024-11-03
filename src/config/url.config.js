@@ -51,3 +51,21 @@ export const IMPORT_URL = {
   CREATE: "/admin/import/create",
   EDIT: "/admin/import/create",
 };
+
+export const ORDER_URL = {
+  INDEX: '/admin/order',
+  CREATE: '/admin/order/create',
+  EDIT: '/admin/order/create',
+  CUSTOMER: '/customer/order'
+}
+export const CART_URL = {
+  INDEX: '/customer/cart',
+  CREATE: '/customer/cart/create',
+  EDIT: '/customer/cart/create'
+
+}
+export const PAYMENT_URL = {
+  INDEX: '/customer/payment',
+  CREATE: '/customer/payment/create',
+  EDIT: '/customer/payment/create'
+}

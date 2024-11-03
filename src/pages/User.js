@@ -5,16 +5,17 @@ import {
   Col,
   Form,
   Input,
+  List,
   notification,
   Row,
   Select,
-  Table,
 } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../components/context/AuthContext";
 import axios from "axios";
 import { PATH } from "../config/api.config";
 import { options } from "./ProvinceData";
+import { TruckOutlined } from "@ant-design/icons";
 
 const User = () => {
   const navigate = useNavigate();
@@ -142,7 +143,7 @@ const User = () => {
   const columns = [
     {
       title: "Order ID",
-      dataIndex: "_id",
+      dataIndex: "id",
       key: "id",
     },
     {
@@ -162,6 +163,38 @@ const User = () => {
       key: "status",
     },
   ];
+
+  const data = [
+    {
+      avatar: '	https://product.hstatic.net/1000344185/product/img_4125_4feb7a360b3b4f00bd2465a85ef2d9e3_small.jpg',
+      title: 'Ant Design Title 1',
+      quantity: 2,
+      price: <p><del>440,000₫</del>400,000₫</p>,
+      size: 'M'
+    },
+    {
+      avatar: '	https://product.hstatic.net/1000344185/product/img_4125_4feb7a360b3b4f00bd2465a85ef2d9e3_small.jpg',
+      title: 'Ant Design Title 2',
+      quantity: 2,
+      price: <p><del>440,000₫</del>400,000₫</p>,
+      size: 'M'
+    },
+    {
+      avatar: '	https://product.hstatic.net/1000344185/product/img_4125_4feb7a360b3b4f00bd2465a85ef2d9e3_small.jpg',
+      title: 'Ant Design Title 3',
+      quantity: 2,
+      price: <p><del>440,000₫</del>400,000₫</p>,
+      size: 'M'
+    },
+    {
+      avatar: '	https://product.hstatic.net/1000344185/product/img_4125_4feb7a360b3b4f00bd2465a85ef2d9e3_small.jpg',
+      title: 'Ant Design Title 4',
+      quantity: 2,
+      price: <p><del>440,000₫</del>400,000₫</p>,
+      size: 'M'
+    },
+  ];
+
   return (
     <div className="container profile">
       <h1 className="profile-title">My Profile</h1>
@@ -180,6 +213,17 @@ const User = () => {
                   }}
                 >
                   Account information
+                </Button>
+              </li>
+
+              <li>
+                <Button
+                  style={{ border: "none", marginBottom: 5, fontSize: "15px" }}
+                  onClick={() => {
+                    navigate("/customer/order");
+                  }}
+                >
+                  Order
                 </Button>
               </li>
 
@@ -288,14 +332,65 @@ const User = () => {
             </Form.Item>
           </Form>
 
-          <div style={{ paddingTop: 30 }}>
+          <div style={{ paddingTop: 30 }} className="customer_order_list">
             <h3 className="account-title">List of latest order</h3>
-            <Table
+            {/* <Table
               pagination={{ pageSize: 3 }}
               dataSource={dataSource}
               columns={columns}
-              rowKey={"_id"}
+              rowKey={"id"}
+              expandable={{
+                expandedRowRender: (record) => (
+                  <List
+                    itemLayout="horizontal"
+                    dataSource={listData}
+                    renderItem={(item, index) => (
+                      <List.Item>
+                        <List.Item.Meta
+                          avatar={<Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`} />}
+                          title={<a href="https://ant.design">{item.title}</a>}
+                          description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                        />
+                      </List.Item>
+                    )}
+                  />
+                ),
+                rowExpandable: (record) => record.name !== 'Not Expandable',
+                expandIcon: ({ expanded, onExpand, record }) =>
+                  expanded ? (
+                    <CaretUpOutlined onClick={e => onExpand(record, e)} />
+                  ) : (
+                    <CaretDownOutlined onClick={e => onExpand(record, e)} />
+                  )
+              }}
+            /> */}
+            <List
+              header={<div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 20 }}>
+                <div>delivery date: 2024</div>
+                <div style={{ textAlign: 'right', fontSize: 20, color: 'gray' }}><TruckOutlined style={{ marginRight: 10 }} />Successful delivery</div>
+              </div>}
+              footer={<div style={{ textAlign: 'right', fontSize: 20, display: 'flex', justifyContent: 'space-between' }}>
+                <Button color="danger" variant="solid">
+                  Feedback
+                </Button>
+                <p><b style={{ marginRight: 10 }}>Total:</b> <span>200</span></p>
+              </div>}
+              itemLayout="horizontal"
+              dataSource={data}
+              bordered
+              style={{ marginBottom: 10 }}
+              renderItem={(item, index) => (
+                <List.Item>
+                  <List.Item.Meta
+                    avatar={<img src={item.avatar} alt="" style={{ width: '100%' }} />}
+                    title={item.title + ' - Size: ' + item.size}
+                    description={'x' + item.quantity}
+                  />
+                  <div>{item.price}</div>
+                </List.Item>
+              )}
             />
+
           </div>
         </Col>
       </Row>

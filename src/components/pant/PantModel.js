@@ -28,7 +28,7 @@ const PantModel = ({ type }) => {
                 M: values.M,
                 L: values.L
             },
-            discount_id: values.discount,
+            discount_id: values?.discount,
         }
 
         if (type === 'create') {
@@ -96,7 +96,7 @@ const PantModel = ({ type }) => {
                             >
                                 {discounts?.map((discount) => {
                                     return (
-                                        <Option value={discount._id}>{discount.percent}%</Option>
+                                        <Option value={discount?._id}>{discount?.percent}%</Option>
                                     )
                                 })}
                             </Select>
@@ -106,8 +106,9 @@ const PantModel = ({ type }) => {
                             label="Quantity of size S"
                             rules={[
                                 {
+                                    required: true,
                                     type: 'number',
-                                    min: 0
+                                    min: 0,
                                 },
                             ]}
                         >
@@ -118,8 +119,9 @@ const PantModel = ({ type }) => {
                             label="Quantity of size M"
                             rules={[
                                 {
+                                    required: true,
                                     type: 'number',
-                                    min: 0
+                                    min: 0,
                                 },
                             ]}
                         >
@@ -130,8 +132,9 @@ const PantModel = ({ type }) => {
                             label="Quantity of size L"
                             rules={[
                                 {
+                                    required: true,
                                     type: 'number',
-                                    min: 0
+                                    min: 0,
                                 },
                             ]}
                         >

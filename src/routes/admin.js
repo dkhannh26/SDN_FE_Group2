@@ -29,6 +29,7 @@ import ShoesSizeModel from "../components/size/ShoesSizeModel";
 import Account from "../pages/Account";
 import AccountTable from "../components/account/AccountTable";
 import AccountModel from "../components/account/AccountModel";
+import OrderTable from '../components/order/OrderTable';
 
 export const AdminRoutes = (
   <Route path="admin" element={<Dashboard />}>
@@ -81,6 +82,9 @@ export const AdminRoutes = (
       <Route index element={<ImportTable />} />
       <Route path="create" element={<ImportModel type="create" />} />
       <Route path="edit/:id" element={<ImportModel type="edit" />} />
+    </Route>
+    <Route path='order' element={<Voucher />}>
+      <Route index element={<OrderTable />} />
     </Route>
   </Route>
 );

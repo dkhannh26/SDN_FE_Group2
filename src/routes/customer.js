@@ -5,6 +5,12 @@ import Register from "../pages/Register";
 import SuccessRegister from "../pages/SuccessRegister";
 import User from "../pages/User";
 import ResetPassword from "../pages/ResetPassword";
+import Payment from '../pages/Payment';
+import PaymentModel from '../components/payment/PaymentModel';
+import Cart from '../pages/Cart';
+import CartList from '../components/cart/CartList';
+import OrderCustomer from '../components/order/OrderCustomer';
+
 import PantsCustomer from "../pages/product-customer/pant/PantsCustomer";
 import PantDetail from "../pages/product-customer/pant/PantDetail";
 import ShoesCustomer from "../pages/product-customer/shoes/ShoesCustomer";
@@ -18,6 +24,7 @@ export const CustomerRoutes = (
     <Route path="customer" element={<Layout />}>
       <Route path="profile" element={<User />}></Route>
       <Route path="register" element={<Register />}></Route>
+      <Route path="order" element={<OrderCustomer />}></Route>
       <Route path="pant/:id" element={<PantDetail />} />
       <Route path="pant" element={<PantsCustomer />} />
       <Route path="shoes/:id" element={<ShoesDetail />} />
@@ -41,5 +48,13 @@ export const CustomerRoutes = (
       path="customer/reset-password/:token"
       element={<ResetPassword />}
     ></Route>
+    <Route path='customer'>
+      <Route path='cart' element={<Cart />}>
+        <Route index element={<CartList />} />
+      </Route>
+      <Route path='payment' element={<Payment />}>
+        <Route index element={<PaymentModel />} />
+      </Route>
+    </Route>
   </>
 );

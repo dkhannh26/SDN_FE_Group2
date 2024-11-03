@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import {
   DownOutlined,
@@ -6,38 +6,123 @@ import {
   ShoppingOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Badge, Col, Empty, List, Menu, Popover, Row } from "antd";
+import { Badge, Col, Empty, Image, List, Menu, Popover, Row, message, Typography, InputNumber } from "antd";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../assets/css/header.css";
 import Logo from "../assets/images/logo.webp";
 import { getSearchList } from "../services/product/search.service";
-import { useAuth } from "./context/AuthContext";
 import LoginPopover from "./login";
+import { CART_URL, PAYMENT_URL } from "../config/url.config";
+import { API_PATH, PATH } from "../config/api.config";
+import { getListCart } from "../services/cart.service";
+import axios from "axios";
+import { useAuth } from "./context/AuthContext";
+const { Text } = Typography;
 
 const Header = () => {
-
   const [searchFocus, setSearchForcus] = useState(false)
   const [searchList, setSearchList] = useState([])
+  const [isCheck, setIsCheck] = useState();
+  const [carts, setCarts] = useState([])
+  const [voucher, setVoucher] = useState([])
+  // const [messageApi, contextHolder] = message.useMessage(null)
+  const [totalAmount, setTotalAmount] = useState(Number);
+  const [total, setTotal] = useState(Number);
+  const [initialTotal, setInitialTotal] = useState(0);
 
+  const { isAuthenticated, username, user } =
+    useAuth();
+  const [initialValues, setInitialValues] = useState({
+    userId: "",
+    username: "",
+    email: "",
+    phone: "",
+    address: "",
+  });
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isAuthenticated) {
+        await axios
+          .get(`${PATH.profile}/${user.username}`)
+          .then((res) => {
+            setInitialValues({
+              userId: res.data.user._id,
+              username: res?.data?.user?.username,
+              email: res?.data?.user?.email,
+              phone: res?.data?.user?.phone,
+              address: res?.data?.user?.address,
+            });
+          })
+          .catch((error) => console.error("Error fetching data:", error));
+      }
+    };
+
+    fetchData();
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    if (initialValues.userId) {
+      getListCart(initialValues.userId, setCarts, (total) => {
+        setTotal(total);
+        setInitialTotal(total);
+      });
+      setIsCheck(null);
+    }
+  }, [totalAmount, initialValues.userId]);
+  console.log(initialValues.userId);
   const cartPopover = (
     <div className="cart-pop">
       <div className="card-pop-title text">
         <p>GIỎ HÀNG</p>
       </div>
-      <Empty
-        image="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRg01rpxlqIYNzFCaI-E5pwTAji-IFfa9P2Eg&s"
-        description="Hiện chưa có sản phẩm"
+      <List
+        itemLayout="horizontal"
+        dataSource={carts}
+        renderItem={(item) => {
+          return (<List.Item>
+            <List.Item.Meta
+              avatar={
+                item.productImage ? (
+                  <Image width={100} src={`${API_PATH.image}/${item.product.product_id}/${item.productImage._id}${item.productImage.file_extension}`} />
+                  // {`${API_PATH.image}/${item.product.product_id}/${item.productImage._id}${item.productImage.file_extension}`}
+                  // <span>{item.productImage ? item.productImage._id : "default extension"}</span>
+
+                ) : (
+                  <Image width={100} src="path-to-default-image" />
+                  // <span>{item.productImage ? item.productImage.file_extension : "default extension"}</span>
+                )
+              }
+              title={
+                <Text style={{ display: 'block', textAlign: 'left', fontSize: '15px', fontWeight: 'bold' }}>{item.product.name}</Text>
+              }
+              description={(
+                <div style={{ marginTop: '5px', display: 'block', textAlign: 'left' }}>
+                  <Text style={{ color: '#888' }}>{(item.product.price * item.quantity).toLocaleString()}<Text style={{ fontSize: '10px', color: '#888', textDecorationLine: 'underline' }}>đ</Text></Text>
+                  <br />
+                  <Text style={{ color: '#888' }}>Kích thước: {item.productSize ? item.productSize.size_name : "Không có kích thước"}</Text>
+                  <br />
+                  {/* <InputNumber min={1} max={item.product.quantity} defaultValue={Math.min(item.quantity, item.product.quantity)} onChange={(value) => onChange(value, item._id)} /> */}
+                </div>
+              )}
+              style={{ marginLeft: '10px' }}
+            />
+            <div style={{ textAlign: 'right' }}>
+              <Text style={{ fontSize: '15px', color: 'black', fontWeight: 'bold' }}>{((item.product.price - (item.product.price * (item.product.discount / 100))) * item.quantity).toLocaleString()}<Text style={{ fontSize: '10px', color: 'black', textDecorationLine: 'underline' }}>đ</Text></Text>
+            </div>
+          </List.Item>)
+        }
+        }
       />
       <div className="flex-space-between">
         <p className="text">TỔNG TIỀN:</p>
-        <p style={{ color: "red", fontWeight: "600", fontSize: 16 }}>0đ</p>
+        <p style={{ color: "red", fontWeight: "600", fontSize: 16 }}>{total.toLocaleString()}0đ</p>
       </div>
       <div className="flex-space-between cart-pop-navigate">
-        <button className="login-pop-btn">
+        <button className="login-pop-btn" onClick={() => navigate(CART_URL.INDEX)} >
           <span>XEM GIỎ HÀNG</span>
         </button>
-        <button className="login-pop-btn">
+        <button className="login-pop-btn" onClick={() => navigate(PAYMENT_URL.INDEX, { state: { voucherTotal: total } })} >
           <span>THANH TOÁN</span>
         </button>
       </div>
@@ -89,8 +174,7 @@ const Header = () => {
   ];
 
   const navigate = useNavigate()
-  const { isAuthenticated, username } =
-    useAuth();
+
 
   return (
     <div className="header">
@@ -306,7 +390,7 @@ const Header = () => {
             trigger="click"
             className="cart flex-center"
           >
-            <Badge count={0} showZero style={{ backgroundColor: "#333333" }}>
+            <Badge count={carts.length} showZero style={{ backgroundColor: "#333333" }}>
               <ShoppingOutlined className="icon" />
             </Badge>
             <p style={{ marginLeft: 10 }}>Giỏ hàng</p>
