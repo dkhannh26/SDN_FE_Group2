@@ -97,7 +97,6 @@ const PantDetail = () => {
 
             if (matchingCartItem) {
                 const updatedQuantity = matchingCartItem.quantity + count;
-                console.log(matchingCartItem.product.quantity);
                 if (updatedQuantity > matchingCartItem.product.quantity) {
                     alert('sold out');
                 } else {

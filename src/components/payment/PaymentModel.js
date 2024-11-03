@@ -214,9 +214,9 @@ const PaymentModel = () => {
         required: '${label} is required!',
     };
     return (
-        <div style={{ padding: '20px' }}>
+        <div style={{ padding: '10px' }}>
             <Row gutter={16} style={{ marginTop: '3%' }}>
-                <Col xs={24} md={14} style={{ textAlign: 'left', paddingLeft: '15%', paddingRight: '5%' }}>
+                <Col xs={24} md={14} style={{ textAlign: 'left', paddingLeft: '5%', paddingRight: '5%' }}>
                     <Title level={3}>Thông tin giao hàng</Title>
                     <Form
                         name="nest-messages"
@@ -242,7 +242,15 @@ const PaymentModel = () => {
                             />
                         </Form.Item>
                         <Row style={{ marginTop: '3%', display: 'flex', justifyContent: 'space-between' }}>
-                            <Col xs={14}>
+                            <Col xs={15}>
+                                <Input
+                                    size="large"
+                                    placeholder="Email"
+                                    defaultValue={initialValues.email}
+                                    disabled
+                                />
+                            </Col>
+                            <Col xs={8}>
                                 <Form.Item
                                     name="phone"
                                     rules={[
@@ -264,14 +272,7 @@ const PaymentModel = () => {
                                     />
                                 </Form.Item>
                             </Col>
-                            <Col xs={8}>
-                                <Input
-                                    size="large"
-                                    placeholder="Email"
-                                    defaultValue={initialValues.email}
-                                    disabled
-                                />
-                            </Col>
+
                         </Row>
                         <Form.Item
                             name={'address'}
@@ -342,7 +343,7 @@ const PaymentModel = () => {
                     </Form>
                 </Col>
 
-                <Col xs={24} md={8} style={{ padding: '20px', backgroundColor: '#f0f0f0', borderRadius: '8px' }}>
+                <Col xs={24} md={10} style={{ padding: '20px', backgroundColor: '#f0f0f0', borderRadius: '8px' }}>
                     <Title level={3}>Thông tin thanh toán</Title>
 
                     <List

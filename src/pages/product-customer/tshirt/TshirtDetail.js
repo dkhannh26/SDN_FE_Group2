@@ -123,7 +123,7 @@ const TshirtDetail = () => {
                         {images?.map(image => {
                             return (
                                 <Image
-                                    onClick={() => setCanvas(image.url)}
+                                    onClick={() => setCanvas(image?.url)}
                                     preview={false}
                                     style={{
                                         marginBottom: 10,
@@ -131,7 +131,7 @@ const TshirtDetail = () => {
                                         border: image?.url === canvas ? '1px solid black' : ''
                                     }}
                                     width={80}
-                                    src={image.url}
+                                    src={image?.url}
                                 />
                             )
                         })}

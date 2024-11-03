@@ -69,7 +69,7 @@ export const getPant = (id, form, handleFileListChange) => {
 
 
             form.setFieldsValue({
-                discount: res.data.discount.discount_id,
+                discount: res.data?.discount?.discount_id,
                 name: res.data.name,
                 price: res.data.price,
                 S: S,
@@ -96,7 +96,9 @@ export const getPantCustomer = (id, setPant, setImages, setCanvas, selectSize) =
                     })
                 }
             }
-            setCanvas(imgArrResult[0].url)
+            if (imgArrResult[0]) {
+                setCanvas(imgArrResult[0]?.url)
+            }
             setImages(imgArrResult)
             selectSize(Object.keys(res.data.size[0])[0], Object.values(res.data.size[0])[0], Object.values(res.data.size[0])[1])
         }

@@ -142,6 +142,7 @@ const OrderCustomer = () => {
 
         fetchData();
     }, [isAuthenticated]);
+
     useEffect(() => {
         if (initialValues.userId) {
             if (status === "pending") {
@@ -150,7 +151,7 @@ const OrderCustomer = () => {
                 getListDoneOrder(initialValues.userId, setOrders);
             }
         }
-    }, [status]);
+    }, [status, initialValues.userId]);
 
     if (isLoading) return <div>Loading...</div>;
 

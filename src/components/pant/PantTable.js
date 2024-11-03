@@ -26,6 +26,7 @@ const PantTable = () => {
             title: 'Image',
             dataIndex: 'pantImg',
             render: (imgUrl) => {
+                console.log('http://localhost:3000' + imgUrl);
                 return <Image
                     width={150}
                     src={'http://localhost:3000' + imgUrl}
