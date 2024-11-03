@@ -1,10 +1,9 @@
 import {
     CloseOutlined
 } from '@ant-design/icons';
-import { faReply } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button, Card, Col, Form, Image, Input, InputNumber, List, Row, Space, Typography, message } from 'antd';
+import { Button, Card, Col, Image, InputNumber, List, Row, Space, Typography, message } from 'antd';
 import Title from 'antd/es/typography/Title';
+import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { API_PATH, PATH } from "../../config/api.config";
@@ -13,7 +12,6 @@ import { editCart, getListCart } from '../../services/cart.service';
 import { getListVoucher } from '../../services/voucher.service';
 import { showDeleteConfirm } from '../../utils/helper';
 import { useAuth } from '../context/AuthContext';
-import axios from 'axios';
 
 
 const { Text } = Typography;
@@ -170,7 +168,7 @@ const CartList = () => {
                                     {total.toLocaleString()}<Text style={{ fontSize: '15px', color: 'red', textDecorationLine: 'underline' }}>đ</Text>
                                 </Text>
                             </Row>
-                            {carts.length != 0 ? <Button type="primary" block style={{ marginTop: '20px', backgroundColor: 'red', borderColor: 'red' }} onClick={() => navigate(PAYMENT_URL.INDEX, { state: { voucherTotal: total } })}>
+                            {carts.length !== 0 ? <Button type="primary" block style={{ marginTop: '20px', backgroundColor: 'red', borderColor: 'red' }} onClick={() => navigate(PAYMENT_URL.INDEX, { state: { voucherTotal: total } })}>
                                 <Text style={{ fontWeight: 'bold', color: 'white', fontSize: '14px' }}>THANH TOÁN</Text>
                             </Button> : ''}
 
