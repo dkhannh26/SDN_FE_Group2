@@ -27,6 +27,7 @@ const CustomerFeedback = ({ accessory_id, pant_id, tshirt_id, shoes_id, userId }
             shoes_id: shoes_id
         }
         if (currentFeedback) {
+            console.log('aa', id);
             updateFeedback(id, feedbackData)
         } else {
             createFeedback(feedbackData)
@@ -117,7 +118,7 @@ const CustomerFeedback = ({ accessory_id, pant_id, tshirt_id, shoes_id, userId }
                                 <Row style={{ marginTop: 10 }}>
                                     {userId === item.account_id._id && (
                                         <>
-                                            <Button style={{ backgroundColor: 'green', color: 'white', marginRight: 10 }} onClick={() => editFeedback(item)}>Edit</Button>
+                                            <Button style={{ backgroundColor: 'green', color: 'white', marginRight: 10 }} onClick={() => editFeedback(item, item._id)}>Edit</Button>
                                             <Button style={{ backgroundColor: 'red', color: 'white' }} onClick={() => showDeleteConfirm(item._id, messageApi, getFeedBack, setFeedback, API_PATH.feedback)}>Remove</Button>
                                         </>
                                     )}
