@@ -1,26 +1,33 @@
 import { Button, Col, Image, InputNumber, Row, Typography } from 'antd';
-import React, { useEffect, useState } from 'react';
-import { getPantCustomer } from '../../../services/product/pant.service';
-import { useParams } from 'react-router-dom';
-import CustomerFeedback from '../../../components/feedback/CustomerFeedback';
 import Title from 'antd/es/typography/Title';
-import '../../../assets/css/sizeBtn.css'
 import axios from 'axios';
-import { PATH } from '../../../config/api.config';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import '../../../assets/css/sizeBtn.css';
 import { useAuth } from '../../../components/context/AuthContext';
+import { PATH } from '../../../config/api.config';
+import { AddCartDup, createCart, editCart, getListCart, getProductDetail } from '../../../services/cart.service';
+import { getPantCustomer } from '../../../services/product/pant.service';
+import CustomerFeedback from '../../../components/feedback/CustomerFeedback';
 const { Text } = Typography;
 const PantDetail = () => {
     const [canvas, setCanvas] = useState('https://top10hoabinh.com/wp-content/uploads/2022/10/anh-dang-load-2.jpg')
-    const { id } = useParams();
+    const navigate = useNavigate();
+    const [cart, setCarts] = useState([])
+    const [total, setTotal] = useState(0);
+    const [productDetail, setProductDetail] = useState([])
     const [pant, setPant] = useState()
     const [images, setImages] = useState()
     const [sizeSelected, setSizeSelected] = useState('')
     const [sizeNumber, setSizeNumber] = useState(1)
-    const selectSize = (size, number) => {
-        setSizeSelected(size)
-        setSizeNumber(number)
-        setCount(1)
-    }
+    const [detailId, setProductDetailId] = useState('')
+    const selectSize = (size, number, detailId) => {
+        setSizeSelected(size);
+        setSizeNumber(number);
+        setProductDetailId(detailId);
+        setCount(1);
+    };
+
 
     const [count, setCount] = useState(1);
 
@@ -33,7 +40,20 @@ const PantDetail = () => {
             setCount(count - 1);
         }
     };
+    const onFinish = async () => {
+        try {
+            await getProductDetail(id, setProductDetail);
 
+            if (initialValues.userId) {
+                await getListCart(initialValues.userId, setCarts, (total) => {
+                    setTotal(total);
+                });
+            }
+        } catch (error) {
+            console.error("Error in onFinish:", error);
+        }
+    };
+    const { id } = useParams();
     const {
         isAuthenticated,
         user,
@@ -70,7 +90,32 @@ const PantDetail = () => {
     useEffect(() => {
         getPantCustomer(id, setPant, setImages, setCanvas, selectSize)
     }, [id])
-    console.log(pant)
+
+    useEffect(() => {
+        getPantCustomer(id, setPant, setImages, setCanvas, selectSize)
+        if (productDetail.pants) {
+            const matchingCartItem = cart.find(item => item.pant_shirt_size_detail_id?._id === detailId);
+
+            if (matchingCartItem) {
+                const updatedQuantity = matchingCartItem.quantity + count;
+                console.log(matchingCartItem.product.quantity);
+                if (updatedQuantity > matchingCartItem.product.quantity) {
+                    alert('sold out');
+                } else {
+                    AddCartDup(matchingCartItem._id, { quantity: updatedQuantity }, navigate);
+                }
+            } else {
+                const newCart = {
+                    account_id: initialValues.userId,
+                    pant_shirt_size_detail_id: detailId,
+                    quantity: count
+                };
+                createCart(newCart, navigate);
+            }
+        }
+
+    }, [cart], [productDetail])
+
     return (
         <>
             <Row style={{ margin: 40 }}>
@@ -174,14 +219,16 @@ const PantDetail = () => {
                         <Col span={18}>
                             {pant?.size.map((item, index) => {
                                 return (
-                                    <Button color="default"
+                                    <Button
+                                        key={index}
+                                        color="default"
                                         variant={sizeSelected === Object.keys(item)[0] ? "solid" : ''}
                                         className="size-button"
-                                        onClick={() => selectSize(Object.keys(item)[0], Object.values(item)[0])}
+                                        onClick={() => selectSize(Object.keys(item)[0], Object.values(item)[0], Object.values(item)[1])}
                                     >
                                         {Object.keys(item)[0]}
                                     </Button>
-                                )
+                                );
                             })}
                         </Col>
                         <Col span={6}>
@@ -209,7 +256,7 @@ const PantDetail = () => {
                     </Row>
                     {
                         sizeNumber !== 0 ? <Row style={{ marginTop: 30 }}>
-                            <div class="box-1">
+                            <div class="box-1" onClick={onFinish}>
                                 <div class="btn btn-one">
                                     <span>THÊM VÀO GIỎ HÀNG</span>
                                 </div>
@@ -226,6 +273,7 @@ const PantDetail = () => {
                     }
 
                 </Col>
+
             </Row>
             <Row>
                 <CustomerFeedback pant_id={id} userId={initialValues.userId} />

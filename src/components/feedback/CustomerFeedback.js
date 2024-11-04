@@ -56,10 +56,10 @@ const CustomerFeedback = ({ accessory_id, pant_id, tshirt_id, shoes_id, userId }
 
 
     return (
-        <div style={{ width: 900, margin: 'auto' }}>
-            <Row style={{ justifyContent: 'space-between', marginBottom: 30 }}>
-                <p style={{ fontSize: 25 }}>Feedback</p>
-                <Button type="primary" onClick={showModal}>
+        <div style={{ width: 900, margin: 'auto', marginTop: 100 }}>
+            <Row style={{ justifyContent: 'space-between', paddingBottom: 40, }}>
+                <p style={{ fontSize: 25, fontWeight: 'bold' }}>Feedback</p>
+                <Button style={{ backgroundColor: "black", borderRadius: 0 }} type="primary" onClick={showModal}>
                     Write Feedback
                 </Button>
             </Row>
@@ -102,23 +102,24 @@ const CustomerFeedback = ({ accessory_id, pant_id, tshirt_id, shoes_id, userId }
 
 
             <List
+                style={{ padding: '30px 0', borderTop: '1px solid gray', borderBottom: '1px solid gray' }}
                 itemLayout="horizontal"
                 dataSource={feedback}
                 split={false}
                 renderItem={(item, index) => (
-                    <List.Item style={{ marginBottom: 10 }}>
+                    <List.Item style={{ marginBottom: 15, display: "block", }}>
                         <Row>
                             <Col span={6}>
                                 <b>{item.account_id.username}</b>
-                                <p>{item.createdAt}</p>
+                                <p>{new Date(item.createdAt).toLocaleDateString()}</p>
                             </Col>
-                            <Col span={20}>
+                            <Col span={18}>
                                 {item.content}
                                 <Row style={{ marginTop: 10 }}>
                                     {userId === item.account_id._id && (
                                         <>
-                                            <Button style={{ backgroundColor: 'green', color: 'white', marginRight: 10 }} onClick={() => editFeedback(item, item._id)}>Edit</Button>
-                                            <Button style={{ backgroundColor: 'red', color: 'white' }} onClick={() => showDeleteConfirm(item._id, messageApi, getFeedBack, setFeedback, API_PATH.feedback)}>Remove</Button>
+                                            <Button style={{ backgroundColor: '#FF9800', color: 'white', marginRight: 10 }} onClick={() => editFeedback(item, item._id)}>Edit</Button>
+                                            <Button style={{ backgroundColor: '#FF5252  ', color: 'white' }} onClick={() => showDeleteConfirm(item._id, messageApi, getFeedBack, setFeedback, API_PATH.feedback)}>Remove</Button>
                                         </>
                                     )}
                                 </Row>

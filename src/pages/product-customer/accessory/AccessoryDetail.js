@@ -1,16 +1,21 @@
 import { Button, Col, Image, InputNumber, Row, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Title from 'antd/es/typography/Title';
-import CustomerFeedback from '../../../components/feedback/CustomerFeedback';
 import { getAccessoryCustomer } from '../../../services/product/accessory.service';
+import { useAuth } from '../../../components/context/AuthContext';
 import axios from 'axios';
 import { PATH } from '../../../config/api.config';
-import { useAuth } from '../../../components/context/AuthContext';
+import { AddCartDup, createCart, getListCart, getProductDetail } from '../../../services/cart.service';
+import CustomerFeedback from '../../../components/feedback/CustomerFeedback';
 const { Text } = Typography;
 const AccessoryDetail = () => {
     const [canvas, setCanvas] = useState('https://top10hoabinh.com/wp-content/uploads/2022/10/anh-dang-load-2.jpg')
     const { id } = useParams();
+    const navigate = useNavigate();
+    const [cart, setCarts] = useState([])
+    const [total, setTotal] = useState(0);
+    const [productDetail, setProductDetail] = useState([])
     const [accessory, setAccessory] = useState()
     const [images, setImages] = useState()
     const [quantity, setQuantity] = useState(1)
@@ -24,6 +29,20 @@ const AccessoryDetail = () => {
     const handleDecrement = () => {
         if (count > 1) {
             setCount(count - 1);
+        }
+    };
+
+    const onFinish = async () => {
+        try {
+            await getProductDetail(id, setProductDetail);
+
+            if (initialValues.userId) {
+                await getListCart(initialValues.userId, setCarts, (total) => {
+                    setTotal(total);
+                });
+            }
+        } catch (error) {
+            console.error("Error in onFinish:", error);
         }
     };
     const {
@@ -58,10 +77,36 @@ const AccessoryDetail = () => {
 
         fetchData();
     }, [isAuthenticated]);
+
     useEffect(() => {
         getAccessoryCustomer(id, setAccessory, setImages, setCanvas, setQuantity)
     }, [id])
 
+    useEffect(() => {
+        getAccessoryCustomer(id, setAccessory, setImages, setCanvas, setQuantity)
+        if (productDetail.accessories) {
+            const matchingCartItem = cart.find(item => item.accessory_id?._id === id);
+
+            if (matchingCartItem) {
+                const updatedQuantity = matchingCartItem.quantity + count;
+                console.log(matchingCartItem.product.quantity);
+                if (updatedQuantity > matchingCartItem.product.quantity) {
+                    alert('sold out');
+                } else {
+                    AddCartDup(matchingCartItem._id, { quantity: updatedQuantity }, navigate);
+                }
+            } else {
+                const newCart = {
+                    account_id: initialValues.userId,
+                    accessory_id: id,
+                    quantity: count
+                };
+                createCart(newCart, navigate);
+            }
+        }
+
+    }, [cart], [productDetail])
+    console.log(cart);
     return (
         <>
             <Row style={{ margin: 40 }}>
@@ -190,7 +235,7 @@ const AccessoryDetail = () => {
                     </Row>
                     {
                         accessory?.quantity !== 0 ? <Row style={{ marginTop: 30 }}>
-                            <div class="box-1">
+                            <div class="box-1" onClick={onFinish}>
                                 <div class="btn btn-one">
                                     <span>THÊM VÀO GIỎ HÀNG</span>
                                 </div>

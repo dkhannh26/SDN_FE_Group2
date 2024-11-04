@@ -1,26 +1,33 @@
 import { Button, Col, Image, InputNumber, Row, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Title from 'antd/es/typography/Title';
 import '../../../assets/css/sizeBtn.css'
 import { getTshirtCustomer } from '../../../services/product/tshirt.service';
-import CustomerFeedback from '../../../components/feedback/CustomerFeedback';
-import { PATH } from '../../../config/api.config';
-import axios from 'axios';
 import { useAuth } from '../../../components/context/AuthContext';
+import axios from 'axios';
+import { AddCartDup, createCart, getListCart, getProductDetail } from '../../../services/cart.service';
+import { PATH } from '../../../config/api.config';
+import CustomerFeedback from '../../../components/feedback/CustomerFeedback';
 const { Text } = Typography;
 const TshirtDetail = () => {
     const [canvas, setCanvas] = useState('https://top10hoabinh.com/wp-content/uploads/2022/10/anh-dang-load-2.jpg')
     const { id } = useParams();
+    const [cart, setCarts] = useState([])
+    const [total, setTotal] = useState(0);
+    const [productDetail, setProductDetail] = useState([])
     const [tshirt, setTshirt] = useState()
     const [images, setImages] = useState()
     const [sizeSelected, setSizeSelected] = useState('')
     const [sizeNumber, setSizeNumber] = useState(1)
-    const selectSize = (size, number) => {
-        setSizeSelected(size)
-        setSizeNumber(number)
-        setCount(1)
-    }
+    const [detailId, setProductDetailId] = useState('')
+    const selectSize = (size, number, detailId) => {
+        setSizeSelected(size);
+        setSizeNumber(number);
+        setProductDetailId(detailId);
+        setCount(1);
+        // console.log(detailId);
+    };
 
     const [count, setCount] = useState(1);
 
@@ -31,6 +38,20 @@ const TshirtDetail = () => {
     const handleDecrement = () => {
         if (count > 1) {
             setCount(count - 1);
+        }
+    };
+    const navigate = useNavigate();
+    const onFinish = async () => {
+        try {
+            await getProductDetail(id, setProductDetail);
+
+            if (initialValues.userId) {
+                await getListCart(initialValues.userId, setCarts, (total) => {
+                    setTotal(total);
+                });
+            }
+        } catch (error) {
+            console.error("Error in onFinish:", error);
         }
     };
     const {
@@ -65,9 +86,36 @@ const TshirtDetail = () => {
 
         fetchData();
     }, [isAuthenticated]);
+
     useEffect(() => {
         getTshirtCustomer(id, setTshirt, setImages, setCanvas, selectSize)
     }, [id])
+
+    useEffect(() => {
+        getTshirtCustomer(id, setTshirt, setImages, setCanvas, selectSize)
+        if (productDetail.tshirts) {
+            const matchingCartItem = cart.find(item => item.pant_shirt_size_detail_id?._id === detailId);
+            console.log(matchingCartItem);
+
+            if (matchingCartItem) {
+                const updatedQuantity = matchingCartItem.quantity + count;
+                console.log(matchingCartItem.product.quantity);
+                if (updatedQuantity > matchingCartItem.product.quantity) {
+                    alert('sold out');
+                } else {
+                    AddCartDup(matchingCartItem._id, { quantity: updatedQuantity }, navigate);
+                }
+            } else {
+                const newCart = {
+                    account_id: initialValues.userId,
+                    pant_shirt_size_detail_id: detailId,
+                    quantity: count
+                };
+                createCart(newCart, navigate);
+            }
+        }
+
+    }, [cart], [productDetail])
     return (
         <>
             <Row style={{ margin: 40 }}>
@@ -171,14 +219,16 @@ const TshirtDetail = () => {
                         <Col span={18}>
                             {tshirt?.size.map((item, index) => {
                                 return (
-                                    <Button color="default"
+                                    <Button
+                                        key={index}
+                                        color="default"
                                         variant={sizeSelected === Object.keys(item)[0] ? "solid" : ''}
                                         className="size-button"
-                                        onClick={() => selectSize(Object.keys(item)[0], Object.values(item)[0])}
+                                        onClick={() => selectSize(Object.keys(item)[0], Object.values(item)[0], Object.values(item)[1])}
                                     >
                                         {Object.keys(item)[0]}
                                     </Button>
-                                )
+                                );
                             })}
                         </Col>
                         <Col span={6}>
@@ -205,14 +255,13 @@ const TshirtDetail = () => {
                         </div>
                     </Row>
                     {
-                        sizeNumber !== 0 ?
-                            <Row style={{ marginTop: 30 }}>
-                                <div class="box-1">
-                                    <div class="btn btn-one">
-                                        <span>THÊM VÀO GIỎ HÀNG</span>
-                                    </div>
+                        sizeNumber !== 0 ? <Row style={{ marginTop: 30 }}>
+                            <div class="box-1" onClick={onFinish}>
+                                <div class="btn btn-one">
+                                    <span>THÊM VÀO GIỎ HÀNG</span>
                                 </div>
-                            </Row>
+                            </div>
+                        </Row>
                             :
                             <Row style={{ marginTop: 30 }}>
                                 <div class="box-1 unavailable">
