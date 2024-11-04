@@ -13,7 +13,8 @@ import { Route } from 'react-router-dom';
 import About from '../pages/About';
 import ExchangePolicy from '../pages/ExchangePolicy';
 import Contact from '../pages/Contact';
-
+import Product from '../pages/Product';
+import Home from "../pages/Home";
 import PantsCustomer from "../pages/product-customer/pant/PantsCustomer";
 import PantDetail from "../pages/product-customer/pant/PantDetail";
 import ShoesCustomer from "../pages/product-customer/shoes/ShoesCustomer";
@@ -39,6 +40,8 @@ export const CustomerRoutes = (
       <Route path='about' element={<About />}></Route>
       <Route path='exchange-policy' element={<ExchangePolicy />}></Route>
       <Route path='contact' element={<Contact />}></Route>
+      <Route path="product" element={<Product />}></Route>
+      <Route path="" element={<Home />}></Route>
     </Route>
     <Route
       path="customer/register/:token"
