@@ -1,7 +1,7 @@
-import { EyeInvisibleOutlined, EyeOutlined, TruckOutlined } from "@ant-design/icons";
-import { Button, Image, List, Table, Typography } from "antd";
+import { CheckOutlined, EyeInvisibleOutlined, EyeOutlined, TruckOutlined } from "@ant-design/icons";
+import { Button, Image, List, Space, Table, Typography, message } from "antd";
 import { useEffect, useState } from "react";
-import { getListDoneOrder, getListOrder, getListPendingOrder, getOrderDetails } from "../../services/order.service";
+import { getListDoneOrder, getListOrder, getListPendingOrder, getOrderDetails, shippedOrder } from "../../services/order.service";
 import { useAuth } from "../context/AuthContext";
 import axios from "axios";
 import { API_PATH, PATH } from "../../config/api.config";
@@ -13,6 +13,7 @@ const OrderCustomer = () => {
     const [orderDetails, setOrderDetails] = useState([]);
     const [expandedRowKeys, setExpandedRowKeys] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [messageApi, contextHolder] = message.useMessage()
     const columns = [
         {
             title: 'No.',
@@ -42,6 +43,22 @@ const OrderCustomer = () => {
             sorter: (a, b) => {
                 if (a.status === 'pending' && b.status !== 'pending') return -1;
             },
+        },
+        {
+            title: 'Action',
+            dataIndex: '_id',
+            render: (_id, record) => {
+                return (
+                    <Space>
+                        {record.status === 'delivered' && (
+                            <>
+                                <Button shape="round" icon={<CheckOutlined style={{ color: 'green' }} />} onClick={() => shippedOrder(_id, messageApi, () => getListDoneOrder(initialValues.userId, setOrders), setOrders)}></Button>
+                            </>
+                        )}
+                    </Space>
+                )
+            },
+            width: '10%',
         },
     ];
 

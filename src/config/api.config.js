@@ -13,6 +13,7 @@ export const API_PATH = {
   orderDetails: baseURL + 'order/details',
   pendingOrder: baseURL + 'order/pending',
   doneOrder: baseURL + 'order/done',
+  shippedOrder: baseURL + 'order/shipped',
   payment: baseURL + 'payment',
   search: baseURL + 'product/search',
   tshirt: baseURL + 'product/tshirt',
@@ -22,7 +23,7 @@ export const API_PATH = {
   image: baseURL + 'images/upload',
   pantShirtSize: baseURL + 'size/pantShirtSize',
   shoesSize: baseURL + 'size/shoesSize',
-  image: baseURL + 'images/upload'
+  image: baseURL + 'images/upload',
 }
 export const PATH = {
   user: baseURL + "users",
