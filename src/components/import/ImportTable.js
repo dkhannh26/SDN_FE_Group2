@@ -21,6 +21,8 @@ const ImportTable = () => {
   const location = useLocation();
   const { state } = location;
   const [isModalVisible, setIsModalVisible] = useState(false);
+  let role = localStorage.getItem("role");
+  console.log(role);
 
   const showModal = () => {
     setIsModalVisible(true);
@@ -65,7 +67,7 @@ const ImportTable = () => {
         return (
           <Space>
             {record.confirm === undefined ? (
-              <>
+              role === "staff" ? (
                 <Button
                   shape="round"
                   icon={<CheckOutlined />}
@@ -73,6 +75,7 @@ const ImportTable = () => {
                     confirmImport(_id, navigate);
                   }}
                 ></Button>
+              ) : (
                 <Button
                   danger
                   shape="round"
@@ -86,7 +89,7 @@ const ImportTable = () => {
                     )
                   }
                 ></Button>
-              </>
+              )
             ) : (
               ""
             )}

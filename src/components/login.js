@@ -154,7 +154,7 @@ const LoginPopover = () => {
             className="pop-list-item"
             style={{ marginBottom: 8, border: "none" }}
             onClick={() => {
-              navigate("/customer/profile");
+              navigate("/customer/profile", { state: { view: "profile" } });
             }}
           >
             My Profile
@@ -162,6 +162,9 @@ const LoginPopover = () => {
           <Button
             className="pop-list-item"
             style={{ marginBottom: 8, border: "none" }}
+            onClick={() => {
+              navigate("/customer/profile", { state: { view: "change" } });
+            }}
           >
             Change Password
           </Button>
