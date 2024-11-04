@@ -1,5 +1,4 @@
 import React from "react";
-import { Route } from "react-router-dom";
 import Layout from "../components/layout";
 import Register from "../pages/Register";
 import SuccessRegister from "../pages/SuccessRegister";
@@ -10,6 +9,10 @@ import PaymentModel from '../components/payment/PaymentModel';
 import Cart from '../pages/Cart';
 import CartList from '../components/cart/CartList';
 import OrderCustomer from '../components/order/OrderCustomer';
+import { Route } from 'react-router-dom';
+import About from '../pages/About';
+import ExchangePolicy from '../pages/ExchangePolicy';
+import Contact from '../pages/Contact';
 
 import PantsCustomer from "../pages/product-customer/pant/PantsCustomer";
 import PantDetail from "../pages/product-customer/pant/PantDetail";
@@ -33,6 +36,9 @@ export const CustomerRoutes = (
       <Route path="accessory" element={<AccessoryCustomer />} />
       <Route path="tshirt/:id" element={<TshirtDetail />} />
       <Route path="tshirt" element={<TshirtCustomer />} />
+      <Route path='about' element={<About />}></Route>
+      <Route path='exchange-policy' element={<ExchangePolicy />}></Route>
+      <Route path='contact' element={<Contact />}></Route>
     </Route>
     <Route
       path="customer/register/:token"

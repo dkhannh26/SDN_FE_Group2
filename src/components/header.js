@@ -10,7 +10,6 @@ import { Badge, Col, Empty, Image, List, Menu, Popover, Row, message, Typography
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "../assets/css/header.css";
-import Logo from "../assets/images/logo.webp";
 import { getSearchList } from "../services/product/search.service";
 import LoginPopover from "./login";
 import { CART_URL, PAYMENT_URL } from "../config/url.config";
@@ -18,6 +17,9 @@ import { API_PATH, PATH } from "../config/api.config";
 import { getListCart } from "../services/cart.service";
 import axios from "axios";
 import { useAuth } from "./context/AuthContext";
+import '../assets/css/header.css'
+import Logo from '../assets/images/logo.webp'
+import Logo2 from '../assets/images/logo2.jpeg'
 const { Text } = Typography;
 
 const Header = () => {
@@ -131,7 +133,9 @@ const Header = () => {
 
   const items = [
     {
-      label: "HOME",
+      label: (
+        <Link to='/customer/home'>HOME</Link>
+      ),
       key: "HOME",
     },
     {
@@ -160,12 +164,22 @@ const Header = () => {
     },
 
     {
-      label: "ABOUT",
+      label: (
+        <Link to='/customer/about'>ABOUT</Link>
+      ),
       key: "ABOUT",
     },
     {
-      label: "EXCHANGE POLICY",
+      label: (
+        <Link to='/customer/exchange-policy'>EXCHANGE POLICY</Link>
+      ),
       key: "EXCHANGE POLICY",
+    },
+    {
+      label: (
+        <Link to='/customer/contact'>CONTACT</Link>
+      ),
+      key: "CONTACT",
     },
     {
       label: "SALE",
@@ -186,7 +200,7 @@ const Header = () => {
       </Row>
       <Row className="container header-middle flex-center">
         <Col span={4}>
-          <img src={Logo} alt="logo" className="logo" />
+          <img src={Logo2} alt="logo" className="logo" />
         </Col>
         <Col span={9} style={{ position: "relative" }}>
           <div className="flex-center">
@@ -395,8 +409,8 @@ const Header = () => {
             </Badge>
             <p style={{ marginLeft: 10 }}>Giỏ hàng</p>
           </Popover>
-        </Col>
-      </Row>
+        </Col >
+      </Row >
       <Row className="container header-menu">
         <Menu mode="horizontal" items={items} />
       </Row>
