@@ -26,6 +26,7 @@ const TshirtTable = () => {
             title: 'Image',
             dataIndex: 'tshirtImg',
             render: (imgUrl) => {
+                console.log(imgUrl)
                 return <Image
                     width={150}
                     src={'http://localhost:3000' + imgUrl}
