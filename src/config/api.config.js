@@ -23,9 +23,8 @@ export const API_PATH = {
   orderDetails: baseURL + 'order/details',
   pendingOrder: baseURL + 'order/pending',
   doneOrder: baseURL + 'order/done',
+  shippedOrder: baseURL + 'order/shipped',
   payment: baseURL + 'payment',
-  search: baseURL + 'product/search',
-  image: baseURL + 'images/upload'
 }
 export const PATH = {
   user: baseURL + "users",

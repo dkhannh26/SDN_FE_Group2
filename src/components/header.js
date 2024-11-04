@@ -134,7 +134,7 @@ const Header = () => {
   const items = [
     {
       label: (
-        <Link to='/customer/home'>HOME</Link>
+        <Link to='/customer'>HOME</Link>
       ),
       key: "HOME",
     },
@@ -180,10 +180,6 @@ const Header = () => {
         <Link to='/customer/contact'>CONTACT</Link>
       ),
       key: "CONTACT",
-    },
-    {
-      label: "SALE",
-      key: "SALE",
     },
   ];
 
