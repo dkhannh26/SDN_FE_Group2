@@ -9,10 +9,9 @@ export const getListFeedback = (id, setFeedback) => {
         .catch(error => console.error(error))
 }
 
-export const getFeedBack = (setFeedback) => {
+export const getFeedBack = () => {
     axios.get(API_PATH.feedback)
         .then((res) => {
-            setFeedback(res.data)
         })
         .catch(error => console.error(error))
 }

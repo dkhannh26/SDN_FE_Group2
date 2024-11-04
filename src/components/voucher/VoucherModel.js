@@ -48,18 +48,17 @@ const VoucherModel = ({ type }) => {
                     >
                         <Form.Item
                             name="percent"
-                            label="Percent"
+                            label="VND"
                             rules={[
                                 {
                                     required: true,
                                     type: 'number',
                                     min: 0,
-                                    max: 100,
                                 },
                             ]}
 
                         >
-                            <InputNumber suffix="%" style={{ width: '100%' }} />
+                            <InputNumber style={{ width: '100%' }} />
                         </Form.Item>
                         <Form.Item
                             name="condition"

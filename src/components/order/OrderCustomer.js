@@ -117,7 +117,7 @@ const OrderCustomer = () => {
                                     title={`${item.product.name} - Size: ${item.size ? item.size.size_name : "Không có kích thước"}`}
                                     description={`x${item.quantity}`}
                                 />
-                                <Title level={4}><del>{item.product?.price.toLocaleString()}đ</del><span style={{ color: 'red' }}>{((item.product?.price - (item.product?.price * (item.discount / 100))) * item.quantity).toLocaleString()}đ</span></Title>
+                                <Title level={4}><del>{(item.product?.price * item.quantity).toLocaleString()}đ</del><span style={{ color: 'red' }}>{((item.product?.price - (item.product?.price * (item.discount / 100))) * item.quantity).toLocaleString()}đ</span></Title>
 
                             </List.Item>
                         )

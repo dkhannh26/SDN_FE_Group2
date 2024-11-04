@@ -119,7 +119,7 @@ const CustomerFeedback = ({ accessory_id, pant_id, tshirt_id, shoes_id, userId }
                                     {userId === item.account_id._id && (
                                         <>
                                             <Button style={{ backgroundColor: '#FF9800', color: 'white', marginRight: 10 }} onClick={() => editFeedback(item, item._id)}>Edit</Button>
-                                            <Button style={{ backgroundColor: '#FF5252  ', color: 'white' }} onClick={() => showDeleteConfirm(item._id, messageApi, getFeedBack, setFeedback, API_PATH.feedback)}>Remove</Button>
+                                            <Button style={{ backgroundColor: '#FF5252  ', color: 'white' }} onClick={() => showDeleteConfirm(item._id, messageApi, () => getListFeedback(selectId, setFeedback), setFeedback, API_PATH.feedback)}>Remove</Button>
                                         </>
                                     )}
                                 </Row>

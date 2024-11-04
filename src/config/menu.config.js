@@ -11,40 +11,47 @@ import {
 } from '@ant-design/icons';
 import React from 'react';
 
-
+let role = localStorage.getItem('role')
 export const menu = [
     {
         icon: UserOutlined,
         title: 'My Profile',
+        role: '',
         key: '/profile'
     },
     {
         icon: UsergroupDeleteOutlined,
         title: 'Account',
+        role: '',
         key: '/account'
     },
     {
         icon: TagOutlined,
         title: 'Discount',
+        role: '',
         key: '/discount'
     },
     {
         icon: DollarOutlined,
         title: 'Voucher',
+        role: '',
         key: '/voucher'
     },
     {
         icon: AreaChartOutlined,
         title: 'Statistic',
+        role: '',
         key: '/statistic'
     },
     {
         icon: CodepenOutlined,
         title: 'Import',
+        role: '',
         key: '/import'
     },
     {
         icon: ProductOutlined,
+        role: '',
         title: 'Product',
         children: [
             {
@@ -69,6 +76,7 @@ export const menu = [
         icon: CompressOutlined,
         title: 'Size',
         key: '/size',
+        role: '',
         children: [
             {
                 key: '/admin/pantTshirtSize',
@@ -83,12 +91,29 @@ export const menu = [
     {
         icon: FileDoneOutlined,
         title: 'Order',
-        key: '/order'
+        key: '/order',
+        role: 'staff'
     },
 
-].map((item, index) => ({
-    key: '/admin' + item.key,
-    icon: React.createElement(item.icon),
-    label: item.title,
-    children: item.children
-}));
+].map((item, index) => {
+    if (item.role === '') {
+        return ({
+            key: '/admin' + item.key,
+            icon: React.createElement(item.icon),
+            label: item.title,
+            children: item.children
+        })
+
+    }
+    else if (item.role === role) {
+        console.log(role);
+        return (
+            {
+                key: '/admin' + item.key,
+                icon: React.createElement(item.icon),
+                label: item.title,
+                children: item.children
+            }
+        )
+    }
+});
