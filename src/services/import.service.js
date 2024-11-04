@@ -50,8 +50,19 @@ export const getDetailImport = (setImportDetail, _id) => {
 };
 
 export const confirmImport = (_id, navigate) => {
+  let token = localStorage.getItem("token");
+  console.log(token);
+
   axios
-    .put(API_PATH.import + `/${_id}`)
+    .put(
+      API_PATH.import + `/${_id}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    )
     .then(
       navigate(IMPORT_URL.INDEX, {
         state: { message: MESSAGE.UPDATE_SUCCESS },
