@@ -7,12 +7,12 @@ import { CustomerRoutes } from './customer';
 let role = localStorage.getItem('role')
 
 const router = createBrowserRouter(
-    createRoutesFromElements(
-        <Route path='/' element={<App />}>
-            {role === 'admin' ? AdminRoutes : null}
-            {CustomerRoutes}
-        </Route>
-    )
+  createRoutesFromElements(
+    <Route path='/' element={<App />}>
+      {AdminRoutes}
+      {CustomerRoutes}
+    </Route>
+  )
 );
 
 
