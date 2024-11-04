@@ -71,7 +71,7 @@ export const getAccessory = (id, form, handleFileListChange) => {
       }
 
       form.setFieldsValue({
-        discount: res.data.discount.discount_id,
+        discount: res.data?.discount?.discount_id,
         name: res.data.name,
         quantity: res.data.quantity,
         price: res.data.price,

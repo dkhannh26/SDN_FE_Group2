@@ -60,7 +60,7 @@ const AccessoryDetail = () => {
     }, [isAuthenticated]);
     useEffect(() => {
         getAccessoryCustomer(id, setAccessory, setImages, setCanvas, setQuantity)
-    }, [])
+    }, [id])
 
     return (
         <>

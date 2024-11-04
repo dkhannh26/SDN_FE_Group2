@@ -56,7 +56,7 @@ export const getListTshirtDecrease = (setTshirtList) => {
 }
 
 
-export const getTshirt = (id, form, handleFileListChange) => {
+export const getTshirt = (id, form, handleFileListChange, setError) => {
   axios.get(API_PATH.tshirt + `/${id}`)
     .then((res) => {
 
@@ -95,7 +95,7 @@ export const getTshirt = (id, form, handleFileListChange) => {
       }
 
       form.setFieldsValue({
-        discount: res.data?.discount?.discount_id,
+        discount: res.data.discount?.discount_id,
         name: res.data.name,
         price: res.data.price,
         S: S,
@@ -107,7 +107,7 @@ export const getTshirt = (id, form, handleFileListChange) => {
     })
 }
 
-export const createTshirt = (tshirt, fileList, navigate) => {
+export const createTshirt = (tshirt, fileList, navigate, setError) => {
   axios.post(API_PATH.tshirt, tshirt)
     .then(res => {
       axios.post(API_PATH.tshirt + `/upload/${res.data}`, fileList, {
@@ -116,12 +116,14 @@ export const createTshirt = (tshirt, fileList, navigate) => {
         },
       })
     })
-    .then(
+    .then(() => {
       navigate(TSHIRT_URL.INDEX, {
         state: { message: MESSAGE.CREATE_SUCCESS }
       })
+    }
     )
     .catch(error => {
+      setError('T-shirt name is already existed')
       console.log(error)
     })
 }

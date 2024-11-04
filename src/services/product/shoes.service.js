@@ -72,7 +72,7 @@ export const getShoes = (id, form, handleFileListChange) => {
       }
 
       form.setFieldsValue({
-        discount: res.data?.discount?.discount_id,
+        discount: res.data.discount?.discount_id,
         name: res.data.name,
         price: res.data.price,
         size37: size37,

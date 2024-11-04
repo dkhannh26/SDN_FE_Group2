@@ -18,6 +18,7 @@ const PantModel = ({ type }) => {
     const handleFileListChange = (newFileList) => {
         setFileList(newFileList);
     };
+    const currentDate = new Date();
 
     const onFinish = async (values) => {
         const pant = {
@@ -95,9 +96,11 @@ const PantModel = ({ type }) => {
                                 allowClear
                             >
                                 {discounts?.map((discount) => {
-                                    return (
-                                        <Option value={discount?._id}>{discount?.percent}%</Option>
+                                    const date = new Date(discount?.expired_at)
+                                    if (date > currentDate) return (
+                                        <Option value={discount._id}>{discount.percent}%</Option>
                                     )
+                                    return null
                                 })}
                             </Select>
                         </Form.Item>

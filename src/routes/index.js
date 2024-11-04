@@ -4,13 +4,15 @@ import App from '../App';
 import { AdminRoutes } from './admin';
 import { CustomerRoutes } from './customer';
 
+let role = localStorage.getItem('role')
+
 const router = createBrowserRouter(
-    createRoutesFromElements(
-        <Route path='/' element={<App />}>
-            {AdminRoutes}
-            {CustomerRoutes}
-        </Route>
-    )
+  createRoutesFromElements(
+    <Route path='/' element={<App />}>
+      {AdminRoutes}
+      {CustomerRoutes}
+    </Route>
+  )
 );
 
 
