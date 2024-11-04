@@ -331,67 +331,6 @@ const User = () => {
               </Button>
             </Form.Item>
           </Form>
-
-          <div style={{ paddingTop: 30 }} className="customer_order_list">
-            <h3 className="account-title">List of latest order</h3>
-            {/* <Table
-              pagination={{ pageSize: 3 }}
-              dataSource={dataSource}
-              columns={columns}
-              rowKey={"id"}
-              expandable={{
-                expandedRowRender: (record) => (
-                  <List
-                    itemLayout="horizontal"
-                    dataSource={listData}
-                    renderItem={(item, index) => (
-                      <List.Item>
-                        <List.Item.Meta
-                          avatar={<Avatar src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`} />}
-                          title={<a href="https://ant.design">{item.title}</a>}
-                          description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-                        />
-                      </List.Item>
-                    )}
-                  />
-                ),
-                rowExpandable: (record) => record.name !== 'Not Expandable',
-                expandIcon: ({ expanded, onExpand, record }) =>
-                  expanded ? (
-                    <CaretUpOutlined onClick={e => onExpand(record, e)} />
-                  ) : (
-                    <CaretDownOutlined onClick={e => onExpand(record, e)} />
-                  )
-              }}
-            /> */}
-            <List
-              header={<div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 20 }}>
-                <div>delivery date: 2024</div>
-                <div style={{ textAlign: 'right', fontSize: 20, color: 'gray' }}><TruckOutlined style={{ marginRight: 10 }} />Successful delivery</div>
-              </div>}
-              footer={<div style={{ textAlign: 'right', fontSize: 20, display: 'flex', justifyContent: 'space-between' }}>
-                <Button color="danger" variant="solid">
-                  Feedback
-                </Button>
-                <p><b style={{ marginRight: 10 }}>Total:</b> <span>200</span></p>
-              </div>}
-              itemLayout="horizontal"
-              dataSource={data}
-              bordered
-              style={{ marginBottom: 10 }}
-              renderItem={(item, index) => (
-                <List.Item>
-                  <List.Item.Meta
-                    avatar={<img src={item.avatar} alt="" style={{ width: '100%' }} />}
-                    title={item.title + ' - Size: ' + item.size}
-                    description={'x' + item.quantity}
-                  />
-                  <div>{item.price}</div>
-                </List.Item>
-              )}
-            />
-
-          </div>
         </Col>
       </Row>
     </div>
