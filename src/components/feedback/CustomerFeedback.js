@@ -52,7 +52,7 @@ const CustomerFeedback = ({ accessory_id, pant_id, tshirt_id, shoes_id, userId }
     };
     useEffect(() => {
         getListFeedback(selectId, setFeedback)
-    }, [feedback], [isModalOpen])
+    }, [feedback, isModalOpen, selectId])
 
 
     return (
@@ -117,17 +117,17 @@ const CustomerFeedback = ({ accessory_id, pant_id, tshirt_id, shoes_id, userId }
                                 <Row style={{ marginTop: 10 }}>
                                     {userId === item.account_id._id && (
                                         <>
-                                            <Button style={{ backgroundColor: 'green', color: 'white', marginRight: 10 }} onClick={() => editFeedback(item)}>Edit</Button>
+                                            <Button style={{ backgroundColor: 'green', color: 'white', marginRight: 10 }} onClick={() => editFeedback(item, item._id)}>Edit</Button>
                                             <Button style={{ backgroundColor: 'red', color: 'white' }} onClick={() => showDeleteConfirm(item._id, messageApi, getFeedBack, setFeedback, API_PATH.feedback)}>Remove</Button>
                                         </>
                                     )}
                                 </Row>
                             </Col>
                         </Row>
-                    </List.Item >
+                    </List.Item>
                 )}
             />
-        </div >
+        </div>
     );
 };
 

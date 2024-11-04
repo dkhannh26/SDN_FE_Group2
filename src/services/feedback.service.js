@@ -1,7 +1,5 @@
 import axios from "axios"
 import { API_PATH } from "../config/api.config"
-import { DISCOUNT_URL } from "../config/url.config"
-import { MESSAGE } from "../config/message.config"
 
 export const getListFeedback = (id, setFeedback) => {
     axios.get(API_PATH.feedback + `/${id}`)
