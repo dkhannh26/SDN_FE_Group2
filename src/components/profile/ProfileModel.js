@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import "../../assets/css/profile.css";
 import {
   Button,
   Col,
@@ -17,6 +16,7 @@ import axios from "axios";
 import { PATH } from "../../config/api.config";
 import { options } from "./../ProvinceData";
 
+import "../../assets/css/profile.css";
 const ProfileTable = () => {
   const navigate = useNavigate();
 
@@ -37,7 +37,6 @@ const ProfileTable = () => {
       if (isAuthenticated) {
         await axios.get(`${PATH.profile}/${user.username}`).then((res) => {
           console.log(res.data.user);
-
           setInitialValues({
             username: res?.data?.user?.username,
             email: res?.data?.user?.email,
@@ -94,81 +93,79 @@ const ProfileTable = () => {
   };
 
   return (
-    <div className="container profile">
-      <Row className="profile-content">
-        <Col span={6} className="profile-item">
-          <div>
-            <ul style={{ listStyleType: "circle" }}></ul>
-          </div>
-        </Col>
-        <Col span={18} className="profile-item">
-          <h3 className="account-title">Account information</h3>
-          <Form
-            onFinish={onFinish}
-            // variant={componentVariant}
-            form={form}
-            layout="vertical"
-          >
-            <Form.Item
-              name="username"
-              label="Username"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your username!",
-                },
-              ]}
-            >
-              <Input
-                disabled={true}
-                placeholder="Username"
-                className="register-input"
-              />
-            </Form.Item>
-            <Form.Item
-              name="email"
-              label="Email"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your email!",
-                },
-                { type: "email", message: "Please enter a valid email!" },
-              ]}
-            >
-              <Input placeholder="Email" className="register-input" />
-            </Form.Item>
-            <Form.Item
-              name="phone"
-              label="Phone number"
-              rules={[
-                {
-                  required: true,
-                  message: "Please input your phone number!",
-                },
-                {
-                  pattern: /^[0-9]{10}$/,
-                  message: "Phone number must be 10 digits!",
-                },
-              ]}
-            >
-              <Input placeholder="Phone" className="register-input" />
-            </Form.Item>
-            <Form.Item
-              name="address"
-              label="Address"
-              rules={[
-                {
-                  required: true,
-                  message: "Please select your address!",
-                },
-              ]}
-            >
-              <Select placeholder="Address" options={options} />
-            </Form.Item>
-          </Form>
-        </Col>
-      </Row>
+    <div className="container profile" style={{ width: "900px" }}>
+      <h3 className="account-title">Account information</h3>
+      <Form onFinish={onFinish} form={form} layout="vertical">
+        <Form.Item
+          name="username"
+          label="Username"
+          rules={[
+            {
+              required: true,
+              message: "Please input your username!",
+            },
+          ]}
+        >
+          <Input
+            disabled={true}
+            placeholder="Username"
+            className="register-input"
+          />
+        </Form.Item>
+        <Form.Item
+          name="email"
+          label="Email"
+          rules={[
+            {
+              required: true,
+              message: "Please input your email!",
+            },
+            { type: "email", message: "Please enter a valid email!" },
+          ]}
+        >
+          <Input
+            disabled={true}
+            placeholder="Email"
+            className="register-input"
+          />
+        </Form.Item>
+        <Form.Item
+          name="phone"
+          label="Phone number"
+          rules={[
+            {
+              required: true,
+              message: "Please input your phone number!",
+            },
+            {
+              pattern: /^[0-9]{10}$/,
+              message: "Phone number must be 10 digits!",
+            },
+          ]}
+        >
+          <Input
+            disabled={true}
+            placeholder="Phone"
+            className="register-input"
+          />
+        </Form.Item>
+        <Form.Item
+          name="address"
+          label="Address"
+          rules={[
+            {
+              required: true,
+              message: "Please select your address!",
+            },
+          ]}
+        >
+          <Input
+            disabled={true}
+            placeholder="Address"
+            className="register-input"
+          />
+        </Form.Item>
+      </Form>
     </div>
   );
 };

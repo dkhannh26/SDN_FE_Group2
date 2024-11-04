@@ -34,6 +34,7 @@ import Profile from "../pages/Profile";
 import ProfileTable from "../components/profile/ProfileModel";
 export const AdminRoutes = (
   <>
+    <Route path="admin/login" element={<LoginAdmin />} />
     <Route path="admin" element={<Dashboard />}>
       <Route path="discount" element={<Discount />}>
         <Route index element={<DiscountTable />} />

@@ -14,9 +14,8 @@ let role = localStorage.getItem("role");
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
-      {role === "admin" ? AdminRoutes : null}
+      {AdminRoutes}
       {CustomerRoutes}
-      <Route path="admin/login" element={<LoginAdmin />} />
     </Route>
   )
 );
