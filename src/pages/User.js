@@ -92,13 +92,7 @@ const User = () => {
               phone: res?.data?.user?.phone,
               address: res?.data?.user?.address,
             });
-            // let orders = res?.data?.user?.order_id;
-            const formattedOrders = res?.data?.user?.order_id.map((order) => ({
-              ...order,
-              createdAt: new Date(order.createdAt).toLocaleDateString("en-GB"), // Chuyển đổi createdAt
-            }));
 
-            setDataSource(formattedOrders);
           });
       }
     };

@@ -161,7 +161,7 @@ const CartList = () => {
                             <Space wrap style={{ marginBottom: '20px' }}>
                                 {voucher.map((item) => {
                                     return (
-                                        <Button color={isCheck === item._id ? 'primary' : 'default'} variant='outlined' onClick={() => handleVoucherClick(item._id, item.percent)} disabled={total < item.condition} >Giảm {item.percent}k cho đơn từ {item.condition}đ</Button>
+                                        <Button color={isCheck === item._id ? 'primary' : 'default'} variant='outlined' onClick={() => handleVoucherClick(item._id, item.percent)} disabled={total < item.condition} >Giảm {item.percent}đ cho đơn từ {item.condition}đ</Button>
                                     )
                                 })}
                             </Space>
