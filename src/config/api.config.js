@@ -25,6 +25,7 @@ export const API_PATH = {
   doneOrder: baseURL + 'order/done',
   shippedOrder: baseURL + 'order/shipped',
   payment: baseURL + 'payment',
+  feedback: baseURL + 'feedback',
 }
 export const PATH = {
   user: baseURL + "users",
