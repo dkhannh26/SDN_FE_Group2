@@ -31,6 +31,7 @@ const LoginAdmin = () => {
 
             setTimeout(() => {
               navigate("/admin/profile");
+              window.location.reload();
             }, 1000);
           }
         })

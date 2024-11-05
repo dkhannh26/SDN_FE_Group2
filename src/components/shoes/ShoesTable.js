@@ -118,7 +118,11 @@ const ShoesTable = () => {
             height: "100%",
           }}
         >
-          <Button onClick={() => navigate(SHOES_URL.CREATE)}>Insert</Button>
+          {role === "admin" ? (
+            <Button onClick={() => navigate(SHOES_URL.CREATE)}>Insert</Button>
+          ) : (
+            ""
+          )}
         </Col>
       </Flex>
       <Table columns={columns} dataSource={shoesList} />

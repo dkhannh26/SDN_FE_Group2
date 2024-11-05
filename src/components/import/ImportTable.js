@@ -171,7 +171,11 @@ const ImportTable = () => {
             height: "100%",
           }}
         >
-          <Button onClick={() => navigate(IMPORT_URL.CREATE)}>Insert</Button>
+          {role === "admin" ? (
+            <Button onClick={() => navigate(IMPORT_URL.CREATE)}>Insert</Button>
+          ) : (
+            ""
+          )}
         </Col>
       </Flex>
       <Table columns={columns} dataSource={imports} />

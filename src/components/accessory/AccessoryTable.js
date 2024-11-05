@@ -118,7 +118,13 @@ const AccessoryTable = () => {
             height: "100%",
           }}
         >
-          <Button onClick={() => navigate(ACCESSORY_URL.CREATE)}>Insert</Button>
+          {role === "admin" ? (
+            <Button onClick={() => navigate(ACCESSORY_URL.CREATE)}>
+              Insert
+            </Button>
+          ) : (
+            ""
+          )}
         </Col>
       </Flex>
       <Table columns={columns} dataSource={accessories} />
